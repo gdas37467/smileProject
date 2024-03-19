@@ -38,6 +38,15 @@ services:
     build : ./Blood-bank-backend
     image : paulshauvik99/smile-backend:v2
     container_name: 'smile-backend'
+    environment : 
+      - SECRET_KEY=django-secured-1i&!f7cipita@ep7%hvmq&e)x&(@(s1zq5t47%b=yifc62j+50
+      - TWILIO_ACCOUNT_SID=AC77f125f317171f793ce6f7a414f0d5dc
+      - TWILIO_AUTH_TOKEN=7a8d3a6a00f36b7e92d197823344c35a
+      - TWILIO_PHONE_NUMBER=+14073260071
+      - HOST=mongodb+srv://gdas:abcdefgh@smile1.lbmzkff.mongodb.net/?retryWrites=true&w=majority
+      - USERNAME=gdas
+      - PASSWORD=abcdefgh
+      - AUTHSOURCE=admin
 
   smile-frontend: 
     build : ./Blood-bank-frontend/smile
