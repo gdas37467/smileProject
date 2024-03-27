@@ -149,47 +149,28 @@ def send_otp(request):
         
 
 
-        # try: 
-        #     print(settings.TWILIO_AUTH_TOKEN)
-        #     client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+        try: 
+            print(settings.TWILIO_AUTH_TOKEN)
+            client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
     
-        #     # Replace 'to' with the recipient's phone number
-        #     to = phoneNumber
+            # Replace 'to' with the recipient's phone number
+            to = phoneNumber
             
-        #     # Replace 'from_' with your Twilio phone number
-        #     from_ = settings.TWILIO_PHONE_NUMBER
+            # Replace 'from_' with your Twilio phone number
+            from_ = settings.TWILIO_PHONE_NUMBER
 
             
-        #     message = client.messages.create(
-        #         body="Hi, your otp is " + otp,
-        #         to=to,
-        #         from_=from_
-        #     )
-            
-            
-        # except Exception as e:
-        #     print(e) 
-        #     return JsonResponse({"error" : "error occured while sending sms"}, status=500)
-        
-        try:
-            client = vonage.Client(key=settings.API_KEY, secret=settings.API_SECRET)
-            sms = vonage.Sms(client)
-
-            responseData = sms.send_message(
-                {
-                    "from": "Vonage APIs",
-                    "to": phoneNumber,
-                    "text": "Hi Shauvik Paul",
-                }
+            message = client.messages.create(
+                body="Hi, your otp is " + otp,
+                to=to,
+                from_=from_
             )
-
-            if responseData["messages"][0]["status"] == "0":
-                print("Message sent successfully.")
-            else:
-                print(f"Message failed with error: {responseData['messages'][0]['error-text']}")
+            
+            
         except Exception as e:
-            print(e)
+            print(e) 
             return JsonResponse({"error" : "error occured while sending sms"}, status=500)
+        
 
         return JsonResponse({"success" : "SMS sent successfully"},status  =200) 
     return JsonResponse({"error" :"Invalid request Method"}, status=409)
