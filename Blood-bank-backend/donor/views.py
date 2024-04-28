@@ -16,6 +16,7 @@ from django.conf import settings
 import uuid
 import jwt
 import vonage
+import requests
 
 
 
@@ -165,7 +166,23 @@ def send_otp(request):
                 to=to,
                 from_=from_
             )
-            
+            headers = {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer EAALIjaP4h4YBO3OdlClikMkZCUZBwBYCoiGw4orWgaDjN8i7Oe17wS7hHl1WhSiubRJrjJxWdw6F04iJsN6n3SJ8Y6g3SH0xgKJzynZCIKzz9D4bExtKGTjQYiFzJZAE79ikn67OebZBGlRJlo4G9Wa26LjPaYvqD2pkRemmt10Vv2LZBVyvQoSLAErVu5FsIFZCJa0mydZAPlPjGMaZAPrAZD'
+            }
+            data = {
+                    "messaging_product": "whatsapp",
+                    "to": "917002450760",
+                    'type': 'text',
+                    'text': {
+                        'preview_url': False,
+                        'body': '<MESSAGE_CONTENT>'
+                    }
+            }
+            data = json.dumps(data)        
+
+         
+
             
         except Exception as e:
             print(e) 
