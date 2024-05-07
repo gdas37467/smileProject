@@ -20,11 +20,13 @@ from django.shortcuts import get_object_or_404
 from django.core.files.storage import FileSystemStorage
 
 
+from smtplib import SMTPException
 import random
 from django.conf import settings
 import uuid
 import jwt
 import pytz
+from django.core.mail import send_mail
 # Create your views here.
 
 
@@ -42,9 +44,62 @@ def authorize_admin(request):
     user  = User.objects.filter(username = username).first()
     if user == None or user.is_superuser == False:
         return False
+def generate_otp():
+    return str(random.randint(100000, 999999))
 
+@csrf_exempt
+def send_otp_email(request):
+    if request.method=='POST':
+        try:
+            email = request.POST.get('email')
+            otp = generate_otp()
+            message = f'Your OTP for password update is: {otp}'
+            subject = 'OTP Verification'
+            send_mail(
+                subject,
+                message,
+                'support@smileorganization.in',
+                [email],
+                fail_silently=False,
+                )
+            request.session['otp'] = {
+                    'otp': otp,
+                    'timestamp': time.time()  # Add the timestamp when OTP is generated
+                }
+            return JsonResponse({'status': 'success'})
+        except SMTPException as e:
+                print('There was an error sending an email: ', e)
 
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'},status =401)
 
+@csrf_exempt
+def verify_otp_email(request,otp):
+    if request.method == 'GET':
+        print(otp)
+        if otp:
+            otp_data = request.session.get('otp')
+            print(otp_data)
+            if otp_data :
+                otp_generated = otp_data.get('otp')
+                print(otp_generated)
+                timestamp = otp_data.get('timestamp')
+                current_time = time.time()
+                print(type(otp_generated))
+                print(type(otp))
+                # Check if OTP is within the 5-minute validity period
+                print(current_time - timestamp)
+                if otp_generated == otp and current_time - timestamp <= 80000:
+                    # OTP matched and is still valid, do further processing here
+                # OTP matched, do further processing here
+                    return JsonResponse({'status': 'success'})
+                else:
+                    return JsonResponse({'status': 'error', 'message': 'Invalid OTP or OTP has expired.'})
+            else:
+                return JsonResponse({'status': 'error', 'message': 'No OTP data found. Please generate OTP first.'})
+        else:
+            return JsonResponse({'status': 'error', 'message': 'OTP not provided.'})
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
 #completed
 @csrf_exempt
 def get_donor_list(request):
@@ -84,7 +139,7 @@ def get_donor_list(request):
                                     'totalDonation' : donor.totalDonation,
                                     } for index, donor in enumerate(donor_list_obj)]
             
-           
+        
 
             return JsonResponse({'success' : 'returned successsfully', 'donor_list' : donor_list_data},safe=False ,status =200)
                 

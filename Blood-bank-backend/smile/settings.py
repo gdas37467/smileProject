@@ -86,6 +86,7 @@ CORS_ALLOW_CREDENTIALS = True
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_AGE = 2*60
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
 
 
@@ -240,3 +241,11 @@ TWILIO_PHONE_NUMBER = os.environ.get('TWILIO_PHONE_NUMBER')
 
 API_KEY = os.environ.get('API_KEY')
 API_SECRET = os.environ.get('API_SECRET')
+
+
+EMAIL_HOST = 'smtp.hostinger.com'
+EMAIL_PORT = '587'
+EMAIL_HOST_USER='support@smileorganization.in'
+EMAIL_HOST_PASSWORD='smileorg99aA@'
+EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

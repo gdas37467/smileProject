@@ -14,7 +14,7 @@ import jwt
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.core.files.storage import FileSystemStorage
-
+from django.core.mail import send_mail
 
 
 #matchpair view
