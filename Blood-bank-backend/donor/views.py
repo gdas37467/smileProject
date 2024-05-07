@@ -17,6 +17,10 @@ import uuid
 import jwt
 import vonage
 import requests
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
+from django.core.mail import send_mail
+import time
 
 
 
@@ -239,12 +243,16 @@ def verify_otp(request):
 def donor_send_otp(request):
     if request.method== "POST": 
         body  = json.loads(request.body)
-        phoneNumber  = body['phoneNumber'] 
-        if not phoneNumber:
-            return JsonResponse({'status': 'Mobile number is required.'}, status=400)
-        donor = Donor.objects.filter(phoneNumber= phoneNumber).first()
-        if donor is None:
-            return JsonResponse({"error" : "Donor Not Registered"},status = 401)
+        email = body['email'] 
+        try:
+            validate_email(email)
+        except ValidationError as e:
+            return JsonResponse({'status': 'Invalid email address'}, status=400)
+        
+
+        donor = Donor.objects.filter(email=email).first()
+        if donor is not None:
+            return JsonResponse({"error" : "Email already exists for another donor"},status = 401)
         secret_key = pyotp.random_base32()
         print(secret_key)
         totp = pyotp.TOTP(secret_key, interval=300)  
@@ -254,23 +262,23 @@ def donor_send_otp(request):
         # Store the OTP and its creation time in the session
         request.session['secret_key'] = secret_key
         #request.session['otp_creation_time'] = time.time()
-        request.session['phoneNumber'] = phoneNumber
+        request.session['email'] = email
         
         #generate JWT token for user verification
         try: 
-            client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
-    
-            # Replace 'to' with the recipient's phone number
-            to = phoneNumber
-            
-            # Replace 'from_' with your Twilio phone number
-            from_ = settings.TWILIO_PHONE_NUMBER
-            
-            message = client.messages.create(
-                body="Hi , your otp is " + otp,
-                to=to,
-                from_=from_
-            )
+            message = f'Your OTP for password update is: {otp}'
+            subject = 'OTP Verification'
+            send_mail(
+                subject,
+                message,
+                'support@smileorganization.in',
+                [email],
+                fail_silently=False,
+                )
+            request.session['otp'] = {
+                    'otp': otp,
+                    'timestamp': time.time()  # Add the timestamp when OTP is generated
+                }
             
         except Exception as e:
             print(e) 

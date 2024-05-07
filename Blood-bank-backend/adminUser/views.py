@@ -27,6 +27,7 @@ import uuid
 import jwt
 import pytz
 from django.core.mail import send_mail
+
 # Create your views here.
 
 
@@ -52,7 +53,16 @@ def send_otp_email(request):
     if request.method=='POST':
         try:
             email = request.POST.get('email')
-            otp = generate_otp()
+            secret_key = pyotp.random_base32()
+            print(secret_key)
+            totp = pyotp.TOTP(secret_key, interval=300)  
+            otp = totp.now()
+        
+
+            
+            request.session['secret_key'] = secret_key
+            request.session['email'] = email
+            
             message = f'Your OTP for password update is: {otp}'
             subject = 'OTP Verification'
             send_mail(
@@ -62,11 +72,11 @@ def send_otp_email(request):
                 [email],
                 fail_silently=False,
                 )
-            request.session['otp'] = {
-                    'otp': otp,
-                    'timestamp': time.time()  # Add the timestamp when OTP is generated
-                }
-            return JsonResponse({'status': 'success'})
+            # request.session['otp'] = {
+            #         'otp': otp,
+            #         'timestamp': time.time()  # Add the timestamp when OTP is generated
+            #     }
+            return JsonResponse({'status': 'success'},status=200)
         except SMTPException as e:
                 print('There was an error sending an email: ', e)
 
@@ -78,24 +88,17 @@ def verify_otp_email(request,otp):
         print(otp)
         if otp:
             otp_data = request.session.get('otp')
-            print(otp_data)
-            if otp_data :
-                otp_generated = otp_data.get('otp')
-                print(otp_generated)
-                timestamp = otp_data.get('timestamp')
-                current_time = time.time()
-                print(type(otp_generated))
-                print(type(otp))
-                # Check if OTP is within the 5-minute validity period
-                print(current_time - timestamp)
-                if otp_generated == otp and current_time - timestamp <= 80000:
+            secret_key = request.session.get('secret_key')
+            print(secret_key)
+            totp = pyotp.TOTP(secret_key,interval=300)
+            status = totp.verify(otp)
+            print(status)
                     # OTP matched and is still valid, do further processing here
                 # OTP matched, do further processing here
-                    return JsonResponse({'status': 'success'})
-                else:
-                    return JsonResponse({'status': 'error', 'message': 'Invalid OTP or OTP has expired.'})
-            else:
-                return JsonResponse({'status': 'error', 'message': 'No OTP data found. Please generate OTP first.'})
+            if status == False:
+                return JsonResponse({"error" : "Incorrect OTP"  },status=400)
+            
+            return JsonResponse({"success" : "OTP verification success " ,"user_type" : type},status=200)
         else:
             return JsonResponse({'status': 'error', 'message': 'OTP not provided.'})
 
