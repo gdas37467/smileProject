@@ -15,8 +15,7 @@ from django.core.serializers import serialize
 from django.conf import settings
 import uuid
 import jwt
-import vonage
-import requests
+
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.core.mail import send_mail
@@ -170,29 +169,12 @@ def send_otp(request):
                 to=to,
                 from_=from_
             )
-            headers = {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer EAALIjaP4h4YBO3OdlClikMkZCUZBwBYCoiGw4orWgaDjN8i7Oe17wS7hHl1WhSiubRJrjJxWdw6F04iJsN6n3SJ8Y6g3SH0xgKJzynZCIKzz9D4bExtKGTjQYiFzJZAE79ikn67OebZBGlRJlo4G9Wa26LjPaYvqD2pkRemmt10Vv2LZBVyvQoSLAErVu5FsIFZCJa0mydZAPlPjGMaZAPrAZD'
-            }
-            data = {
-                    "messaging_product": "whatsapp",
-                    "to": "917002450760",
-                    'type': 'text',
-                    'text': {
-                        'preview_url': False,
-                        'body': '<MESSAGE_CONTENT>'
-                    }
-            }
-            data = json.dumps(data)        
-
-         
-
+            
             
         except Exception as e:
             print(e) 
             return JsonResponse({"error" : "error occured while sending sms"}, status=500)
         
-
         return JsonResponse({"success" : "SMS sent successfully"},status  =200) 
     return JsonResponse({"error" :"Invalid request Method"}, status=409)
 
@@ -243,16 +225,12 @@ def verify_otp(request):
 def donor_send_otp(request):
     if request.method== "POST": 
         body  = json.loads(request.body)
-        email = body['email'] 
-        try:
-            validate_email(email)
-        except ValidationError as e:
-            return JsonResponse({'status': 'Invalid email address'}, status=400)
-        
-
-        donor = Donor.objects.filter(email=email).first()
-        if donor is not None:
-            return JsonResponse({"error" : "Email already exists for another donor"},status = 401)
+        email  = body['email'] 
+        if not email:
+            return JsonResponse({'status': 'Email is required.'}, status=400)
+        donor = Donor.objects.filter(email= email).first()
+        if donor is None:
+            return JsonResponse({"error" : "Donor Not Registered"},status = 401)
         secret_key = pyotp.random_base32()
         print(secret_key)
         totp = pyotp.TOTP(secret_key, interval=300)  
@@ -262,10 +240,24 @@ def donor_send_otp(request):
         # Store the OTP and its creation time in the session
         request.session['secret_key'] = secret_key
         #request.session['otp_creation_time'] = time.time()
-        request.session['email'] = email
+        request.session['phoneNumber'] = phoneNumber
         
         #generate JWT token for user verification
         try: 
+            # client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+    
+            # # Replace 'to' with the recipient's phone number
+            # to = phoneNumber
+            
+            # # Replace 'from_' with your Twilio phone number
+            # from_ = settings.TWILIO_PHONE_NUMBER
+            
+            # message = client.messages.create(
+            #     body="Hi , your otp is " + otp,
+            #     to=to,
+            #     from_=from_
+            # )
+
             message = f'Your OTP for password update is: {otp}'
             subject = 'OTP Verification'
             send_mail(
@@ -275,10 +267,6 @@ def donor_send_otp(request):
                 [email],
                 fail_silently=False,
                 )
-            request.session['otp'] = {
-                    'otp': otp,
-                    'timestamp': time.time()  # Add the timestamp when OTP is generated
-                }
             
         except Exception as e:
             print(e) 
@@ -286,6 +274,8 @@ def donor_send_otp(request):
         
         return JsonResponse({"success" : "SMS sent successfully"},status  =200)
     return JsonResponse({"error" : "Invalid request method"},status = 400)
+
+
 
 #get donor past records
 
