@@ -195,7 +195,7 @@ def verify_otp(request):
             
             # request.session['member_id'] = email
 
-            request.session["session_id"]
+            request.session["member_id"] = email
 
             isDonor = False
             isRecipient = True
