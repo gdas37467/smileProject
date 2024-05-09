@@ -75,7 +75,7 @@ def register(request) :
 
             isDonor = True
             isRecipient = False
-            recipient = Recipient.objects.filter(phoneNumber= phoneNumber).first()
+            recipient = Recipient.objects.filter(email= email).first()
             if recipient is not None:
                 isRecipient = True
 
