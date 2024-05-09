@@ -284,10 +284,10 @@ def donor_send_otp(request):
 @csrf_exempt
 def get_donor_records(request):
     if request.method == "GET":
-        phoneNumber = request.session.get('member_id')
-        if phoneNumber is None:
+        email = request.session.get('member_id')
+        if email is None:
             return JsonResponse({"error" : "Invalid Session Id"},status =401)
-        donor = Donor.objects.filter(phoneNumber = phoneNumber).first()
+        donor = Donor.objects.filter(email=email).first()
         if donor is None : 
             JsonResponse({"error" : "Something Went Wrong"},status=401)
 
@@ -302,7 +302,7 @@ def get_donor_records(request):
                                     'totalDonation' : donor.totalDonation,
                                     } for donor in donorList]
                 print(donor_list_data)
-            donorDetailsObj = Donor.objects.filter(phoneNumber=phoneNumber).first()
+            donorDetailsObj = Donor.objects.filter(email=email).first()
             
             is_eligible = True
             differenceInDays = 90
