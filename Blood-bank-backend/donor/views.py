@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from donor.models import Donor
-from recipient.models import Recipient,RecipientUser
+from recipient.models import Recipient
 from django.http import JsonResponse
 import json
 from datetime import datetime
@@ -110,7 +110,7 @@ def register(request) :
 
             )
             new_donor.save()
-            request.session["donor_id"] = new_donor.id
+            
             request.session.set_expiry(20*60)
             print(request.session["session_data"])
         except Exception as e:
@@ -195,20 +195,14 @@ def verify_otp(request):
             
             # request.session['member_id'] = email
 
-            
-            
+            request.session["session_id"]
+
             isDonor = False
             isRecipient = True
-
-            recipient = RecipientUser.objects.filter(email=email).first()
             donor = Donor.objects.filter(email=email).first()
             if donor is not None:
                 isDonor = True
-                request.session["donor_id"] = donor.id
             
-            if recipient is None:
-                recipient = RecipientUser(email = email).save()
-            request.session["recipient_id"] = recipient.id
             type = jwt.encode({'isDonor': isDonor,"isRecipient" : isRecipient}, key, algorithm='HS256')
 
             request.session.set_expiry(24*60*60)
@@ -290,10 +284,10 @@ def donor_send_otp(request):
 @csrf_exempt
 def get_donor_records(request):
     if request.method == "GET":
-        donor_id = request.session.get('donor_id')
-        if donor_id is None:
+        phoneNumber = request.session.get('member_id')
+        if phoneNumber is None:
             return JsonResponse({"error" : "Invalid Session Id"},status =401)
-        donor = Donor.objects.filter(id = donor_id).first()
+        donor = Donor.objects.filter(phoneNumber = phoneNumber).first()
         if donor is None : 
             JsonResponse({"error" : "Something Went Wrong"},status=401)
 
@@ -308,7 +302,7 @@ def get_donor_records(request):
                                     'totalDonation' : donor.totalDonation,
                                     } for donor in donorList]
                 print(donor_list_data)
-            donorDetailsObj = Donor.objects.filter(id = donor_id).first()
+            donorDetailsObj = Donor.objects.filter(phoneNumber=phoneNumber).first()
             
             is_eligible = True
             differenceInDays = 90

@@ -273,9 +273,6 @@ def confirmRecipientDonation(request,recipient_id):
             recipient = Recipient.objects.filter(id = recipient_id).first()
             recipient.status = "Confirmed"
             recipient.save()
-            recipient.recipientUserId.status = "Confirmed"
-            recipient.recipientUserId.lastRequestDate = recipient.requestDate
-            recipient.recipientUserId.save()
             return JsonResponse({"status" : "Request approved successfully"},status=200)
 
         except Exception as e:
@@ -295,8 +292,6 @@ def reject_request(request,recipient_id):
             recipient = Recipient.objects.filter(id = recipient_id).first()
             recipient.status = "Rejected"
             recipient.save()
-            recipient.recipientUserId.status = "Confirmed"
-            recipient.recipientUserId.save()
             dayQuantity = Calender.objects.first()
             dayQuantity.quantity+=1
             dayQuantity.save()
