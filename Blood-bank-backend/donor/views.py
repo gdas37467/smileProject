@@ -111,8 +111,8 @@ def register(request) :
             )
             new_donor.save()
             
-            request.session.set_expiry(20*60)
-            print(request.session["session_data"])
+            request.session.set_expiry(24*20*60)
+            
         except Exception as e:
             print(e)
             return JsonResponse({'error': 'While regestering'},status=500)
@@ -202,7 +202,8 @@ def verify_otp(request):
             donor = Donor.objects.filter(email=email).first()
             if donor is not None:
                 isDonor = True
-            
+            print("isdonor " + str(isDonor))
+            print("isrecipient" + str(isRecipient))
             type = jwt.encode({'isDonor': isDonor,"isRecipient" : isRecipient}, key, algorithm='HS256')
 
             request.session.set_expiry(24*60*60)

@@ -22,7 +22,6 @@ class Recipient(models.Model):
     dob = models.DateField(default=timezone.now)
     bloodGroup = models.CharField(default="",max_length=30)
     phoneNumber = models.CharField(default='',max_length=10)
-    alternateNumber = models.CharField(default='',max_length=10)
     email = models.CharField(default="",max_length=30)
     gender = models.CharField(default="",max_length=300)
     address  = models.TextField(default="",max_length=500)

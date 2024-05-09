@@ -59,16 +59,16 @@ from django.core.mail import send_mail
 def request_blood(request):
     if request.method == "POST" : 
 
-        phoneNumber = request.session.get('member_id')
-        if phoneNumber is None:
+        email = request.session.get('member_id')
+        if email is None:
             return JsonResponse({"error" : "Invalid Session Id"},status =401)
-
+        print(email)
          
         firstName = request.POST.get('firstName')
         lastName = request.POST.get('lastName')
         dob = request.POST.get('dob')
-        email = request.POST.get('email')
-        alternateNumber = request.POST.get('phoneNumber')
+        #email = request.POST.get('email')
+        phoneNumber = request.POST.get('phoneNumber')
         address = request.POST.get('address')
         bloodGroup = request.POST.get('bloodGroup')
         hospitalName = request.POST.get('hospitalName')
@@ -98,7 +98,7 @@ def request_blood(request):
         current_date = datetime.datetime.strptime(current_date_string, "%Y-%m-%d").date()
 
         try:
-            recipient = Recipient.objects.filter(phoneNumber = phoneNumber,status__in = ['Confirmed' ,'Pending']).order_by("-date").first()
+            recipient = Recipient.objects.filter(email=email,status__in = ['Confirmed' ,'Pending']).order_by("-date").first()
             if recipient is not None:
                 #lastRecieved = datetime.datetime.strptime(recipient.date,"%Y-%m-%d").date()
                 print((current_date.year - recipient.date.year)*365 +( current_date.month-recipient.date.month)*30 + (current_date.day - recipient.date.day))
@@ -156,7 +156,7 @@ def request_blood(request):
             dob = birthDateObj.date(),
             bloodGroup = bloodGroup,
             phoneNumber = phoneNumber,
-            alternateNumber = alternateNumber,
+            
             email = email,
             address = address,
             date = current_date,
@@ -193,23 +193,23 @@ def request_blood(request):
 @csrf_exempt
 def get_recipient_records(request):
     if request.method == "GET":
-        phoneNumber = request.session.get('member_id')
-        print(phoneNumber)
-        if phoneNumber is None:
+        email = request.session.get('member_id')
+        print(email)
+        if email is None:
             return JsonResponse({"error" : "Invalid Session Id"},status =401)
         
-        recipients = Recipient.objects.filter(phoneNumber = phoneNumber,status__in = ['Confirmed','Pending','Rejected']).order_by("-date").all()
+        recipients = Recipient.objects.filter(email = email,status__in = ['Confirmed','Pending','Rejected']).order_by("-date").all()
         print(recipients)
         data = []
         calender = Calender.objects.first()
         
         isEligible= True
         difference = 15
-        eligibleRecipient = Recipient.objects.filter(phoneNumber = phoneNumber,status__in = ['Confirmed' ,'Pending']).order_by("-date").first()
+        eligibleRecipient = Recipient.objects.filter(email = email,status__in = ['Confirmed' ,'Pending']).order_by("-date").first()
         if eligibleRecipient is not None:
             current_date_string= datetime.datetime.now(tz=pytz.timezone('Asia/Kolkata')).date().isoformat()
             current_date = datetime.datetime.strptime(current_date_string, "%Y-%m-%d").date()
-            difference =  (current_date.year - eligibleRecipient.date.year)*365 +( current_date.month-eligibleRecipient.date.month)*30 + (current_date.day - eligibleRecipient.date.day) 
+            difference =  (current_date.year - eligibleRecipient.requestDate.year)*365 +( current_date.month-eligibleRecipient.requestDate.month)*30 + (current_date.day - eligibleRecipient.requestDate.day) 
             isEligible = difference >= 15
         
         newData = { 
@@ -225,7 +225,7 @@ def get_recipient_records(request):
                         {
                             
                             "bloodGroup" : recipient.bloodGroup,
-                            "date" : recipient.date, 
+                            "date" : recipient.requestDate, 
                             "status" : recipient.status,
                             "recipient_name" : recipient.firstName +" " + recipient.lastName,
                             'gender' : recipient.gender,
