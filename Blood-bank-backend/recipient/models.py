@@ -13,12 +13,21 @@ class FirstDonationDetails(models.Model):
     def __str__(self) -> str:
         return self.donorName
 
+class RecipientUser(models.Model) : 
+    id = models.UUIDField(primary_key=True,default= uuid.uuid4,  editable=False)
+    email = models.CharField(default="",max_length=30)
+    phoneNumber = models.CharField(default='',max_length=10,null=True)
+    lastRequestDate = models.DateField(null=True)
+    status = models.CharField(default="Confirmed",max_length=10)
+    
+
 # Create your models here.
 class Recipient(models.Model):
     id = models.UUIDField(primary_key=True,default= uuid.uuid4,  editable=False)
+    recipientUserId = models.ForeignKey(RecipientUser, null=True, on_delete=models.CASCADE)
     firstName = models.CharField(default="",max_length=30)
     lastName = models.CharField(default="",max_length=30)
-    dob = models.DateField(default=timezone.now)
+    dob = models.DateField(null=True)
     bloodGroup = models.CharField(default="",max_length=30)
     phoneNumber = models.CharField(default='',max_length=10)
     alternateNumber = models.CharField(default='',max_length=10)
@@ -30,7 +39,7 @@ class Recipient(models.Model):
     hasCancer = models.BooleanField(default= False)
     firstDonCheck = models.BooleanField(default = False)
     firstDonation = models.ForeignKey(FirstDonationDetails, null=True, on_delete=models.CASCADE)
-    date = models.DateField(timezone.now)
+    requestDate = models.DateField(null=True)
     status = models.CharField(default="Pending",max_length=10)
 
 

@@ -2,7 +2,7 @@ from django.shortcuts import render
 import json
 
 import datetime
-from recipient.models import Recipient,FirstDonationDetails
+from recipient.models import Recipient,FirstDonationDetails,RecipientUser
 from donor.models import Donor,Calender
 from django.http import JsonResponse
 import datetime
@@ -97,12 +97,15 @@ def request_blood(request):
         current_date_string= datetime.datetime.now(tz=pytz.timezone('Asia/Kolkata')).date().isoformat()
         current_date = datetime.datetime.strptime(current_date_string, "%Y-%m-%d").date()
 
+        recipient_id= request.session.get('recipient_id')
+        
+
         try:
-            recipient = Recipient.objects.filter(phoneNumber = phoneNumber,status__in = ['Confirmed' ,'Pending']).order_by("-date").first()
+            recipient = RecipientUser.objects.filter(id =recipient_id).first()
             if recipient is not None:
                 #lastRecieved = datetime.datetime.strptime(recipient.date,"%Y-%m-%d").date()
-                print((current_date.year - recipient.date.year)*365 +( current_date.month-recipient.date.month)*30 + (current_date.day - recipient.date.day))
-                if (current_date.year - recipient.date.year)*365 +( current_date.month-recipient.date.month)*30 + (current_date.day - recipient.date.day) <15:
+                print((current_date.year - recipient.lastRequestDate.year)*365 +( current_date.month-recipient.lastRequestDate.month)*30 + (current_date.day - recipient.lastRequestDate.day))
+                if (recipient.lastRequestDate == None or ( (current_date.year - recipient.lastRequestDate.year)*365 +( current_date.month-recipient.lastRequestDate.month)*30 + (current_date.day - recipient.lastRequestDate.day) <15) or recipient.status == "Pending"):
                     return JsonResponse({"error" : "Cannot place request withing 15 days of last recieved"},status = 400)
             
             
@@ -157,13 +160,14 @@ def request_blood(request):
             bloodGroup = bloodGroup,
             phoneNumber = phoneNumber,
             alternateNumber = alternateNumber,
-            email = email,
+            email = recipient.email,
             address = address,
             date = current_date,
             hospitalName = hospitalName,
             isThalassemia = isThalassemia,
             hasCancer  = hasCancer,
             firstDonCheck = firstDonCheck,
+            recipientUserId = recipient,
             firstDonation = firstDonation,
             gender=gender
             )
@@ -171,6 +175,8 @@ def request_blood(request):
             
             dayQuantity.quantity-=1
             dayQuantity.save()
+            recipient.status = "Pending"
+            recipient.save()
             return JsonResponse({"success" : "Request Placed Successfully"},status=201)
 
 
@@ -193,23 +199,23 @@ def request_blood(request):
 @csrf_exempt
 def get_recipient_records(request):
     if request.method == "GET":
-        phoneNumber = request.session.get('member_id')
-        print(phoneNumber)
-        if phoneNumber is None:
+        recipient_id= request.session.get('recipient_id')
+        print(recipient_id)
+        if recipient_id is None:
             return JsonResponse({"error" : "Invalid Session Id"},status =401)
         
-        recipients = Recipient.objects.filter(phoneNumber = phoneNumber,status__in = ['Confirmed','Pending','Rejected']).order_by("-date").all()
+        recipients = Recipient.objects.filter(recipientUserId = recipient_id,status__in = ['Confirmed','Pending','Rejected']).order_by("-date").all()
         print(recipients)
         data = []
         calender = Calender.objects.first()
         
         isEligible= True
         difference = 15
-        eligibleRecipient = Recipient.objects.filter(phoneNumber = phoneNumber,status__in = ['Confirmed' ,'Pending']).order_by("-date").first()
+        eligibleRecipient = RecipientUser.objects.filter(id =recipient_id).first()
         if eligibleRecipient is not None:
             current_date_string= datetime.datetime.now(tz=pytz.timezone('Asia/Kolkata')).date().isoformat()
             current_date = datetime.datetime.strptime(current_date_string, "%Y-%m-%d").date()
-            difference =  (current_date.year - eligibleRecipient.date.year)*365 +( current_date.month-eligibleRecipient.date.month)*30 + (current_date.day - eligibleRecipient.date.day) 
+            difference =  (current_date.year - eligibleRecipient.lastRequestDate.year)*365 +( current_date.month-eligibleRecipient.lastRequestDate.month)*30 + (current_date.day - eligibleRecipient.lastRequestDate.day) 
             isEligible = difference >= 15
         
         newData = { 
@@ -225,7 +231,7 @@ def get_recipient_records(request):
                         {
                             
                             "bloodGroup" : recipient.bloodGroup,
-                            "date" : recipient.date, 
+                            "date" : recipient.requestDate, 
                             "status" : recipient.status,
                             "recipient_name" : recipient.firstName +" " + recipient.lastName,
                             'gender' : recipient.gender,

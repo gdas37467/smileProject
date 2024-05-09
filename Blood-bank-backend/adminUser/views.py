@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import render
 from django.http import HttpResponse
-from donor.models import Donor
+from donor.models import Donor,Calender
 from recipient.models import Recipient
 from adminUser.models import LeaderBoard
 from django.http import JsonResponse
@@ -273,6 +273,9 @@ def confirmRecipientDonation(request,recipient_id):
             recipient = Recipient.objects.filter(id = recipient_id).first()
             recipient.status = "Confirmed"
             recipient.save()
+            recipient.recipientUserId.status = "Confirmed"
+            recipient.recipientUserId.lastRequestDate = recipient.requestDate
+            recipient.recipientUserId.save()
             return JsonResponse({"status" : "Request approved successfully"},status=200)
 
         except Exception as e:
@@ -292,6 +295,11 @@ def reject_request(request,recipient_id):
             recipient = Recipient.objects.filter(id = recipient_id).first()
             recipient.status = "Rejected"
             recipient.save()
+            recipient.recipientUserId.status = "Confirmed"
+            recipient.recipientUserId.save()
+            dayQuantity = Calender.objects.first()
+            dayQuantity.quantity+=1
+            dayQuantity.save()
         except Exception as e:
             print(e)
             return JsonResponse({"error" : "Something Went wrong"},status =500)
