@@ -48,61 +48,7 @@ def authorize_admin(request):
 def generate_otp():
     return str(random.randint(100000, 999999))
 
-@csrf_exempt
-def send_otp_email(request):
-    if request.method=='POST':
-        try:
-            email = request.POST.get('email')
-            secret_key = pyotp.random_base32()
-            print(secret_key)
-            totp = pyotp.TOTP(secret_key, interval=300)  
-            otp = totp.now()
-        
 
-            
-            request.session['secret_key'] = secret_key
-            request.session['email'] = email
-            
-            message = f'Your OTP for password update is: {otp}'
-            subject = 'OTP Verification'
-            send_mail(
-                subject,
-                message,
-                'support@smileorganization.in',
-                [email],
-                fail_silently=False,
-                )
-            # request.session['otp'] = {
-            #         'otp': otp,
-            #         'timestamp': time.time()  # Add the timestamp when OTP is generated
-            #     }
-            return JsonResponse({'status': 'success'},status=200)
-        except SMTPException as e:
-                print('There was an error sending an email: ', e)
-
-    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'},status =401)
-
-@csrf_exempt
-def verify_otp_email(request,otp):
-    if request.method == 'GET':
-        print(otp)
-        if otp:
-            otp_data = request.session.get('otp')
-            secret_key = request.session.get('secret_key')
-            print(secret_key)
-            totp = pyotp.TOTP(secret_key,interval=300)
-            status = totp.verify(otp)
-            print(status)
-                    # OTP matched and is still valid, do further processing here
-                # OTP matched, do further processing here
-            if status == False:
-                return JsonResponse({"error" : "Incorrect OTP"  },status=400)
-            
-            return JsonResponse({"success" : "OTP verification success " ,"user_type" : type},status=200)
-        else:
-            return JsonResponse({'status': 'error', 'message': 'OTP not provided.'})
-
-    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
 #completed
 @csrf_exempt
 def get_donor_list(request):
@@ -187,23 +133,20 @@ def confirm_donor(request,donor_id):
             return JsonResponse({"error":"Donation Confirmation Failed"},status=500)
        
         try: 
-            client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
-
-          
-
-            # Replace 'to' with the recipient's phone number
-            to =donor.phoneNumber
             
-            # Replace 'from_' with your Twilio phone number
-            from_ = settings.TWILIO_PHONE_NUMBER
-            
-            message = client.messages.create(
-                body="Hi "+ donor.firstName + ", " + "\nThank You for your Blood Donation.", 
-                to=to,
-                from_=from_
-            )
+            message = "Hi "+ donor.firstName + ", " + "\nThank You for your Blood Donation.", 
+            subject = 'Blood Needed Urgently'
+            send_mail(
+                subject,
+                message,
+                'support@smileorganization.in',
+                [donor.email],
+                fail_silently=False,
+                )
 
             return JsonResponse({"success" : "Comfirmation Done Successfully"},status=200)
+        
+            
             
         except Exception as e:
             print(e) 
@@ -364,18 +307,19 @@ def requirement_msg(request, donor_id):
         if (donor.lastDonated is not None) and donor.lastDonated >three_months_ago :
             return JsonResponse({"error" : "Donor not eligible for Donation"}, status=500)
         try: 
-            client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
-            # Replace 'to' with the recipient's phone number
-            to =donor.phoneNumber
             
-            # Replace 'from_' with your Twilio phone number
-            from_ = settings.TWILIO_PHONE_NUMBER
+            message = "Hi "+ donor.firstName + ", " + "\nThere is an urgent need of blood. Kindly visit or contact SMILE admin", 
+            subject = 'Blood Needed Urgently'
+            send_mail(
+                subject,
+                message,
+                'support@smileorganization.in',
+                [donor.email],
+                fail_silently=False,
+                )
+
+
             
-            message = client.messages.create(
-                body="Hi "+ donor.firstName + ", " + "\nThere is an urgent need of blood. Kindly visit or contact SMILE admin", 
-                to=to,
-                from_=from_
-            )
 
             return JsonResponse({"success" : "SMS sent successfully"},status=200)
             
@@ -397,21 +341,16 @@ def loan_msg(request, donor_id):
         if donor.loan == False : 
             return JsonResponse({"error" : "Donor doesn't have any existing loan"},status = 500)
         try: 
-            client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
-
-          
-
-            # Replace 'to' with the recipient's phone number
-            to =donor.phoneNumber
             
-            # Replace 'from_' with your Twilio phone number
-            from_ = settings.TWILIO_PHONE_NUMBER
-            
-            message = client.messages.create(
-                body="Hi "+ donor.firstName + ", " + "\nThere is a pending blood loan against your id, Kindly visit SMILE or contact admin to donate blood.", 
-                to=to,
-                from_=from_
-            )
+            message = "Hi "+ donor.firstName + ", " + "\nThere is a pending blood loan against your id, Kindly visit SMILE or contact admin to donate blood."
+            subject = 'Loan Pending'
+            send_mail(
+                subject,
+                message,
+                'support@smileorganization.in',
+                [donor.email],
+                fail_silently=False,
+                )
 
             return JsonResponse({"success" : "SMS sent successfully"},status=200)
             
@@ -443,21 +382,17 @@ def confirm_loan(request, donor_id):
             return JsonResponse({"error":"Donation Confirmation Failed"},status=500)
        
         try: 
-            client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
-
-          
-
-            # Replace 'to' with the recipient's phone number
-            to =donor.phoneNumber
             
-            # Replace 'from_' with your Twilio phone number
-            from_ = settings.TWILIO_PHONE_NUMBER
-            
-            message = client.messages.create(
-                body="Hi "+ donor.firstName + ", " + "\nYour Loan Request for 1 unit blood has been processed.", 
-                to=to,
-                from_=from_
-            )
+
+            message = f'Hi '+ donor.firstName + ',' + '\nYour Loan Request for 1 unit blood has been processed.'
+            subject = 'Loan Confirmed'
+            send_mail(
+                subject,
+                message,
+                'support@smileorganization.in',
+                [donor.email],
+                fail_silently=False,
+                )
 
             return JsonResponse({"success" : "Comfirmation Done Successfully"},status=200)
             
