@@ -88,7 +88,7 @@ def request_blood(request):
         image_file = request.FILES.get('donationReceipt')
         birthDateObj = datetime.datetime.strptime(dob, date_format)
 
-
+        print("Hello")
         dayQuantity = Calender.objects.first()
         if dayQuantity.quantity <= 0:
             return JsonResponse({"error":"Currently no slot available for booking!"},status=500)
@@ -98,13 +98,13 @@ def request_blood(request):
         current_date = datetime.datetime.strptime(current_date_string, "%Y-%m-%d").date()
 
         try:
-            recipient = Recipient.objects.filter(email=email,status__in = ['Confirmed' ,'Pending']).order_by("-date").first()
+            recipient = Recipient.objects.filter(email=email,status__in = ['Confirmed' ,'Pending']).order_by("-requestDate").first()
             if recipient is not None:
                 #lastRecieved = datetime.datetime.strptime(recipient.date,"%Y-%m-%d").date()
-                print((current_date.year - recipient.date.year)*365 +( current_date.month-recipient.date.month)*30 + (current_date.day - recipient.date.day))
-                if (current_date.year - recipient.date.year)*365 +( current_date.month-recipient.date.month)*30 + (current_date.day - recipient.date.day) <15:
+                print((current_date.year - recipient.requestDate.year)*365 +( current_date.month-recipient.requestDate.month)*30 + (current_date.day - recipient.requestDate.day))
+                if (current_date.year - recipient.requestDate.year)*365 +( current_date.month-recipient.requestDate.month)*30 + (current_date.day - recipient.requestDate.day) <15:
                     return JsonResponse({"error" : "Cannot place request withing 15 days of last recieved"},status = 400)
-            
+            print('HI')
             
         except Exception as e:
             print(e)
@@ -159,7 +159,7 @@ def request_blood(request):
             
             email = email,
             address = address,
-            date = current_date,
+            requestDate = current_date,
             hospitalName = hospitalName,
             isThalassemia = isThalassemia,
             hasCancer  = hasCancer,
