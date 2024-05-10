@@ -288,7 +288,7 @@ const DonateBlood = () => {
             console.log(phoneNumber)
             timer()
             try{
-                const res =  await axios.post('http://192.168.1.15:8000/donor/send_otp/', JSON.stringify(phoneNumber))
+                const res =  await axios.post('http://192.168.29.55:8000/donor/send_otp/', JSON.stringify(phoneNumber))
                 if('success' in res.data){
                     toast.success(res.data.success, {
                         position : toast.POSITION.TOP_RIGHT
@@ -327,7 +327,7 @@ const DonateBlood = () => {
         }
         console.log(JSON.stringify(donorDet))
         try {
-            const res = await axios.post('http://192.168.1.15:8000/donor/register/',JSON.stringify(donorDet))
+            const res = await axios.post('http://192.168.29.55:8000/donor/register/',JSON.stringify(donorDet))
             if('success' in res.data){
                 const now = new Date().getTime()
                         let check = {
@@ -358,26 +358,24 @@ const DonateBlood = () => {
     }
 
     // Donor Register Form
-    const formDetails = (activeStep) =>{
+    function formDetails(activeStep) {
 
-        switch(activeStep){
+        switch (activeStep) {
 
-            case 0 : return(
-                <>  
+            case 0: return (
+                <>
 
-                    <Grid templateColumns={{lg : 'repeat(2, 1fr)'}} columnGap={14}>
+                    <Grid templateColumns={{ lg: 'repeat(2, 1fr)' }} columnGap={14}>
                         <GridItem>
                             <FormControl isRequired>
                                 <FormLabel htmlFor='firstName'>First Name</FormLabel>
                                 <InputGroup>
-                                    <InputLeftAddon backgroundColor='#d71414'  height={30}>
-                                        <Icon as={IdentificationBadge } boxSize={8} weight="duotone" color="#f0e3e4" />
+                                    <InputLeftAddon backgroundColor='#d71414' height={30}>
+                                        <Icon as={IdentificationBadge} boxSize={8} weight="duotone" color="#f0e3e4" />
                                     </InputLeftAddon>
-                                    <Input variant='outline' backgroundColor='red.50' errorBorderColor='red.400' focusBorderColor={isInValid.firstName ? 'red.400' : 'green.300'} isInvalid={isInValid.firstName} height={30} fontSize={14} type="text" name="firstName" value={donorInfo.firstName} onChange={e =>  setDetails(e)}  colorScheme='pink'/>
+                                    <Input variant='outline' backgroundColor='red.50' errorBorderColor='red.400' focusBorderColor={isInValid.firstName ? 'red.400' : 'green.300'} isInvalid={isInValid.firstName} height={30} fontSize={14} type="text" name="firstName" value={donorInfo.firstName} onChange={e => setDetails(e)} colorScheme='pink' />
                                 </InputGroup>
-                                    {
-                                        isInValid.firstName ? <FormHelperText color="red" fontWeight={500}> Name is too Short, Minimum 3 Characters is required  </FormHelperText> : null
-                                    }
+                                {isInValid.firstName ? <FormHelperText color="red" fontWeight={500}> Name is too Short, Minimum 3 Characters is required  </FormHelperText> : null}
                             </FormControl>
                         </GridItem>
                         <GridItem>
@@ -385,19 +383,17 @@ const DonateBlood = () => {
                                 <FormLabel htmlFor='lastName'>Last Name</FormLabel>
                                 <InputGroup>
                                     <InputLeftAddon backgroundColor='#d71414' height={30}>
-                                        <Icon as={IdentificationBadge }  boxSize={8} weight="duotone" color="#f0e3e4" />
+                                        <Icon as={IdentificationBadge} boxSize={8} weight="duotone" color="#f0e3e4" />
                                     </InputLeftAddon>
-                                    <Input variant='outline' backgroundColor='red.50' errorBorderColor='red.400' focusBorderColor={isInValid.lastName ? 'red.400' : 'green.300'} isInvalid={isInValid.lastName} height={30} fontSize={14} type="text" name="lastName" value={donorInfo.lastName} onChange={e =>  setDetails(e)} />
+                                    <Input variant='outline' backgroundColor='red.50' errorBorderColor='red.400' focusBorderColor={isInValid.lastName ? 'red.400' : 'green.300'} isInvalid={isInValid.lastName} height={30} fontSize={14} type="text" name="lastName" value={donorInfo.lastName} onChange={e => setDetails(e)} />
                                 </InputGroup>
-                                    {
-                                        isInValid.lastName ? <FormHelperText color="red" fontWeight={500}> Name is too Short, Minimum 3 Characters is required  </FormHelperText> : null
-                                    }
+                                {isInValid.lastName ? <FormHelperText color="red" fontWeight={500}> Name is too Short, Minimum 3 Characters is required  </FormHelperText> : null}
                             </FormControl>
                         </GridItem>
                         <GridItem>
                             <FormControl isRequired>
                                 <FormLabel htmlFor='gender'> Gender </FormLabel>
-                                <RadioGroup onChange={e => setDonorInfo(prev => ({...prev , gender : e}))} name="gender" value={donorInfo.gender}>
+                                <RadioGroup onChange={e => setDonorInfo(prev => ({ ...prev, gender: e }))} name="gender" value={donorInfo.gender}>
                                     <Stack direction='row' pt={4}>
                                         <Radio size='lg' colorScheme='red' value='male'>Male</Radio>
                                         <Radio size='lg' colorScheme='red' value='female'>Female</Radio>
@@ -411,29 +407,29 @@ const DonateBlood = () => {
                                 <FormLabel htmlFor='dob'>Date of Birth</FormLabel>
                                 <InputGroup>
                                     <InputLeftAddon backgroundColor='#d71414' height={30}>
-                                        <Icon as={Calendar }  boxSize={8} weight="duotone" color="#f0e3e4" />
+                                        <Icon as={Calendar} boxSize={8} weight="duotone" color="#f0e3e4" />
                                     </InputLeftAddon>
-                                    <Input variant='outline' backgroundColor='red.50' height={30} fontSize={14}  type="date" name="dob" value={donorInfo.dob} onChange={e =>  setDetails(e)} />
+                                    <Input variant='outline' backgroundColor='red.50' height={30} fontSize={14} type="date" name="dob" value={donorInfo.dob} onChange={e => setDetails(e)} />
                                 </InputGroup>
                             </FormControl>
                         </GridItem>
-                        
-                        
+
+
                     </Grid>
                 </>
             )
 
-            case 1 : return(
+            case 1: return (
                 <>
-                    <Grid templateColumns={{lg : 'repeat(2, 1fr)'}} columnGap={12}>
+                    <Grid templateColumns={{ lg: 'repeat(2, 1fr)' }} columnGap={12}>
                         <GridItem>
                             <FormControl isRequired>
                                 <FormLabel htmlFor='bloodGroup'>Blood Group</FormLabel>
                                 <InputGroup>
                                     <InputLeftAddon backgroundColor='#d71414' height={30}>
-                                        <Icon as={Drop}  boxSize={8} weight='duotone' color='#f0e3e4' />
+                                        <Icon as={Drop} boxSize={8} weight='duotone' color='#f0e3e4' />
                                     </InputLeftAddon>
-                                    <Select placeholder='Select Your Blood Group' height={30} fontSize={14} variant="outline" backgroundColor='red.50' name='bloodGroup' value={donorInfo.bloodGroup} onChange={e =>  setDetails(e)}>
+                                    <Select placeholder='Select Your Blood Group' height={30} fontSize={14} variant="outline" backgroundColor='red.50' name='bloodGroup' value={donorInfo.bloodGroup} onChange={e => setDetails(e)}>
                                         <option value='A+'>A Positive (A+)</option>
                                         <option value='A-'>A Negative (A-)</option>
                                         <option value='B+'>B Positive (B+)</option>
@@ -444,38 +440,38 @@ const DonateBlood = () => {
                                         <option value='AB-'>AB Negative (AB-)</option>
                                     </Select>
                                 </InputGroup>
-                                
+
                             </FormControl>
                         </GridItem>
                         {/* <GridItem>
-                            <FormControl isRequired>
-                                <FormLabel htmlFor='weight'>Weight</FormLabel>
-                                <InputGroup>
-                                    <InputLeftAddon backgroundColor='#d71414' height={30}>
-                                        <Icon as={Gauge}  boxSize={8} weight='duotone' color='#f0e3e4' />
-                                    </InputLeftAddon>
-                                    <Input variant='outline' backgroundColor='red.50' height={30} fontSize={14}  type="number" name="weight" value={donorInfo.weight} onChange={e =>  setDetails(e)} />
-                                    <InputRightAddon children='kg' backgroundColor='#d71414' color='#f0e3e4'  height={30}/>
-                                </InputGroup>
-                                
-                            </FormControl>
-                        </GridItem> */}
+                    <FormControl isRequired>
+                        <FormLabel htmlFor='weight'>Weight</FormLabel>
+                        <InputGroup>
+                            <InputLeftAddon backgroundColor='#d71414' height={30}>
+                                <Icon as={Gauge}  boxSize={8} weight='duotone' color='#f0e3e4' />
+                            </InputLeftAddon>
+                            <Input variant='outline' backgroundColor='red.50' height={30} fontSize={14}  type="number" name="weight" value={donorInfo.weight} onChange={e =>  setDetails(e)} />
+                            <InputRightAddon children='kg' backgroundColor='#d71414' color='#f0e3e4'  height={30}/>
+                        </InputGroup>
+                        
+                    </FormControl>
+                </GridItem> */}
                         <GridItem>
                             <FormControl>
                                 <FormLabel htmlFor='lastDonated'>Last Donated (Optional) </FormLabel>
                                 <InputGroup>
                                     <InputLeftAddon backgroundColor='#d71414' height={30}>
-                                        <Icon as={CalendarCheck } boxSize={8} weight='duotone' color='#f0e3e4' />
+                                        <Icon as={CalendarCheck} boxSize={8} weight='duotone' color='#f0e3e4' />
                                     </InputLeftAddon>
-                                    <Input variant='outline' backgroundColor='red.50' height={30} fontSize={14}  type="date" name="lastDonated" value={donorInfo.lastDonated} onChange={e =>  setDetails(e)} />
+                                    <Input variant='outline' backgroundColor='red.50' height={30} fontSize={14} type="date" name="lastDonated" value={donorInfo.lastDonated} onChange={e => setDetails(e)} />
                                 </InputGroup>
                             </FormControl>
                         </GridItem>
-                        <GridItem >
-                            <FormControl paddingTop={10}> 
+                        <GridItem>
+                            <FormControl paddingTop={10}>
                                 <InputGroup>
                                     <FormLabel htmlFor='isThalassemia'>Do you have Thalassemia?</FormLabel>
-                                    <Checkbox size='lg' colorScheme='orange' border="red" paddingLeft={5} name='isThalassemia' isChecked={donorInfo.isThalassemia}   onChange={e => setDonorInfo(prevState => ({...prevState, isThalassemia : !prevState.isThalassemia}))} />
+                                    <Checkbox size='lg' colorScheme='orange' border="red" paddingLeft={5} name='isThalassemia' isChecked={donorInfo.isThalassemia} onChange={e => setDonorInfo(prevState => ({ ...prevState, isThalassemia: !prevState.isThalassemia }))} />
                                 </InputGroup>
                             </FormControl>
                         </GridItem>
@@ -484,21 +480,19 @@ const DonateBlood = () => {
             )
 
 
-            case 2 : return(
+            case 2: return (
                 <>
-                    <Grid templateColumns={{lg : 'repeat(2, 1fr)'}} columnGap={12}>
+                    <Grid templateColumns={{ lg: 'repeat(2, 1fr)' }} columnGap={12}>
                         <GridItem>
                             <FormControl isRequired>
                                 <FormLabel htmlFor='email'>Email</FormLabel>
                                 <InputGroup>
-                                <InputLeftAddon backgroundColor='#d71414' height={30}>
-                                    <Icon as={Envelope} boxSize={8} weight="duotone" color="#f0e3e4" />
-                                </InputLeftAddon>
-                                <Input variant='outline' backgroundColor='red.50' errorBorderColor='red.400' focusBorderColor={isInValid.email ? 'red.400' : 'green.300'} isInvalid={isInValid.email} height={30} fontSize={14}  type="email" name="email" value={donorInfo.email} onChange={e =>  setDetails(e)} />
+                                    <InputLeftAddon backgroundColor='#d71414' height={30}>
+                                        <Icon as={Envelope} boxSize={8} weight="duotone" color="#f0e3e4" />
+                                    </InputLeftAddon>
+                                    <Input variant='outline' backgroundColor='red.50' errorBorderColor='red.400' focusBorderColor={isInValid.email ? 'red.400' : 'green.300'} isInvalid={isInValid.email} height={30} fontSize={14} type="email" name="email" value={donorInfo.email} onChange={e => setDetails(e)} />
                                 </InputGroup>
-                                {
-                                    isInValid.email ? <FormHelperText color="red" fontWeight={500}> Please Enter a Valid Email  </FormHelperText> : null
-                                }
+                                {isInValid.email ? <FormHelperText color="red" fontWeight={500}> Please Enter a Valid Email  </FormHelperText> : null}
                             </FormControl>
                         </GridItem>
                         <GridItem>
@@ -508,42 +502,38 @@ const DonateBlood = () => {
                                     <InputLeftAddon backgroundColor='#d71414' height={30}>
                                         <Icon as={Phone} boxSize={8} weight='duotone' color='#f0e3e4' />
                                     </InputLeftAddon>
-                                    <Input variant='outline' backgroundColor='red.50' errorBorderColor='red.400' focusBorderColor={isInValid.phoneNumber ? 'red.400' : 'green.300'} isInvalid={isInValid.phoneNumber} height={30} fontSize={14}  type="number" name="phoneNumber" value={donorInfo.phoneNumber} onChange={e =>  setDetails(e)} />
+                                    <Input variant='outline' backgroundColor='red.50' errorBorderColor='red.400' focusBorderColor={isInValid.phoneNumber ? 'red.400' : 'green.300'} isInvalid={isInValid.phoneNumber} height={30} fontSize={14} type="number" name="phoneNumber" value={donorInfo.phoneNumber} onChange={e => setDetails(e)} />
                                 </InputGroup>
-                                {
-                                    isInValid.phoneNumber ? <FormHelperText color="red" fontWeight={500}>Please Enter a Valid Phone Number  </FormHelperText> : null
-                                }
+                                {isInValid.phoneNumber ? <FormHelperText color="red" fontWeight={500}>Please Enter a Valid Phone Number  </FormHelperText> : null}
                             </FormControl>
                         </GridItem>
 
-                        <GridItem colSpan={{base: 1 , lg :2}}>
+                        <GridItem colSpan={{ base: 1, lg: 2 }}>
                             <FormControl isRequired>
                                 <FormLabel htmlFor='address'>Address</FormLabel>
                                 <InputGroup>
                                     <InputLeftAddon backgroundColor='#d71414' className='address' height={20}>
-                                        <Icon as={HouseLine}  boxSize={8} weight='duotone' color='#f0e3e4' />
+                                        <Icon as={HouseLine} boxSize={8} weight='duotone' color='#f0e3e4' />
                                     </InputLeftAddon>
-                                    <Textarea variant='outline' backgroundColor='red.50' errorBorderColor='red.400' focusBorderColor={isInValid.address ? 'red.400' :  'green.300'} isInvalid={isInValid.address} fontSize={14} resize='none' name="address" value={donorInfo.address} onChange={e =>  setDetails(e)} />
+                                    <Textarea variant='outline' backgroundColor='red.50' errorBorderColor='red.400' focusBorderColor={isInValid.address ? 'red.400' : 'green.300'} isInvalid={isInValid.address} fontSize={14} resize='none' name="address" value={donorInfo.address} onChange={e => setDetails(e)} />
                                 </InputGroup>
-                            {
-                                isInValid.address ? <FormHelperText color="red" fontWeight={500}> Address is too Short, Minimum 10 Characters is required  </FormHelperText> : null
-                            }
+                                {isInValid.address ? <FormHelperText color="red" fontWeight={500}> Address is too Short, Minimum 10 Characters is required  </FormHelperText> : null}
                             </FormControl>
                         </GridItem>
-                        
+
                     </Grid>
                 </>
             )
-            
-            case 3 : return(
+
+            case 3: return (
                 <>
-                    <Grid  gap={12}>
+                    <Grid gap={12}>
                         <GridItem placeItems='center' className='authenticate'>
                             <VStack mt={20}>
                                 <HStack>
                                     <Button size='lg'
-                                        color="black" bg="#d7141450" 
-                                        _hover={{color:'#f0e3e4' , bg: '#d71414'}} 
+                                        color="black" bg="#d7141450"
+                                        _hover={{ color: '#f0e3e4', bg: '#d71414' }}
                                         mb={10}
                                         height='35px'
                                         width='120px'
@@ -555,16 +545,16 @@ const DonateBlood = () => {
                                         {changeText}
                                     </Button>
                                     {showTime ? <Text fontSize='lg'>Resend in : {time} </Text> : null}
-                                    
+
                                 </HStack>
                                 <HStack>
-                                    <PinInput otp variant='outline' backgroundColor='red.50' placeholder='_' size='lg' value={otpVal}  onChange={e=>setOtpVal(e)} >
-                                        <PinInputField height={20} fontSize={22}   color='black' bg='#d7141450'/>
-                                        <PinInputField height={20} fontSize={22}  color='black' bg='#d7141450'/>
-                                        <PinInputField height={20} fontSize={22}  color='black' bg='#d7141450'/>
-                                        <PinInputField height={20} fontSize={22}  color='black' bg='#d7141450'/>
-                                        <PinInputField height={20} fontSize={22}  color='black' bg='#d7141450'/>
-                                        <PinInputField height={20} fontSize={22}  color='black' bg='#d7141450'/>
+                                    <PinInput otp variant='outline' backgroundColor='red.50' placeholder='_' size='lg' value={otpVal} onChange={e => setOtpVal(e)}>
+                                        <PinInputField height={20} fontSize={22} color='black' bg='#d7141450' />
+                                        <PinInputField height={20} fontSize={22} color='black' bg='#d7141450' />
+                                        <PinInputField height={20} fontSize={22} color='black' bg='#d7141450' />
+                                        <PinInputField height={20} fontSize={22} color='black' bg='#d7141450' />
+                                        <PinInputField height={20} fontSize={22} color='black' bg='#d7141450' />
+                                        <PinInputField height={20} fontSize={22} color='black' bg='#d7141450' />
                                     </PinInput>
                                 </HStack>
                             </VStack>
@@ -573,7 +563,7 @@ const DonateBlood = () => {
                 </>
             )
 
-            default : return(
+            default: return (
                 <> No Steps </>
             )
 

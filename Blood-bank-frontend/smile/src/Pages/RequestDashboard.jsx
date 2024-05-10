@@ -11,7 +11,7 @@ import ContactPageIcon from '@mui/icons-material/ContactPage';
 import VaccinesIcon from '@mui/icons-material/Vaccines';
 import PropTypes from 'prop-types';
 import DoneIcon from '@mui/icons-material/Done';
-import { ChakraProvider,  Flex,  HStack,  RadioGroup,  Skeleton, Spacer, VStack, position } from '@chakra-ui/react';
+import { ChakraProvider, RadioGroup } from '@chakra-ui/react';
 import {
     FormControl,
     FormLabel,
@@ -40,6 +40,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import {BallTriangle} from 'react-loader-spinner';
+import Registration from '../Components/Registration';
 
 
 
@@ -238,45 +239,51 @@ export default function RequestDashboard() {
 
     //Page Validation
     useEffect(()=>{
-        if(localStorage.getItem('check') !== null){
-            const now  =  new Date().getTime()
-            if(JSON.parse(localStorage.getItem('check')).expire < now){
-                setLoadingPage(true)
-                Swal.fire({
-                    title : 'Session Expired! Please Login Again!',
-                    icon : 'warning'
-                }).then((res)=>{
-                    if(res.isConfirmed || res.dismiss==='backdrop'){
-                        localStorage.removeItem('check')
-                        navigate('/request')
-                    }
-                })
-            }else if(!jwtDecode(JSON.parse(localStorage.getItem('check')).user).isRecipient){
-                setLoadingPage(true)
-                Swal.fire({
-                    title : 'You are not authorized to view this Page!',
-                    text :  'Pleaase Register, to Continue!',
-                    icon : 'warning'
-                }).then((res)=>{
-                    if(res.isConfirmed || res.dismiss === 'backdrop'){
-                        navigate('/request')
-                    }
-                })
-            }else{
-                setLoadingApi(true)
-            } 
-        }else{
-            setLoadingPage(true)
-            Swal.fire({
-                title : 'You are not authorized to view this page.',
-                text : 'Please Login to Continue.',
-                icon : 'warning'
-            }).then((res)=>{
-                if(res.isConfirmed || res.dismiss==='backdrop'){
-                    navigate('/request')
-                }
-            })
-        }
+
+        // if(localStorage.getItem('test')){
+        //     setLoadingApi(false)
+            
+        // }
+
+        // if(localStorage.getItem('check') !== null){
+        //     const now  =  new Date().getTime()
+        //     if(JSON.parse(localStorage.getItem('check')).expire < now){
+        //         setLoadingPage(true)
+        //         Swal.fire({
+        //             title : 'Session Expired! Please Login Again!',
+        //             icon : 'warning'
+        //         }).then((res)=>{
+        //             if(res.isConfirmed || res.dismiss==='backdrop'){
+        //                 localStorage.removeItem('check')
+        //                 navigate('/request')
+        //             }
+        //         })
+        //     }else if(!jwtDecode(JSON.parse(localStorage.getItem('check')).user).isRecipient){
+        //         setLoadingPage(true)
+        //         Swal.fire({
+        //             title : 'You are not authorized to view this Page!',
+        //             text :  'Pleaase Register, to Continue!',
+        //             icon : 'warning'
+        //         }).then((res)=>{
+        //             if(res.isConfirmed || res.dismiss === 'backdrop'){
+        //                 navigate('/request')
+        //             }
+        //         })
+        //     }else{
+        //         setLoadingApi(true)
+        //     } 
+        // }else{
+        //     setLoadingPage(true)
+        //     Swal.fire({
+        //         title : 'You are not authorized to view this page.',
+        //         text : 'Please Login to Continue.',
+        //         icon : 'warning'
+        //     }).then((res)=>{
+        //         if(res.isConfirmed || res.dismiss==='backdrop'){
+        //             navigate('/request')
+        //         }
+        //     })
+        // }
     },[])
 
 
@@ -812,7 +819,7 @@ export default function RequestDashboard() {
         }
 
         try {
-            const res = await axios.post('http://192.168.1.15:8000/recipient/request_blood/',formData);
+            const res = await axios.post('http://192.168.29.55:8000/recipient/request_blood/',formData);
             console.log(res)
             Swal.fire({
                 text : res.data.success,
@@ -854,7 +861,7 @@ export default function RequestDashboard() {
     const loadAPI = async () =>{
         setLoadingPage(true)
         try {
-            const res = await axios.get('http://192.168.1.15:8000/recipient/get_recipient_records/')
+            const res = await axios.get('http://192.168.29.55:8000/recipient/get_recipient_records/')
             console.log(res)       
             let pendingReq = res.data.pastRecord.filter(el => el.status === 'Pending')
             let pastRecord = res.data.pastRecord.filter(el => el.status !== 'Pending')
@@ -873,7 +880,7 @@ export default function RequestDashboard() {
     //Logout API
     const logout = () => {
         try{
-            axios.get('http://192.168.1.15:8000/donor/logout/').then((res)=>{
+            axios.get('http://192.168.29.55:8000/donor/logout/').then((res)=>{
                 setLoadingPage(true)
                 localStorage.removeItem('check')
                 Swal.fire({
@@ -919,6 +926,7 @@ export default function RequestDashboard() {
                     
                         <div className="req_dashboard_content">
                             <div className="actual_content">
+                            {/* <Registration /> */}
                             {
                                 !loadingPage ? (
                                     <>

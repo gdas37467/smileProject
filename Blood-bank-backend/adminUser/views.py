@@ -33,7 +33,7 @@ key = settings.SECRET_KEY
 #ADMIN API's
 
 #Base URL form image store and get
-base_url = 'http://192.168.1.15:8000'
+base_url = 'http://192.168.29.55:8000'
 
 
 #Get all matched donors and recipients
@@ -413,7 +413,7 @@ def addPhotos(request):
         if authorize_admin(request) == False:
             return JsonResponse({"error" : "Unauthorized"},status = 401)
          
-        images = request.FILES.getlist('images[]')
+        images = request.FILES.getlist('images')
         print(images)
 
         if len(images) != 5 :
