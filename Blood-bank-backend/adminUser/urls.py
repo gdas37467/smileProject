@@ -15,5 +15,6 @@ urlpatterns = [
     path('confirm_loan/<str:donor_id>',views.confirm_loan),
     path('addPhotos/',views.addPhotos),
     path('getLeaderboardImages/',views.getLeaderboardImage),
-    path('getFirstDon/<str:recipient_id>', views.getFirstDon)
+    path('getFirstDon/<str:recipient_id>', views.getFirstDon),
+ 
 ]

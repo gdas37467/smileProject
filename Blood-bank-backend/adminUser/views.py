@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import render
 from django.http import HttpResponse
-from donor.models import Donor
+from donor.models import Donor,Calender
 from recipient.models import Recipient
 from adminUser.models import LeaderBoard
 from django.http import JsonResponse
@@ -20,11 +20,14 @@ from django.shortcuts import get_object_or_404
 from django.core.files.storage import FileSystemStorage
 
 
+from smtplib import SMTPException
 import random
 from django.conf import settings
 import uuid
 import jwt
 import pytz
+from django.core.mail import send_mail
+
 # Create your views here.
 
 
@@ -42,7 +45,8 @@ def authorize_admin(request):
     user  = User.objects.filter(username = username).first()
     if user == None or user.is_superuser == False:
         return False
-
+def generate_otp():
+    return str(random.randint(100000, 999999))
 
 
 #completed
@@ -84,7 +88,7 @@ def get_donor_list(request):
                                     'totalDonation' : donor.totalDonation,
                                     } for index, donor in enumerate(donor_list_obj)]
             
-           
+        
 
             return JsonResponse({'success' : 'returned successsfully', 'donor_list' : donor_list_data},safe=False ,status =200)
                 
@@ -129,23 +133,20 @@ def confirm_donor(request,donor_id):
             return JsonResponse({"error":"Donation Confirmation Failed"},status=500)
        
         try: 
-            client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
-
-          
-
-            # Replace 'to' with the recipient's phone number
-            to =donor.phoneNumber
             
-            # Replace 'from_' with your Twilio phone number
-            from_ = settings.TWILIO_PHONE_NUMBER
-            
-            message = client.messages.create(
-                body="Hi "+ donor.firstName + ", " + "\nThank You for your Blood Donation.", 
-                to=to,
-                from_=from_
-            )
+            message = "Hi "+ donor.firstName + ", " + "\nThank You for your Blood Donation.", 
+            subject = 'Blood Needed Urgently'
+            send_mail(
+                subject,
+                message,
+                'support@smileorganization.in',
+                [donor.email],
+                fail_silently=False,
+                )
 
             return JsonResponse({"success" : "Comfirmation Done Successfully"},status=200)
+        
+            
             
         except Exception as e:
             print(e) 
@@ -234,6 +235,9 @@ def reject_request(request,recipient_id):
             recipient = Recipient.objects.filter(id = recipient_id).first()
             recipient.status = "Rejected"
             recipient.save()
+            dayQuantity = Calender.objects.first()
+            dayQuantity.quantity+=1
+            dayQuantity.save()
         except Exception as e:
             print(e)
             return JsonResponse({"error" : "Something Went wrong"},status =500)
@@ -303,18 +307,19 @@ def requirement_msg(request, donor_id):
         if (donor.lastDonated is not None) and donor.lastDonated >three_months_ago :
             return JsonResponse({"error" : "Donor not eligible for Donation"}, status=500)
         try: 
-            client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
-            # Replace 'to' with the recipient's phone number
-            to =donor.phoneNumber
             
-            # Replace 'from_' with your Twilio phone number
-            from_ = settings.TWILIO_PHONE_NUMBER
+            message = "Hi "+ donor.firstName + ", " + "\nThere is an urgent need of blood. Kindly visit or contact SMILE admin", 
+            subject = 'Blood Needed Urgently'
+            send_mail(
+                subject,
+                message,
+                'support@smileorganization.in',
+                [donor.email],
+                fail_silently=False,
+                )
+
+
             
-            message = client.messages.create(
-                body="Hi "+ donor.firstName + ", " + "\nThere is an urgent need of blood. Kindly visit or contact SMILE admin", 
-                to=to,
-                from_=from_
-            )
 
             return JsonResponse({"success" : "SMS sent successfully"},status=200)
             
@@ -336,21 +341,16 @@ def loan_msg(request, donor_id):
         if donor.loan == False : 
             return JsonResponse({"error" : "Donor doesn't have any existing loan"},status = 500)
         try: 
-            client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
-
-          
-
-            # Replace 'to' with the recipient's phone number
-            to =donor.phoneNumber
             
-            # Replace 'from_' with your Twilio phone number
-            from_ = settings.TWILIO_PHONE_NUMBER
-            
-            message = client.messages.create(
-                body="Hi "+ donor.firstName + ", " + "\nThere is a pending blood loan against your id, Kindly visit SMILE or contact admin to donate blood.", 
-                to=to,
-                from_=from_
-            )
+            message = "Hi "+ donor.firstName + ", " + "\nThere is a pending blood loan against your id, Kindly visit SMILE or contact admin to donate blood."
+            subject = 'Loan Pending'
+            send_mail(
+                subject,
+                message,
+                'support@smileorganization.in',
+                [donor.email],
+                fail_silently=False,
+                )
 
             return JsonResponse({"success" : "SMS sent successfully"},status=200)
             
@@ -382,21 +382,17 @@ def confirm_loan(request, donor_id):
             return JsonResponse({"error":"Donation Confirmation Failed"},status=500)
        
         try: 
-            client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
-
-          
-
-            # Replace 'to' with the recipient's phone number
-            to =donor.phoneNumber
             
-            # Replace 'from_' with your Twilio phone number
-            from_ = settings.TWILIO_PHONE_NUMBER
-            
-            message = client.messages.create(
-                body="Hi "+ donor.firstName + ", " + "\nYour Loan Request for 1 unit blood has been processed.", 
-                to=to,
-                from_=from_
-            )
+
+            message = f'Hi '+ donor.firstName + ',' + '\nYour Loan Request for 1 unit blood has been processed.'
+            subject = 'Loan Confirmed'
+            send_mail(
+                subject,
+                message,
+                'support@smileorganization.in',
+                [donor.email],
+                fail_silently=False,
+                )
 
             return JsonResponse({"success" : "Comfirmation Done Successfully"},status=200)
             

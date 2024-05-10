@@ -13,6 +13,7 @@ class FirstDonationDetails(models.Model):
     def __str__(self) -> str:
         return self.donorName
 
+
 # Create your models here.
 class Recipient(models.Model):
     id = models.UUIDField(primary_key=True,default= uuid.uuid4,  editable=False)
@@ -21,7 +22,6 @@ class Recipient(models.Model):
     dob = models.DateField(default=timezone.now)
     bloodGroup = models.CharField(default="",max_length=30)
     phoneNumber = models.CharField(default='',max_length=10)
-    alternateNumber = models.CharField(default='',max_length=10)
     email = models.CharField(default="",max_length=30)
     gender = models.CharField(default="",max_length=300)
     address  = models.TextField(default="",max_length=500)
@@ -30,8 +30,9 @@ class Recipient(models.Model):
     hasCancer = models.BooleanField(default= False)
     firstDonCheck = models.BooleanField(default = False)
     firstDonation = models.ForeignKey(FirstDonationDetails, null=True, on_delete=models.CASCADE)
-    date = models.DateField(timezone.now)
+    requestDate = models.DateField(null=True)
     status = models.CharField(default="Pending",max_length=10)
+    registeredByAdmin= models.BooleanField(default=False,null=True)
 
 
     def __str__(self) -> str:
