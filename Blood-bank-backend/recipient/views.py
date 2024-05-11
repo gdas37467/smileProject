@@ -198,14 +198,14 @@ def get_recipient_records(request):
         if email is None:
             return JsonResponse({"error" : "Invalid Session Id"},status =401)
         
-        recipients = Recipient.objects.filter(email = email,status__in = ['Confirmed','Pending','Rejected']).order_by("-date").all()
+        recipients = Recipient.objects.filter(email = email,status__in = ['Confirmed','Pending','Rejected']).order_by("-requestDate").all()
         print(recipients)
         data = []
         calender = Calender.objects.first()
         
         isEligible= True
         difference = 15
-        eligibleRecipient = Recipient.objects.filter(email = email,status__in = ['Confirmed' ,'Pending']).order_by("-date").first()
+        eligibleRecipient = Recipient.objects.filter(email = email,status__in = ['Confirmed' ,'Pending']).order_by("-requestDate").first()
         if eligibleRecipient is not None:
             current_date_string= datetime.datetime.now(tz=pytz.timezone('Asia/Kolkata')).date().isoformat()
             current_date = datetime.datetime.strptime(current_date_string, "%Y-%m-%d").date()
