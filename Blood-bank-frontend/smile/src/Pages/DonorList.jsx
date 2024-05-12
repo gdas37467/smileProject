@@ -134,7 +134,21 @@ const DonorList = () => {
             })
         }
     }
-
+    // Delete Donor
+    const deleteDonor = async (id) =>{
+        console.log(id)
+        
+        try {
+            const res = await axios.get(`http://192.168.29.55:8000/adminUser/remove_donor/${id}`)
+            console.log(res)
+            Swal.fire({
+                text : res.
+            })
+        } catch (error) {
+            
+        }
+        
+    }
 
 
     const getAvailableDonors = async () => {
@@ -219,6 +233,7 @@ const DonorList = () => {
                                     addLoan={addLoan}
                                     sendSMS={sendSMS}
                                     sendReminder={sendReminder}
+                                    deleteDonor={deleteDonor}
                                 />
                             </>
                         )

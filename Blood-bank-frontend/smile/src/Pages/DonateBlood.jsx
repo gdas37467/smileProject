@@ -312,8 +312,8 @@ const DonateBlood = () => {
             firstName : donorInfo.firstName,
             lastName : donorInfo.lastName,
             dob : donorInfo.dob,
-            email : donorInfo.email,
-            phoneNumber : `+91${donorInfo.phoneNumber}`,
+            // email : donorInfo.email,
+            phoneNumber : donorInfo.phoneNumber,
             address : donorInfo.address,
             bloodGroup : donorInfo.bloodGroup,
             // weight : donorInfo.weight,
@@ -440,19 +440,6 @@ const DonateBlood = () => {
 
                             </FormControl>
                         </GridItem>
-                        {/* <GridItem>
-                    <FormControl isRequired>
-                        <FormLabel htmlFor='weight'>Weight</FormLabel>
-                        <InputGroup>
-                            <InputLeftAddon backgroundColor='#d71414' height={30}>
-                                <Icon as={Gauge}  boxSize={8} weight='duotone' color='#f0e3e4' />
-                            </InputLeftAddon>
-                            <Input variant='outline' backgroundColor='red.50' height={30} fontSize={14}  type="number" name="weight" value={donorInfo.weight} onChange={e =>  setDetails(e)} />
-                            <InputRightAddon children='kg' backgroundColor='#d71414' color='#f0e3e4'  height={30}/>
-                        </InputGroup>
-                        
-                    </FormControl>
-                </GridItem> */}
                         <GridItem>
                             <FormControl>
                                 <FormLabel htmlFor='lastDonated'>Last Donated (Optional) </FormLabel>

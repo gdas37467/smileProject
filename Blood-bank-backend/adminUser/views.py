@@ -319,9 +319,6 @@ def requirement_msg(request, donor_id):
                 fail_silently=False,
                 )
 
-
-            
-
             return JsonResponse({"success" : "SMS sent successfully"},status=200)
             
         except Exception as e:

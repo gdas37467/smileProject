@@ -159,6 +159,14 @@ label+.css-v4u5dn-MuiInputBase-root-MuiInput-root, label + .css-zrqpq1 {
     color : #12807e !important;
 }
 
+.delete-donor{
+    font-size: 14px !important;
+    & .MuiListItemIcon-root{
+        color: #d22228;
+        min-width: 26px !important;        
+    }
+}
+
 
 //Navbar
 .outer_nav{

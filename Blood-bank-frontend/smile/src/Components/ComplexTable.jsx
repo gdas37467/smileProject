@@ -7,7 +7,7 @@ import PlusOneIcon from '@mui/icons-material/PlusOne';
 import SmsIcon from '@mui/icons-material/Sms';
 import FeedbackIcon from '@mui/icons-material/Feedback';
 import DoneIcon from '@mui/icons-material/Done';
-
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const ComplexTable = (props) => {
     
@@ -266,6 +266,7 @@ const ComplexTable = (props) => {
                     className='sms'
                     onClick={() => props.sendSMS(params.id)}    
                     disabled={!(params.row.isAvailable && !params.row.loan)}
+                    // showInMenu
                 />,
                 <GridActionsCellItem
                     icon={<Tooltip title="Send Reminder For Loan"><FeedbackIcon /></Tooltip>}
@@ -276,6 +277,32 @@ const ComplexTable = (props) => {
                     // color="success"
                     // showInMenu
                 />,
+                ];
+            },
+        },
+        {
+            field: 'updateDonor',
+            type: 'actions',
+            headerName: 'Update',
+            width: 80,
+            cellClassName: 'actions',
+            getActions: (params) => {
+                return [
+                <GridActionsCellItem
+                    icon={<DeleteIcon fontSize='lg'/>}
+                    label="Delete Donor"
+                    className='delete-donor'
+                    onClick={() => props.deleteDonor(params.id)}    
+                    showInMenu
+                />,
+                // <GridActionsCellItem
+                //     icon={<Tooltip title="Send Reminder For Loan"><FeedbackIcon /></Tooltip>}
+                //     label="Send Reminder"
+                //     className='rem'
+                //     onClick={() => props.deleteDonor(params.id)} 
+                //     // color="success"
+                //     showInMenu
+                // />,
                 ];
             },
         },

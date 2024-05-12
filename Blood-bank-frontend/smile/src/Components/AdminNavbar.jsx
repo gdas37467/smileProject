@@ -102,9 +102,8 @@ function AdminNavbar (){
                     </ListItemButton>
                 </ListItem>
                 <ListItem >
-                    <ListItemButton sx={{ textAlign: 'center' }}>
-                        <button className="nav-link " to='#'> Add Top Donor</button> 
-                        {/* <button className="nav-link " onClick={addTopDonor} to='#'> Add Top Donor</button>  */}
+                    <ListItemButton sx={{ textAlign: 'center' }} >
+                        <button className="nav-link " onClick={e => setRegister(true)} to='#'> Register Donor/Recipient</button> 
                     </ListItemButton>
                 </ListItem>
                 

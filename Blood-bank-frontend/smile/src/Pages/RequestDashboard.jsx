@@ -194,7 +194,6 @@ export default function RequestDashboard() {
         firstName : '',
         lastName : '',
         dob : '',
-        email : '',
         phoneNumber : '',
         address : '',
         bloodGroup : '',
@@ -213,7 +212,6 @@ export default function RequestDashboard() {
     const [patInValid, setPatInValid] = useState({
         firstName : false,
         lastName : false,
-        email : false,
         phoneNumber : false,
         address : false,
         hospitalName : false,
@@ -304,7 +302,7 @@ export default function RequestDashboard() {
             
             case 1:
                 
-                if(!emailRegex.test(patientDetails.email) || patientDetails.address.length <= 10 || patInValid.phoneNumber){
+                if(patientDetails.address.length <= 10 || patientDetails.phoneNumber.length !== 10 ){
                     toast.error("Please enter your details correctly before continuing.")
                     return
                 }
@@ -368,19 +366,6 @@ export default function RequestDashboard() {
                     setPatInValid(pS => ({
                         ...pS,
                         [name] : false    
-                    }))
-                }
-                break
-
-            case 'email':
-                if(!emailRegex.test(value.trim())){
-                    setPatInValid(pS => ({
-                        ...pS,
-                        [name] : true
-                    }))
-                }else{
-                    setPatInValid(pS => ({
-                        [name] : false
                     }))
                 }
                 break
@@ -563,18 +548,7 @@ export default function RequestDashboard() {
 
                         <GridItem>
                             <FormControl isRequired>
-                                <FormLabel fontSize={12} htmlFor='email'>Patient's Email</FormLabel>
-                                <InputGroup>
-                                <InputLeftAddon height={30}>
-                                    <Icon as={Envelope} boxSize={8} weight="duotone" color="#ce2432" />
-                                </InputLeftAddon>
-                                <Input variant='outline' backgroundColor='red.50' height={30} fontSize={14} isInvalid={patInValid.email} focusBorderColor={patInValid.email ? 'red.400' : 'green.300'} type="email" name="email" value={patientDetails.email} onChange={e =>  setDetails(e)} />
-                                </InputGroup>
-                            </FormControl>
-                        </GridItem>
-                        <GridItem>
-                            <FormControl>
-                                <FormLabel fontSize={12} htmlFor='phoneNumber'>Alternate Phone Number (Optional)</FormLabel>
+                                <FormLabel fontSize={12} htmlFor='phoneNumber'>Patient's Phone Number (Please Enter Correct Phone Number)</FormLabel>
                                 <InputGroup>
                                     <InputLeftAddon height={30}>
                                         <Icon as={Phone} boxSize={8} weight='duotone' color='#ce2432' />
@@ -794,7 +768,7 @@ export default function RequestDashboard() {
             lastName : patDet.lastName,
             dob : patDet.dob,
             email : patDet.email,
-            phoneNumber : `+91${patDet.phoneNumber}`,
+            phoneNumber : patDet.phoneNumber,
             address : patDet.address,
             bloodGroup : patDet.bloodGroup,
             isThalassemia : patDet.isThalassemia,
