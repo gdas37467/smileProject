@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import render
 from django.http import HttpResponse
 from donor.models import Donor,Calender
-from recipient.models import Recipient
+from recipient.models import Recipient,FirstDonationDetails
 from adminUser.models import LeaderBoard
 from django.http import JsonResponse
 import json
@@ -41,6 +41,7 @@ base_url = 'http://192.168.29.55:8000'
 
 #Get all matched donors and recipients
 def authorize_admin(request):
+    
     username  =  request.user
     user  = User.objects.filter(username = username).first()
     if user == None or user.is_superuser == False:
@@ -499,3 +500,210 @@ def getFirstDon(request, recipient_id):
             print(e)
             return JsonResponse({"error" : "Something Went Wrong"},status=500)
     return JsonResponse({"error" : "Invalid Request Method"},status=400)   
+
+@csrf_exempt
+def admin_request_blood(request):
+    if request.method == "POST" : 
+
+        if authorize_admin(request) == False:
+            return JsonResponse({"error" : "Unauthorized"},status = 401)
+            
+        username = request.user
+        user  = User.objects.filter(username = username).first()
+        email = user.email
+        
+         
+        firstName = request.POST.get('firstName')
+        lastName = request.POST.get('lastName')
+        dob = request.POST.get('dob')
+       
+        phoneNumber = request.POST.get('phoneNumber')
+        address = request.POST.get('address')
+        bloodGroup = request.POST.get('bloodGroup')
+        hospitalName = request.POST.get('hospitalName')
+        isThalassemia = request.POST.get('isThalassemia').lower().capitalize() == "True"
+        hasCancer = request.POST.get('hasCancer').lower().capitalize() == "True"
+        donBlood = request.POST.get('donBlood')
+        bloodBankName = request.POST.get('bloodBankName')
+        donorName = request.POST.get('donorName')
+        donationDate = request.POST.get('donationDate')
+        gender = request.POST.get('gender')
+        # donationReceipt = request.POST.get('donationReceipt')
+        firstDonCheck = request.POST.get('firstDonCheck').lower().capitalize() == "True"
+        # dateString = body['date']
+        date_format = '%Y-%m-%d'
+        
+        image_file = request.FILES.get('donationReceipt')
+        birthDateObj = datetime.strptime(dob, date_format)
+
+        dayQuantity = Calender.objects.first()
+        if dayQuantity.quantity <= 0:
+            return JsonResponse({"error":"Currently no slot available for booking!"},status=500)
+
+
+        current_date_string= datetime.now(tz=pytz.timezone('Asia/Kolkata')).date().isoformat()
+        current_date = datetime.strptime(current_date_string, "%Y-%m-%d").date()
+
+        try:
+            recipient = Recipient.objects.filter(phoneNumber = phoneNumber,status__in = ['Confirmed' ,'Pending'],registeredByAdmin =True).order_by("-requestDate").first()
+            if recipient is not None:
+                #lastRecieved = datetime.datetime.strptime(recipient.date,"%Y-%m-%d").date()
+                print((current_date.year - recipient.requestDate.year)*365 +( current_date.month-recipient.requestDate.month)*30 + (current_date.day - recipient.requestDate.day))
+                if (current_date.year - recipient.requestDate.year)*365 +( current_date.month-recipient.requestDate.month)*30 + (current_date.day - recipient.requestDate.day) <15:
+                    return JsonResponse({"error" : "Cannot place request withing 15 days of last recieved"},status = 400)
+            print('HI')
+            
+        except Exception as e:
+            print(e)
+            return JsonResponse({"error" : "Something went wrong"},status = 400)
+        
+        
+        if firstDonCheck :
+            firstDonation = FirstDonationDetails().save()
+            if hasCancer == True or isThalassemia == True or (bloodGroup in ['A-', 'B-','AB-','O-']):
+                pass
+            else :
+                return JsonResponse({"error" : "First Donation Validation Error"},status=500)
+        else:
+            firstDonation = FirstDonationDetails(
+                donBlood = donBlood,
+                bloodBankName = bloodBankName,
+                donorName = donorName,
+                donationDate = datetime.strptime(donationDate,date_format).date(),
+                donationReceipt = image_file
+            )
+            firstDonation.save()
+            fs = FileSystemStorage()
+
+            # save the image on MEDIA_ROOT folder
+            file_name = fs.save(image_file.name, image_file)
+
+            # get file url with respect to `MEDIA_URL`
+            file_url = fs.url(file_name)
+            print(file_url)
+
+
+
+        try:
+           
+            new_recipient = Recipient(
+            firstName = firstName,
+            lastName = lastName,
+            dob = birthDateObj.date(),
+            bloodGroup = bloodGroup,
+            phoneNumber = phoneNumber,
+            
+            email = email,
+            address = address,
+            requestDate = current_date,
+            hospitalName = hospitalName,
+            isThalassemia = isThalassemia,
+            hasCancer  = hasCancer,
+            firstDonCheck = firstDonCheck,
+            firstDonation = firstDonation,
+            gender=gender,
+            registeredByAdmin = True
+            )
+            new_recipient.save()
+            
+            dayQuantity.quantity-=1
+            dayQuantity.save()
+            return JsonResponse({"success" : "Request Placed Successfully"},status=201)
+
+
+
+          
+        except Exception as e:
+            print(e)
+            return JsonResponse({'error': 'error while saving form'},status=500)
+        
+
+
+        
+    return JsonResponse({"error" : "Invalid request method"},status =400)
+
+@csrf_exempt
+def admin_registerDonor(request) :
+    if request.method == "POST":
+        if authorize_admin(request) == False:
+            return JsonResponse({"error" : "Unauthorized"},status = 401)
+        
+        username = request.user
+        user  = User.objects.filter(username = username).first()
+        email = user.email
+
+        body = json.loads(request.body)
+        firstName = body['firstName']
+        lastName = body['lastName']
+        dob = body['dob']
+        bloodGroup = body['bloodGroup']
+        phoneNumber = body['phoneNumber']
+        otp = body['otp']
+        address = body['address']
+        gender = body['gender']
+        lastDonated = body['lastDonated']
+        isThalassemia = body['isThalassemia']
+    
+        isDonor = Donor.objects.filter(phoneNumber = phoneNumber , registeredByAdmin = True).first()
+        if isDonor is not None:
+            return JsonResponse({"error":"PhoneNumber Already Exists for another Donor"},status=409)
+
+        
+
+        date_format = '%Y-%m-%d'
+        id=str(uuid.uuid4())
+        print(id)
+        print(dob)
+        date_obj = datetime.strptime(dob, date_format)
+        # isDonor2 = Donor.objects.filter(firstName = firstName , lastName = lastName , bloodGroup = bloodGroup ,dob =date_obj.date()).first()
+        # if isDonor2 is not None : 
+        #     return JsonResponse({"error" : "Kindly contact admin as you are already registered as a donor"},status=400)
+        
+
+
+        try:
+            new_donor = Donor(
+                firstName = firstName,
+                lastName = lastName,
+                dob = date_obj.date(),
+                bloodGroup = bloodGroup,
+                phoneNumber = phoneNumber,
+                email = email,
+                address = address,
+                gender = gender,
+                id = id,
+                lastDonated=lastDonated,
+                isThalassemia = isThalassemia,
+                registeredByAdmin = True
+
+
+            )
+            new_donor.save()
+            
+         
+            
+        except Exception as e:
+            print(e)
+            return JsonResponse({'error': 'While regestering'},status=500)
+        
+        
+        return JsonResponse({"success" : "Donor Registered Successfully","user_type" : type},status = 200)
+    return JsonResponse({"error" : "Invalid request method"},status =400)
+
+@csrf_exempt
+def updateEmail(request):
+    if request.method == "GET":
+        if authorize_admin(request) == False:
+            return JsonResponse({"error" : "Unauthorized" },status=401)
+        email = request.GET.get('email')
+        donor_id = request.GET.get('donor_id')
+
+        donor = Donor.objects.filter(id = donor_id).first()
+        if(donor is not None) : 
+            donor.email = email
+            donor.save()
+            return JsonResponse({"success" : "Email has been updated successfully"},status =201)
+        else:
+            return JsonResponse({"error" : "Donor donot exist"},status=400)
+        
+    return JsonResponse({"error" : "Invalid request method"},status =400)

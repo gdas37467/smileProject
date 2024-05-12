@@ -16,5 +16,9 @@ urlpatterns = [
     path('addPhotos/',views.addPhotos),
     path('getLeaderboardImages/',views.getLeaderboardImage),
     path('getFirstDon/<str:recipient_id>', views.getFirstDon),
+    path('admin_booking/', views.admin_request_blood),
+    path('admin_donor_registration' ,views.admin_registerDonor),
+    path('update_email' ,views.updateEmail)
+
  
 ]
