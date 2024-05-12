@@ -8,6 +8,7 @@ import SmsIcon from '@mui/icons-material/Sms';
 import FeedbackIcon from '@mui/icons-material/Feedback';
 import DoneIcon from '@mui/icons-material/Done';
 import DeleteIcon from '@mui/icons-material/Delete';
+import SwipeRightIcon from '@mui/icons-material/SwipeRight';
 
 const ComplexTable = (props) => {
     
@@ -228,31 +229,6 @@ const ComplexTable = (props) => {
             renderCell : (params) => {return (params.row.loan ?  (<DoneIcon className='con' />) : '')}
         },
         {
-            field: 'actions',
-            type: 'actions',
-            headerName: 'Actions',
-            width: 100,
-            cellClassName: 'actions',
-            getActions: (params) => {
-                return [
-                <GridActionsCellItem
-                    icon={<Tooltip title="Confirm Donation"><CheckCircleIcon /></Tooltip>}
-                    label="Confirm Donor"
-                    className='con'
-                    onClick={() => props.sentForDonation(params.id)}    
-                    disabled={!params.row.isAvailable}
-                />,
-                <GridActionsCellItem
-                    icon={<Tooltip title="Add Donor for Loan"><PlusOneIcon /></Tooltip>}
-                    label="Add Loan"
-                    className='loan'
-                    onClick={() => props.addLoan(params.id)}    
-                    disabled={params.row.isAvailable || params.row.loan}
-                />,
-                ];
-            },
-        },
-        {
             field: 'sendsms',
             type: 'actions',
             headerName: 'Send SMS',
@@ -281,13 +257,27 @@ const ComplexTable = (props) => {
             },
         },
         {
-            field: 'updateDonor',
+            field: 'actions',
             type: 'actions',
-            headerName: 'Update',
-            width: 80,
+            headerName: 'Actions',
+            width: 120,
             cellClassName: 'actions',
             getActions: (params) => {
                 return [
+                <GridActionsCellItem
+                    icon={<Tooltip title="Confirm Donation"><CheckCircleIcon /></Tooltip>}
+                    label="Confirm Donor"
+                    className='con'
+                    onClick={() => props.sentForDonation(params.id)}    
+                    disabled={!params.row.isAvailable}
+                />,
+                <GridActionsCellItem
+                    icon={<Tooltip title="Add Donor for Loan"><PlusOneIcon /></Tooltip>}
+                    label="Add Loan"
+                    className='loan'
+                    onClick={() => props.addLoan(params.id)}    
+                    disabled={params.row.isAvailable || params.row.loan}
+                />,
                 <GridActionsCellItem
                     icon={<DeleteIcon fontSize='lg'/>}
                     label="Delete Donor"
@@ -295,24 +285,17 @@ const ComplexTable = (props) => {
                     onClick={() => props.deleteDonor(params.id)}    
                     showInMenu
                 />,
-                // <GridActionsCellItem
-                //     icon={<Tooltip title="Send Reminder For Loan"><FeedbackIcon /></Tooltip>}
-                //     label="Send Reminder"
-                //     className='rem'
-                //     onClick={() => props.deleteDonor(params.id)} 
-                //     // color="success"
-                //     showInMenu
-                // />,
                 ];
             },
         },
+        
     ]
     // Non Pending Requests
     const nonPendingListCols = [
         { field: 'id', filterable: false,},
         { field: 'sl', headerName: "SL. No." , width:80, sortable : false, align : 'center', headerAlign : 'center', filterable : false },
         { field: 'name', headerName: "Patient's Name" ,
-            width: 200, 
+            width: 170, 
             sortable : false, align : 'center', headerAlign : 'center' , filterable : false,
             valueGetter : (params) =>{
                 return `${params.row.firstName} ${params.row.lastName}`
@@ -321,7 +304,7 @@ const ComplexTable = (props) => {
         {
             field: 'address',
             headerName: "Patient's Address",
-            width: 300,
+            width: 180,
             align: 'center',
             headerAlign: 'center',
             sortable : false,   
@@ -419,6 +402,24 @@ const ComplexTable = (props) => {
                         variant='contained' onClick={() => props.viewPrevDonation(params.id)}> View Receipt </Button>)
             }
             // valueFormatter: ({ value }) => new Date(value).toISOString().split('T')[0]
+        },
+        {
+            field: 'actions',
+            type: 'actions',
+            headerName: 'Actions',
+            width: 120,
+            cellClassName: 'actions',
+            getActions: (params) => {
+                return [
+                <GridActionsCellItem
+                    icon={<SwipeRightIcon fontSize='lg'/>}
+                    label="Accept Request"
+                    className='update-request'
+                    onClick={() => props.updateRequest(params.id, params.row.status)}    
+                    showInMenu
+                />,
+            ];
+            },
         },
     ]
 

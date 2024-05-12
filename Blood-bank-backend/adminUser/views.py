@@ -623,7 +623,7 @@ def admin_registerDonor(request) :
         dob = body['dob']
         bloodGroup = body['bloodGroup']
         phoneNumber = body['phoneNumber']
-        otp = body['otp']
+        # otp = body['otp']
         address = body['address']
         gender = body['gender']
         lastDonated = body['lastDonated']

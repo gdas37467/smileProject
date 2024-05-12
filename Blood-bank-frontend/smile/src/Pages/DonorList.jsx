@@ -136,17 +136,27 @@ const DonorList = () => {
     }
     // Delete Donor
     const deleteDonor = async (id) =>{
-        console.log(id)
-        
-        try {
-            const res = await axios.get(`http://192.168.29.55:8000/adminUser/remove_donor/${id}`)
-            console.log(res)
-            Swal.fire({
-                text : res.data.success
-            })
-        } catch (error) {
-            
-        }
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete Donor!"
+        }).then(async (res) => {
+            if(res.isConfirmed){
+                try {
+                    const res = await axios.get(`http://192.168.29.55:8000/adminUser/remove_donor/${id}`)
+                    console.log(res)
+                    toast.warning("Donor has been deleted successfully!")
+                    setReload(!reload)
+                } catch (error) {
+                    console.log(error)
+                    toast.error(error.response.data.error || error.response.statusText)
+                }
+            }
+        })
         
     }
 

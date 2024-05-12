@@ -255,9 +255,14 @@ const Registration = (props) => {
             return
         }
 
+        const formData = new FormData()
+
+        for(const key in recipientInfo){
+            formData.append(key,recipientInfo[key])
+        }
 
         try {   
-            const res = await axios.post('http://192.168.29.55:8000/adminUser/admin_booking/', JSON.stringify(recipientInfo))
+            const res = await axios.post('http://192.168.29.55:8000/adminUser/admin_booking/', formData)
             console.log(res)
             Swal.fire({
                 text : res.data.success,
@@ -279,8 +284,20 @@ const Registration = (props) => {
             return
         }
 
+        const payload = {
+            firstName : donorInfo.firstName,
+            lastName : donorInfo.lastName,
+            dob : donorInfo.dob,
+            bloodGroup : donorInfo.bloodGroup,
+            gender: donorInfo.gender,
+            lastDonated : donorInfo.lastDonated ? donorInfo.lastDonated : null,
+            isThalassemia : donorInfo.isThalassemia,
+            phoneNumber : donorInfo.phoneNumber,
+            address : donorInfo.address,
+        }
+
         try {
-            const res = await axios.post('http://192.168.29.55:8000/adminUser/admin_donor_registration/', JSON.stringify(donorInfo))
+            const res = await axios.post('http://192.168.29.55:8000/adminUser/admin_donor_registration/', JSON.stringify(payload))
             console.log(res)
             Swal.fire({
                 text : res.data.success,
