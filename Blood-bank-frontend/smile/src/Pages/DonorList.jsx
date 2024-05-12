@@ -142,7 +142,7 @@ const DonorList = () => {
             const res = await axios.get(`http://192.168.29.55:8000/adminUser/remove_donor/${id}`)
             console.log(res)
             Swal.fire({
-                text : res.
+                text : res.data.success
             })
         } catch (error) {
             
