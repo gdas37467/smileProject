@@ -211,6 +211,7 @@ function AdminNavbar (){
                     register && (
                         <Registration 
                             setRegister={e=> setRegister(false)}
+                            
                         />
                     )
                 }

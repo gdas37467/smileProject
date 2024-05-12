@@ -262,7 +262,7 @@ const Registration = (props) => {
         }
 
         try {   
-            const res = await axios.post('http://192.168.29.55:8000/adminUser/admin_booking/', formData)
+            const res = await axios.post('/adminUser/admin_booking/', formData)
             console.log(res)
             Swal.fire({
                 text : res.data.success,
@@ -297,7 +297,7 @@ const Registration = (props) => {
         }
 
         try {
-            const res = await axios.post('http://192.168.29.55:8000/adminUser/admin_donor_registration/', JSON.stringify(payload))
+            const res = await axios.post('/adminUser/admin_donor_registration/', JSON.stringify(payload))
             console.log(res)
             Swal.fire({
                 text : res.data.success,
