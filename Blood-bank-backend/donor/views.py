@@ -16,6 +16,11 @@ from django.conf import settings
 import uuid
 import jwt
 
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
+from django.core.mail import send_mail
+import time
+
 
 
 
@@ -33,24 +38,27 @@ def register(request) :
         dob = body['dob']
         bloodGroup = body['bloodGroup']
         phoneNumber = body['phoneNumber']
-        email = body['email']
+        #email = body['email']
         otp = body['otp']
         address = body['address']
         gender = body['gender']
         lastDonated = body['lastDonated']
         isThalassemia = body['isThalassemia']
     
-        isDonor = Donor.objects.filter(phoneNumber = phoneNumber).first()
+        isDonor = Donor.objects.filter(email = email).first()
         if isDonor is not None:
-            return JsonResponse({"error":"PhoneNumber Already Exists for another Donor"},status=409)
+            return JsonResponse({"error":"Email Already Exists for another Donor"},status=409)
 
-
+        
 
         date_format = '%Y-%m-%d'
         id=str(uuid.uuid4())
         print(id)
         print(dob)
         date_obj = datetime.strptime(dob, date_format)
+        isDonor2 = Donor.objects.filter(firstName = firstName , lastName = lastName , bloodGroup = bloodGroup ,dob =date_obj.date()).first()
+        if isDonor2 is not None : 
+            return JsonResponse({"error" : "Kindly contact admin as you are already registered as a donor"},status=400)
         
         try:
             
@@ -59,22 +67,20 @@ def register(request) :
             totp = pyotp.TOTP(secret_key,interval=300)
             status = totp.verify(otp)
             print(status)
-            phoneNumber = request.session.get('phoneNumber')
-            del request.session['phoneNumber']
+            email = request.session.get('email')
+            del request.session['email']
             del request.session['secret_key']
             
-            request.session['member_id'] = phoneNumber
+            request.session['member_id'] = email
 
             isDonor = True
             isRecipient = False
-            recipient = Recipient.objects.filter(phoneNumber= phoneNumber).first()
+            recipient = Recipient.objects.filter(email= email).first()
             if recipient is not None:
                 isRecipient = True
 
             type = jwt.encode({'isDonor': isDonor,"isRecipient" : isRecipient}, key, algorithm='HS256')
-
-            request.session.set_expiry(20*60)
-
+            
             if status == False:
                 return JsonResponse({"error" : "Incorrect OTP"  },status=400)
             
@@ -102,6 +108,9 @@ def register(request) :
 
             )
             new_donor.save()
+            
+            request.session.set_expiry(24*20*60)
+            
         except Exception as e:
             print(e)
             return JsonResponse({'error': 'While regestering'},status=500)
@@ -124,15 +133,15 @@ def user_logout(request):
     return JsonResponse({"error" : "Invalid request method"},status =400)
 
 
-#only for recipient
+#only for recipient and donor registration
 @csrf_exempt
 def send_otp(request):
     if request.method == "POST":
         body  = json.loads(request.body)
-        phoneNumber  = body['phoneNumber'] 
-        if not phoneNumber:
-            return JsonResponse({'status': 'Mobile number is required.'}, status=400)
-        
+        email = body['email'] 
+        if not email:
+            return JsonResponse({'status': 'Email is required.'}, status=400)
+  
         secret_key = pyotp.random_base32()
         #print(secret_key)
         totp = pyotp.TOTP(secret_key, interval=300)  
@@ -143,34 +152,28 @@ def send_otp(request):
         print(key)
         request.session['secret_key'] = secret_key
         #request.session['otp_creation_time'] = time.time()
-        request.session['phoneNumber'] = phoneNumber
+        request.session['email'] = email
         
         
 
 
         try: 
-            print(settings.TWILIO_AUTH_TOKEN)
-            client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
-    
-            # Replace 'to' with the recipient's phone number
-            to = phoneNumber
-            
-            # Replace 'from_' with your Twilio phone number
-            from_ = settings.TWILIO_PHONE_NUMBER
-
-            
-            message = client.messages.create(
-                body="Hi, your otp is " + otp,
-                to=to,
-                from_=from_
-            )
+            message = f'Your OTP for password update is: {otp}'
+            subject = 'OTP Verification'
+            send_mail(
+                subject,
+                message,
+                'support@smileorganization.in',
+                [email],
+                fail_silently=False,
+                )
             
             
         except Exception as e:
             print(e) 
             return JsonResponse({"error" : "error occured while sending sms"}, status=500)
         
-        return JsonResponse({"success" : "SMS sent successfully"},status  =200) 
+        return JsonResponse({"success" : "OTP sent successfully"},status  =200) 
     return JsonResponse({"error" :"Invalid request Method"}, status=409)
 
 @csrf_exempt
@@ -184,18 +187,21 @@ def verify_otp(request):
             totp = pyotp.TOTP(secret_key,interval=300)
             status = totp.verify(otp)
             print(status)
-            phoneNumber = request.session.get('phoneNumber')
-            del request.session['phoneNumber']
+            email = request.session.get('email')
+            del request.session['email']
             del request.session['secret_key']
             
-            request.session['member_id'] = phoneNumber
+            # request.session['member_id'] = email
+
+            request.session["member_id"] = email
 
             isDonor = False
             isRecipient = True
-            donor = Donor.objects.filter(phoneNumber= phoneNumber).first()
+            donor = Donor.objects.filter(email=email).first()
             if donor is not None:
                 isDonor = True
-            
+            print("isdonor " + str(isDonor))
+            print("isrecipient" + str(isRecipient))
             type = jwt.encode({'isDonor': isDonor,"isRecipient" : isRecipient}, key, algorithm='HS256')
 
             request.session.set_expiry(24*60*60)
@@ -220,10 +226,10 @@ def verify_otp(request):
 def donor_send_otp(request):
     if request.method== "POST": 
         body  = json.loads(request.body)
-        phoneNumber  = body['phoneNumber'] 
-        if not phoneNumber:
-            return JsonResponse({'status': 'Mobile number is required.'}, status=400)
-        donor = Donor.objects.filter(phoneNumber= phoneNumber).first()
+        email  = body['email'] 
+        if not email:
+            return JsonResponse({'status': 'Email is required.'}, status=400)
+        donor = Donor.objects.filter(email= email).first()
         if donor is None:
             return JsonResponse({"error" : "Donor Not Registered"},status = 401)
         secret_key = pyotp.random_base32()
@@ -235,40 +241,52 @@ def donor_send_otp(request):
         # Store the OTP and its creation time in the session
         request.session['secret_key'] = secret_key
         #request.session['otp_creation_time'] = time.time()
-        request.session['phoneNumber'] = phoneNumber
+        request.session['email'] = email
         
         #generate JWT token for user verification
         try: 
-            client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+            # client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
     
-            # Replace 'to' with the recipient's phone number
-            to = phoneNumber
+            # # Replace 'to' with the recipient's phone number
+            # to = phoneNumber
             
-            # Replace 'from_' with your Twilio phone number
-            from_ = settings.TWILIO_PHONE_NUMBER
+            # # Replace 'from_' with your Twilio phone number
+            # from_ = settings.TWILIO_PHONE_NUMBER
             
-            message = client.messages.create(
-                body="Hi , your otp is " + otp,
-                to=to,
-                from_=from_
-            )
+            # message = client.messages.create(
+            #     body="Hi , your otp is " + otp,
+            #     to=to,
+            #     from_=from_
+            # )
+
+            message = f'Your OTP for password update is: {otp}'
+            subject = 'OTP Verification'
+            send_mail(
+                subject,
+                message,
+                'support@smileorganization.in',
+                [email],
+                fail_silently=False,
+                )
             
         except Exception as e:
             print(e) 
             return JsonResponse({"error" : "error occured while sending sms"}, status=500)
         
-        return JsonResponse({"success" : "SMS sent successfully"},status  =200)
+        return JsonResponse({"success" : "OTP sent successfully"},status  =200)
     return JsonResponse({"error" : "Invalid request method"},status = 400)
+
+
 
 #get donor past records
 
 @csrf_exempt
 def get_donor_records(request):
     if request.method == "GET":
-        phoneNumber = request.session.get('member_id')
-        if phoneNumber is None:
+        email = request.session.get('member_id')
+        if email is None:
             return JsonResponse({"error" : "Invalid Session Id"},status =401)
-        donor = Donor.objects.filter(phoneNumber = phoneNumber).first()
+        donor = Donor.objects.filter(email=email).first()
         if donor is None : 
             JsonResponse({"error" : "Something Went Wrong"},status=401)
 
@@ -283,7 +301,7 @@ def get_donor_records(request):
                                     'totalDonation' : donor.totalDonation,
                                     } for donor in donorList]
                 print(donor_list_data)
-            donorDetailsObj = Donor.objects.filter(phoneNumber=phoneNumber).first()
+            donorDetailsObj = Donor.objects.filter(email=email).first()
             
             is_eligible = True
             differenceInDays = 90

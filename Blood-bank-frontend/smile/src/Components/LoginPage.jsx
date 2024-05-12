@@ -1,12 +1,16 @@
 import React, {  useEffect, useState } from 'react'
-import { ChakraProvider,  FormHelperText, Heading, Button, FormControl, FormLabel, Input, Icon, InputGroup, InputLeftAddon, PinInput, PinInputField, HStack, VStack, Text} from '@chakra-ui/react'
-import { Phone } from '@phosphor-icons/react'
+import { ChakraProvider, IconButton, FormHelperText, Heading, Button, FormControl, FormLabel, Input, Icon, InputGroup, InputLeftAddon, PinInput, PinInputField, HStack, Stack, VStack, Text, Box, Divider, AbsoluteCenter} from '@chakra-ui/react'
+import { Envelope, Password } from '@phosphor-icons/react'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom'
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import {AnimatePresence, motion} from 'framer-motion'
 
 
+// Email Regex
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 export default function LoginPage(props){
     axios.defaults.withCredentials=true
@@ -21,8 +25,8 @@ export default function LoginPage(props){
         const [disability , setDisability] = useState(false)
         //Timer Countdown
         const [time , setTime] = useState('')
-        //Recepient Number
-        const [number , setNumber] = useState('')
+        //Recepient Email
+        const [email , setEmail] = useState('')
         //Error Msg for Phone Number
         const [errMsg , setErrorMsg] = useState({
             isErr : false,
@@ -34,9 +38,15 @@ export default function LoginPage(props){
         const [otpVal ,setOtpVal] = useState("")
         //Verifying OTP
         const [isLoading , setIsLoading] = useState(false)
-        //Checking Number Validity
-        const [isNumValid , setIsNumValid] = useState(false)
-    
+        //Checking Email Validity
+        const [isEmailValid , setIsEmailValid] = useState(false)
+        // Recipient Password
+        const [password , setPassword] = useState('')
+        // Check if User already Exists
+        const [userExists , setUserExists] = useState(false)
+        // Email Check
+        const [check , setCheck] = useState(false)
+        
         //Handlers
         // OTP Timer
         const timer= () => {
@@ -65,25 +75,28 @@ export default function LoginPage(props){
     
     
     
-        // SEND OTP
-        const sendOtp = async(number) =>{
-            if(number.length != 10){
+        // SEND OTP and Next Page
+        const sendOtp = async(email) =>{
+            setCheck(false)
+            // return
+
+            if(!emailRegex.test(email)){
                 console.log("Validation")
                 setErrorMsg(prev => ({
                     isErr : true,
-                    msg : "Invalid Number! Please Enter a valid Number."
+                    msg : "Invalid Email! Please Enter a valid Email."
                 }))
                 return
             }else{
-                setShowTime(!showTime)
-                timer()
+                // setShowTime(!showTime)
+                // timer()
                 setErrorMsg({
                     isErr : false,
                     msg : ""
                 })
                 
                 let data =  JSON.stringify({
-                    phoneNumber : `+91${number}`
+                    email : email
                 })
                 // console.log(data)
                 let url = ''
@@ -106,6 +119,7 @@ export default function LoginPage(props){
                     }
                     const res = await axios.post(`/${url}`, data)
                     console.log(res)
+                    setCheck(true)
                     toast.success("OTP Sent Successfully !",{
                         position : toast.POSITION.TOP_CENTER
                     })
@@ -187,93 +201,141 @@ export default function LoginPage(props){
     
             }
         }
-
         //Real Time Number check
-        const numberCheck =(num) =>{
-            if(num.length !== 10 ){
-                setIsNumValid(true)
-                setNumber(num)
+        const emailCheck =(email) =>{
+            // console.log(emailRegex.test(email))
+            if(!emailRegex.test(email)){
+                setIsEmailValid(true)
+                setEmail(email)
             }else{
-                setIsNumValid(false)
-                setNumber(num)
+                setIsEmailValid(false)
+                setEmail(email)
             }
         }
+        // Handle Next
+        const handleNext = () =>{
+            console.log('check')
+            setCheck(true)
+        }
+        const login = () => {
+            console.log('logging in')
+        }
+
+
+
 
     return(
         <>
             <ChakraProvider>
                 <VStack>
                     <Heading as='h3' > {props.type === 'recipientLogin' ? "Recipient Login" : "Donor Login"} </Heading>
-                        <FormControl mt={15} isRequired width={{base : '28rem', lg : '35rem'}}>
-                            <FormLabel fontSize='1.4rem' htmlFor='phone'>Phone</FormLabel>
+                        <FormControl mt={15} isRequired  width={{base : '28rem', lg : '35rem'}}>
+                            <FormLabel fontSize='1.4rem' htmlFor='email'>Email</FormLabel>
                             <InputGroup>
                                 <InputLeftAddon backgroundColor='#d71414' height={30}>
-                                    <Icon as={Phone} boxSize={8} weight='duotone' color='#f0e3e4' />
+                                    <Icon as={Envelope} boxSize={8} weight='duotone' color='#f0e3e4' />
                                 </InputLeftAddon>
-                                <Input variant='outline'
-                                        backgroundColor='red.50'
-                                        isInvalid={isNumValid}
-                                        focusBorderColor={isNumValid ? 'red.400' : 'green.300'}
+                                <Input  variant='outline'
+                                        backgroundColor={check ? 'gray.300' :'blue.50'}
+                                        isInvalid={isEmailValid}
+                                        focusBorderColor={isEmailValid ? 'red.400' : 'green.300'}
                                         errorBorderColor='red.400'
                                         height={30} 
                                         fontSize={14}  
-                                        type="tel" 
-                                        name="phone" 
-                                        value={number} 
-                                        onChange={e =>  numberCheck(e.target.value)} 
+                                        type="email" 
+                                        name="email" 
+                                        value={email} 
+                                        required
+                                        readOnly={check}
+                                        onChange={e =>  emailCheck(e.target.value)} 
                                 />
                             </InputGroup>
                             {errMsg.isErr ? (
                                     <FormHelperText fontSize={12} color="red" fontWeight={500} >{errMsg.msg}</FormHelperText>
                                 ) : null}                                        
                         </FormControl>
-                        <HStack mt={10} mb={26}>
-                            <Button size='lg' 
+                        {
+                            !check ? (
+                                <IconButton
+                                    isRound={true}
+                                    onClick={e => sendOtp(email)}
+                                    sx={{ ml: 'auto', mr : 10}}
+                                    className='reg_btn'
                                     color="black" bg="#d7141450" 
                                     _hover={{color:'#f0e3e4' , bg: '#d71414'}} 
-                                    height='35px'
-                                    width='120px'
+                                    mt={10}
                                     fontSize='16px'
-                                    fontWeight='400'
-                                    onClick={() => sendOtp(number)}
-                                    isDisabled={disability}
-                            >
-                                {changeText}
-                            </Button>
-                            {showTime ? 
-                            <Text fontSize={14} >Resend in : {time} </Text> 
-                            : null} 
-                        </HStack>
-                        <HStack>
-                            <PinInput otp variant='pill' size='lg' value={otpVal}  onChange={e=>setOtpVal(e)}
-                                        placeholder='_'
-                            >
-                                <PinInputField height={20} fontSize={22}  color='black' bg='#d7141450'/>
-                                <PinInputField height={20} fontSize={22}  color='black' bg='#d7141450'/>
-                                <PinInputField height={20} fontSize={22}  color='black' bg='#d7141450'/>
-                                <PinInputField height={20} fontSize={22}  color='black' bg='#d7141450'/>
-                                <PinInputField height={20} fontSize={22}  color='black' bg='#d7141450'/>
-                                <PinInputField height={20} fontSize={22}  color='black' bg='#d7141450'/>
-                            </PinInput>
-                        </HStack>
-                        <Button 
-                            // onClick={handleNext} 
-                            color="black" bg="#d7141450" 
-                            _hover={{color:'#f0e3e4' , bg: '#d71414'}} 
-                            className='reg_btn'
-                            mt={10}
-                            height='30px'
-                            width='120px'
-                            fontSize='16px'
-                            fontWeight='400'
-                            isLoading={isLoading}
-                            loadingText='Verifying'
-                            onClick={verifyOtp}
-                            isDisabled={otpVal.length !== 6}
-                        >
-                            Verify OTP
-                        </Button>   
-                    </VStack>                            
+                                    height='3rem'
+                                    width='3rem'
+                                    icon={<ArrowForwardIosIcon />}
+                                />               
+                            ) : (
+                                
+                                <AnimatePresence>
+                                    <motion.div
+                                        initial={{x : '20vw', opacity : 0}}
+                                        animate={{x : 0, opacity : 1}}
+                                        transition={{ duration : 0.2, type : 'easeOut' }}
+                                        type='easeInOut'
+
+                                    >
+                                                <VStack>
+
+                                                    <HStack mt={2} mb={1}>
+                                                        <Button size='small' 
+                                                                color="black" 
+                                                                _hover={{color:'black' , bg: '#daccca', fontWeight:'400' }} 
+                                                                bg='#daccca'
+                                                                textDecoration='underline'
+                                                                fontSize='10px'
+                                                                fontWeight='200'
+                                                                onClick={() => sendOtp(email)}
+                                                                // isDisabled={disability}
+                                                        >
+                                                            Wrong Email? Update Here!
+                                                        </Button>
+                                                        
+                                                    </HStack>
+                                                        <Box sx={{color:'#d71414', fontSize : '10px', fontWeight: 200 }}>
+                                                            (Please verify your email by checking your inbox or spam folder for the OTP.)
+                                                        </Box>
+                                                    <HStack>
+                                                        <PinInput otp variant='pill' size='lg' value={otpVal}  onChange={e=>setOtpVal(e)}
+                                                                    placeholder='_'
+                                                        >
+                                                            <PinInputField height={20} fontSize={22}  color='black' bg='#d7141450'/>
+                                                            <PinInputField height={20} fontSize={22}  color='black' bg='#d7141450'/>
+                                                            <PinInputField height={20} fontSize={22}  color='black' bg='#d7141450'/>
+                                                            <PinInputField height={20} fontSize={22}  color='black' bg='#d7141450'/>
+                                                            <PinInputField height={20} fontSize={22}  color='black' bg='#d7141450'/>
+                                                            <PinInputField height={20} fontSize={22}  color='black' bg='#d7141450'/>
+                                                        </PinInput>
+                                                    </HStack>
+                                                    <Button 
+                                                        // onClick={handleNext} 
+                                                        color="black" bg="#d7141450" 
+                                                        _hover={{color:'#f0e3e4' , bg: '#d71414'}} 
+                                                        className='reg_btn'
+                                                        mt={10}
+                                                        height='30px'
+                                                        width='120px'
+                                                        fontSize='16px'
+                                                        fontWeight='400'
+                                                        isLoading={isLoading}
+                                                        loadingText='Verifying'
+                                                        onClick={verifyOtp}
+                                                        isDisabled={otpVal.length !== 6}
+                                                    >
+                                                        Verify OTP
+                                                    </Button>   
+                                                </VStack>
+                                    </motion.div>
+                                </AnimatePresence>
+                            )
+                        }
+                        
+                    </VStack>        
+                         
             </ChakraProvider>
 
         </>

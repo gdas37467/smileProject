@@ -155,6 +155,36 @@ const RequestList = () => {
         setReload(!reload)
     }
 
+    // Update Request
+    const updateRequest = async (id, status) => {
+        console.log(status)
+        if(status !== 'Rejected'){
+            toast.error('Not Applicable')
+            return
+        }else{
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, Accept Request!"
+            }).then(async (res) => {
+                if(res.isConfirmed){
+                    try {
+                        const res = await axios.get(`/adminUser/confirm_recipient_donation/${id}`)
+                        console.log(res)
+                        toast.success("Request Accepted Successfully!")
+                        setReload(!reload)
+                    } catch (error) {
+                        console.log(error)
+                        toast.error(error.response.data.error || error.response.statusText)
+                    }
+                }
+            })
+        }
+    }
     
     //API Data Call
     const getTableData = async () =>{
@@ -278,6 +308,7 @@ const RequestList = () => {
                                     type='nonPendingList'
                                     rows={nonPendingList} 
                                     viewPrevDonation={viewPrevDonation}
+                                    updateRequest={updateRequest}
                                 />
                         </>
                         )

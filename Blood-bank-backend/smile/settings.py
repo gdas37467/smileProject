@@ -46,7 +46,7 @@ print(SECRET_KEY)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.12','192.168.56.1','127.0.0.1', '192.168.1.15', '192.168.29.55','43.204.218.79']
+ALLOWED_HOSTS = ['192.168.1.12','192.168.56.1','127.0.0.1', '192.168.1.15','192.168.29.55','localhost']
 
 
 # Application definition
@@ -78,14 +78,15 @@ MIDDLEWARE = [
 ]
 
 
-CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:3000','http://localhost:3000' , 'http://192.168.1.12:3000',"http://192.168.56.1:3000",'http://192.168.1.15:3000', 'http://192.168.1.15:4173', "http://192.168.29.55", 'http://43.204.218.79']
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:3000','http://localhost:3000' , 'http://192.168.1.12:3000',"http://192.168.56.1:3000",'http://192.168.1.15:3000', 'http://192.168.1.15:4173','http://192.168.29.55:3000']
 
 #CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
-
+SESSION_COOKIE_SAMESITE = 'Lax'
 SESSION_COOKIE_HTTPONLY = True
-SESSION_COOKIE_AGE = 2*60
+SESSION_COOKIE_AGE = 24*60
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
 
 
@@ -98,8 +99,8 @@ CORS_ALLOWED_ORIGINS = [
     'http://192.168.56.1:3000',
     'http://192.168.1.15:3000',
     'http://192.168.1.15:4173',
-    "http://192.168.29.55",
-    'http://43.204.218.79'
+    'http://192.168.29.55:3000',
+
   ]
 CSRF_TRUSTED_ORIGINS = [
     
@@ -238,3 +239,14 @@ TWILIO_AUTH_TOKEN = os.environ.get('TWILIO_AUTH_TOKEN')
 
 # Twilio Phone Number (from which you'll send SMS)
 TWILIO_PHONE_NUMBER = os.environ.get('TWILIO_PHONE_NUMBER')
+
+API_KEY = os.environ.get('API_KEY')
+API_SECRET = os.environ.get('API_SECRET')
+
+
+EMAIL_HOST = 'smtp.hostinger.com'
+EMAIL_PORT = '587'
+EMAIL_HOST_USER='support@smileorganization.in'
+EMAIL_HOST_PASSWORD='smileorg99aA@'
+EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
