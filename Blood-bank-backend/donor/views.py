@@ -38,7 +38,7 @@ def register(request) :
         dob = body['dob']
         bloodGroup = body['bloodGroup']
         phoneNumber = body['phoneNumber']
-        email = body['email']
+        #email = body['email']
         otp = body['otp']
         address = body['address']
         gender = body['gender']
