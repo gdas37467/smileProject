@@ -82,6 +82,8 @@ def get_donor_list(request):
                                     'lastName': donor.lastName,
                                     'thalassemia' : donor.isThalassemia,
                                     'bloodGroup' : donor.bloodGroup,
+                                    'email' : donor.email,
+                                    'registeredByAdmin' : donor.registeredByAdmin,
                                     'phoneNumber' : donor.phoneNumber,
                                     'address' : donor.address,
                                     'gender' : donor.gender,
@@ -134,16 +136,16 @@ def confirm_donor(request,donor_id):
             return JsonResponse({"error":"Donation Confirmation Failed"},status=500)
        
         try: 
-            
-            message = "Hi "+ donor.firstName + ", " + "\nThank You for your Blood Donation.", 
-            subject = 'Blood Needed Urgently'
-            send_mail(
-                subject,
-                message,
-                'support@smileorganization.in',
-                [donor.email],
-                fail_silently=False,
-                )
+            if donor.registeredByAdmin == False:
+                message = "Hi "+ donor.firstName + ", " + "\nThank You for your Blood Donation."
+                subject = 'Blood Needed Urgently'
+                send_mail(
+                    subject,
+                    message,
+                    'support@smileorganization.in',
+                    [donor.email],
+                    fail_silently=False,
+                    )
 
             return JsonResponse({"success" : "Comfirmation Done Successfully"},status=200)
         
@@ -302,22 +304,23 @@ def requirement_msg(request, donor_id):
             return JsonResponse({"error" : "Unauthorized"},status = 401)
         donor_id = uuid.UUID(donor_id)
         donor = get_object_or_404(Donor, id=donor_id)
+        email = donor.email
         current_date_string= datetime.now(tz=pytz.timezone('Asia/Kolkata')).date().isoformat()
         current_date = datetime.strptime(current_date_string, "%Y-%m-%d").date()
         three_months_ago = current_date - timedelta(days=3*30)
         if (donor.lastDonated is not None) and donor.lastDonated >three_months_ago :
             return JsonResponse({"error" : "Donor not eligible for Donation"}, status=500)
         try: 
-            
-            message = "Hi "+ donor.firstName + ", " + "\nThere is an urgent need of blood. Kindly visit or contact SMILE admin", 
-            subject = 'Blood Needed Urgently'
-            send_mail(
-                subject,
-                message,
-                'support@smileorganization.in',
-                [donor.email],
-                fail_silently=False,
-                )
+            if donor.registeredByAdmin == False:
+                message = "Hi "+ donor.firstName + ", " + "\nThere is an urgent need of blood. Kindly visit or contact SMILE admin"
+                subject = 'Blood Needed Urgently'
+                send_mail(
+                    subject,
+                    message,
+                    'support@smileorganization.in',
+                    [email],
+                    fail_silently=False,
+                    )
 
 
             
@@ -342,16 +345,16 @@ def loan_msg(request, donor_id):
         if donor.loan == False : 
             return JsonResponse({"error" : "Donor doesn't have any existing loan"},status = 500)
         try: 
-            
-            message = "Hi "+ donor.firstName + ", " + "\nThere is a pending blood loan against your id, Kindly visit SMILE or contact admin to donate blood."
-            subject = 'Loan Pending'
-            send_mail(
-                subject,
-                message,
-                'support@smileorganization.in',
-                [donor.email],
-                fail_silently=False,
-                )
+            if donor.registeredByAdmin == False:
+                message = "Hi "+ donor.firstName + ", " + "\nThere is a pending blood loan against your id, Kindly visit SMILE or contact admin to donate blood."
+                subject = 'Loan Pending'
+                send_mail(
+                    subject,
+                    message,
+                    'support@smileorganization.in',
+                    [donor.email],
+                    fail_silently=False,
+                    )
 
             return JsonResponse({"success" : "SMS sent successfully"},status=200)
             
@@ -384,16 +387,16 @@ def confirm_loan(request, donor_id):
        
         try: 
             
-
-            message = f'Hi '+ donor.firstName + ',' + '\nYour Loan Request for 1 unit blood has been processed.'
-            subject = 'Loan Confirmed'
-            send_mail(
-                subject,
-                message,
-                'support@smileorganization.in',
-                [donor.email],
-                fail_silently=False,
-                )
+            if donor.registeredByAdmin == False:
+                message = f'Hi '+ donor.firstName + ',' + '\nYour Loan Request for 1 unit blood has been processed.'
+                subject = 'Loan Confirmed'
+                send_mail(
+                    subject,
+                    message,
+                    'support@smileorganization.in',
+                    [donor.email],
+                    fail_silently=False,
+                    )
 
             return JsonResponse({"success" : "Comfirmation Done Successfully"},status=200)
             
