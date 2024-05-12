@@ -15,7 +15,7 @@ class Donor(models.Model):
     email = models.TextField(default="",max_length=30,null=True)
     lastDonated = models.DateField(null=True)
     address  = models.TextField(default="",max_length=500,null=True)
-   
+    registrationDate = models.DateField(null=True)
     isThalassemia = models.BooleanField(default = False,null=True)
     totalDonation = models.IntegerField(default = 0,null=False)
     loan = models.BooleanField(default=False) 

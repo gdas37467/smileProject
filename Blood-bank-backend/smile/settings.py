@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_crontab',
 ]
 
 MIDDLEWARE = [
@@ -249,3 +250,10 @@ EMAIL_HOST_USER='support@smileorganization.in'
 EMAIL_HOST_PASSWORD='smileorg99aA@'
 EMAIL_USE_TLS = True
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+
+#cron job
+CRONJOBS = [
+    ('* * * * *', 'adminUser.cron.updateUnits', '>> ' + os.path.join(BASE_DIR,'log/debug7.log' + ' 2>&1 ')),
+    # Add more cron jobs as needed
+]

@@ -20,6 +20,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.core.mail import send_mail
 import time
+import pytz
 
 
 
@@ -56,6 +57,8 @@ def register(request) :
         print(id)
         print(dob)
         date_obj = datetime.strptime(dob, date_format)
+        current_date_string= datetime.now(tz=pytz.timezone('Asia/Kolkata')).date().isoformat()
+        current_date = datetime.strptime(current_date_string, "%Y-%m-%d").date()
         isDonor2 = Donor.objects.filter(firstName = firstName , lastName = lastName , bloodGroup = bloodGroup ,dob =date_obj.date()).first()
         if isDonor2 is not None : 
             return JsonResponse({"error" : "Kindly contact admin as you are already registered as a donor"},status=400)
@@ -105,7 +108,8 @@ def register(request) :
                 gender = gender,
                 id = id,
                 lastDonated=lastDonated,
-                isThalassemia = isThalassemia
+                isThalassemia = isThalassemia,
+                registrationDate = current_date
 
 
             )
@@ -160,7 +164,7 @@ def send_otp(request):
 
 
         try: 
-            message = f'Your OTP for password update is: {otp}'
+            message = f'Your OTP is: {otp}'
             subject = 'OTP Verification'
             send_mail(
                 subject,
@@ -261,7 +265,7 @@ def donor_send_otp(request):
             #     from_=from_
             # )
 
-            message = f'Your OTP for password update is: {otp}'
+            message = f'Your OTP is: {otp}'
             subject = 'OTP Verification'
             send_mail(
                 subject,
