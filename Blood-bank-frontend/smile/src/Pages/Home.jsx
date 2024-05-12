@@ -53,7 +53,7 @@ const Home = () => {
     const loadImgs = async() =>{
         try{
     
-            const res = await axios.get('http://127.0.0.1:8000/adminUser/getLeaderboardImages/')
+            const res = await axios.get('http://192.168.29.55:8000/adminUser/getLeaderboardImages/')
             setImages(res.data.data)
         }catch(e){
             console.log(e.data.status)

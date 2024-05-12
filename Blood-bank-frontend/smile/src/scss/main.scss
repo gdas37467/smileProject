@@ -159,6 +159,22 @@ label+.css-v4u5dn-MuiInputBase-root-MuiInput-root, label + .css-zrqpq1 {
     color : #12807e !important;
 }
 
+.delete-donor{
+    font-size: 14px !important;
+    & .MuiListItemIcon-root{
+        color: #d22228;
+        min-width: 26px !important;        
+    }
+}
+
+.update-request{
+    font-size: 14px !important;
+    & .MuiListItemIcon-root{
+        color: rgb(9, 163, 9);
+        min-width: 26px !important;        
+    }
+}
+
 
 //Navbar
 .outer_nav{
@@ -169,7 +185,7 @@ label+.css-v4u5dn-MuiInputBase-root-MuiInput-root, label + .css-zrqpq1 {
     height: 10rem;
     background-color: $bg;
     display: grid;
-    grid-template-columns: 1fr 40rem 20rem 80rem 1fr;
+    grid-template-columns: 1fr 20rem 20rem 80rem 1.5fr;
     align-items: center;
     box-shadow: 0 0 5rem rgba(0 , 0 , 0 , 0.2);
     & .logo{

@@ -74,7 +74,7 @@ const DonorList = () => {
         //API for matched donor
         console.log(id)
         try {
-            const res = await axios.get(`http://127.0.0.1:8000/adminUser/confirm_donor/${id}`)
+            const res = await axios.get(`http://192.168.29.55:8000/adminUser/confirm_donor/${id}`)
             // console.log(res)
             toast.success(res.data.status)
             setReload(!reload)
@@ -91,7 +91,7 @@ const DonorList = () => {
         //API for matched donor
         console.log(id)
         try {
-            const res = await axios.get(`http://127.0.0.1:8000/adminUser/confirm_loan/${id}` )
+            const res = await axios.get(`http://192.168.29.55:8000/adminUser/confirm_loan/${id}` )
             toast.success('Donor Added For Loan Successfully')
             setReload(!reload)
 
@@ -106,7 +106,7 @@ const DonorList = () => {
     const sendSMS = async (id) =>{
         //API for matched donor
         try {
-            const res = await axios.get(`http://127.0.0.1:8000/adminUser/send_requirement/${id}`)
+            const res = await axios.get(`http://192.168.29.55:8000/adminUser/send_requirement/${id}`)
             toast.success(res.data.success)
             setReload(!reload)
 
@@ -122,7 +122,7 @@ const DonorList = () => {
         //API for matched donor
         console.log(id)
         try {
-            const res = await axios.get(`http://127.0.0.1:8000/adminUser/loan_msg/${id}`)
+            const res = await axios.get(`http://192.168.29.55:8000/adminUser/loan_msg/${id}`)
             console.log(res)
             toast.success('Reminder Sent Successfully')
             setReload(!reload)
@@ -134,12 +134,36 @@ const DonorList = () => {
             })
         }
     }
-
+    // Delete Donor
+    const deleteDonor = async (id) =>{
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete Donor!"
+        }).then(async (res) => {
+            if(res.isConfirmed){
+                try {
+                    const res = await axios.get(`http://192.168.29.55:8000/adminUser/remove_donor/${id}`)
+                    console.log(res)
+                    toast.warning("Donor has been deleted successfully!")
+                    setReload(!reload)
+                } catch (error) {
+                    console.log(error)
+                    toast.error(error.response.data.error || error.response.statusText)
+                }
+            }
+        })
+        
+    }
 
 
     const getAvailableDonors = async () => {
         setLoadingPage(true)
-        const res = await axios.get('http://127.0.0.1:8000/adminUser/get_donor_list/')
+        const res = await axios.get('http://192.168.29.55:8000/adminUser/get_donor_list/')
         console.log(res)
         setDonorList(res.data.donor_list)
         setLoadingPage(false)
@@ -147,7 +171,7 @@ const DonorList = () => {
 
     const adminLogout = () => {
         try{
-            axios.get('http://127.0.0.1:8000/adminUser/admin_logout/').then((res)=>{
+            axios.get('http://192.168.29.55:8000/adminUser/admin_logout/').then((res)=>{
                 setLoadingPage(true)
                 localStorage.removeItem('adminCheck')
                 Swal.fire({
@@ -219,6 +243,7 @@ const DonorList = () => {
                                     addLoan={addLoan}
                                     sendSMS={sendSMS}
                                     sendReminder={sendReminder}
+                                    deleteDonor={deleteDonor}
                                 />
                             </>
                         )

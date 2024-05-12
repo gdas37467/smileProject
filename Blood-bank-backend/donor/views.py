@@ -83,9 +83,7 @@ def register(request) :
                 isRecipient = True
 
             type = jwt.encode({'isDonor': isDonor,"isRecipient" : isRecipient}, key, algorithm='HS256')
-
             
-
             if status == False:
                 return JsonResponse({"error" : "Incorrect OTP"  },status=400)
             

@@ -36,7 +36,7 @@ key = settings.SECRET_KEY
 #ADMIN API's
 
 #Base URL form image store and get
-base_url = 'http://192.168.1.15:8000'
+base_url = 'http://192.168.29.55:8000'
 
 
 #Get all matched donors and recipients
@@ -169,7 +169,7 @@ def get_recipient_list(request):
             return JsonResponse({"error" : "Unauthorized"},status = 401)
         try:
             current_date_string= datetime.now(tz=pytz.timezone('Asia/Kolkata')).date()
-            recipientList = Recipient.objects.filter(date = current_date_string).all()
+            recipientList = Recipient.objects.filter(requestDate = current_date_string).all()
             print(recipientList.values())
             recipient_list_data=[]
             sl = 1
@@ -322,9 +322,6 @@ def requirement_msg(request, donor_id):
                     [email],
                     fail_silently=False,
                     )
-
-
-            
 
             return JsonResponse({"success" : "SMS sent successfully"},status=200)
             

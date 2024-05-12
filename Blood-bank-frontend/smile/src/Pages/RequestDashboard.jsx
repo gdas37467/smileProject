@@ -11,7 +11,7 @@ import ContactPageIcon from '@mui/icons-material/ContactPage';
 import VaccinesIcon from '@mui/icons-material/Vaccines';
 import PropTypes from 'prop-types';
 import DoneIcon from '@mui/icons-material/Done';
-import { ChakraProvider,  Flex,  HStack,  RadioGroup,  Skeleton, Spacer, VStack, position } from '@chakra-ui/react';
+import { ChakraProvider, RadioGroup } from '@chakra-ui/react';
 import {
     FormControl,
     FormLabel,
@@ -40,6 +40,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import {BallTriangle} from 'react-loader-spinner';
+import Registration from '../Components/Registration';
 
 
 
@@ -193,7 +194,6 @@ export default function RequestDashboard() {
         firstName : '',
         lastName : '',
         dob : '',
-        email : '',
         phoneNumber : '',
         address : '',
         bloodGroup : '',
@@ -212,7 +212,6 @@ export default function RequestDashboard() {
     const [patInValid, setPatInValid] = useState({
         firstName : false,
         lastName : false,
-        email : false,
         phoneNumber : false,
         address : false,
         hospitalName : false,
@@ -238,6 +237,7 @@ export default function RequestDashboard() {
 
     //Page Validation
     useEffect(()=>{
+
         if(localStorage.getItem('check') !== null){
             const now  =  new Date().getTime()
             if(JSON.parse(localStorage.getItem('check')).expire < now){
@@ -302,7 +302,7 @@ export default function RequestDashboard() {
             
             case 1:
                 
-                if(!emailRegex.test(patientDetails.email) || patientDetails.address.length <= 10 || patInValid.phoneNumber){
+                if(patientDetails.address.length <= 10 || patientDetails.phoneNumber.length !== 10 ){
                     toast.error("Please enter your details correctly before continuing.")
                     return
                 }
@@ -366,19 +366,6 @@ export default function RequestDashboard() {
                     setPatInValid(pS => ({
                         ...pS,
                         [name] : false    
-                    }))
-                }
-                break
-
-            case 'email':
-                if(!emailRegex.test(value.trim())){
-                    setPatInValid(pS => ({
-                        ...pS,
-                        [name] : true
-                    }))
-                }else{
-                    setPatInValid(pS => ({
-                        [name] : false
                     }))
                 }
                 break
@@ -561,18 +548,7 @@ export default function RequestDashboard() {
 
                         <GridItem>
                             <FormControl isRequired>
-                                <FormLabel fontSize={12} htmlFor='email'>Patient's Email</FormLabel>
-                                <InputGroup>
-                                <InputLeftAddon height={30}>
-                                    <Icon as={Envelope} boxSize={8} weight="duotone" color="#ce2432" />
-                                </InputLeftAddon>
-                                <Input variant='outline' backgroundColor='red.50' height={30} fontSize={14} isInvalid={patInValid.email} focusBorderColor={patInValid.email ? 'red.400' : 'green.300'} type="email" name="email" value={patientDetails.email} onChange={e =>  setDetails(e)} />
-                                </InputGroup>
-                            </FormControl>
-                        </GridItem>
-                        <GridItem>
-                            <FormControl>
-                                <FormLabel fontSize={12} htmlFor='phoneNumber'>Alternate Phone Number (Optional)</FormLabel>
+                                <FormLabel fontSize={12} htmlFor='phoneNumber'>Patient's Phone Number (Please Enter Correct Phone Number)</FormLabel>
                                 <InputGroup>
                                     <InputLeftAddon height={30}>
                                         <Icon as={Phone} boxSize={8} weight='duotone' color='#ce2432' />
@@ -792,7 +768,7 @@ export default function RequestDashboard() {
             lastName : patDet.lastName,
             dob : patDet.dob,
             email : patDet.email,
-            phoneNumber : `+91${patDet.phoneNumber}`,
+            phoneNumber : patDet.phoneNumber,
             address : patDet.address,
             bloodGroup : patDet.bloodGroup,
             isThalassemia : patDet.isThalassemia,
@@ -812,7 +788,7 @@ export default function RequestDashboard() {
         }
 
         try {
-            const res = await axios.post('http://127.0.0.1:8000/recipient/request_blood/',formData);
+            const res = await axios.post('http://192.168.29.55:8000/recipient/request_blood/',formData);
             console.log(res)
             Swal.fire({
                 text : res.data.success,
@@ -854,7 +830,7 @@ export default function RequestDashboard() {
     const loadAPI = async () =>{
         setLoadingPage(true)
         try {
-            const res = await axios.get('http://127.0.0.1:8000/recipient/get_recipient_records/')
+            const res = await axios.get('http://192.168.29.55:8000/recipient/get_recipient_records/')
             console.log(res)       
             let pendingReq = res.data.pastRecord.filter(el => el.status === 'Pending')
             let pastRecord = res.data.pastRecord.filter(el => el.status !== 'Pending')
@@ -873,7 +849,7 @@ export default function RequestDashboard() {
     //Logout API
     const logout = () => {
         try{
-            axios.get('http://127.0.0.1:8000/donor/logout/').then((res)=>{
+            axios.get('http://192.168.29.55:8000/donor/logout/').then((res)=>{
                 setLoadingPage(true)
                 localStorage.removeItem('check')
                 Swal.fire({
