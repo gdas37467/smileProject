@@ -240,50 +240,45 @@ export default function RequestDashboard() {
     //Page Validation
     useEffect(()=>{
 
-        // if(localStorage.getItem('test')){
-        //     setLoadingApi(false)
-            
-        // }
-
-        // if(localStorage.getItem('check') !== null){
-        //     const now  =  new Date().getTime()
-        //     if(JSON.parse(localStorage.getItem('check')).expire < now){
-        //         setLoadingPage(true)
-        //         Swal.fire({
-        //             title : 'Session Expired! Please Login Again!',
-        //             icon : 'warning'
-        //         }).then((res)=>{
-        //             if(res.isConfirmed || res.dismiss==='backdrop'){
-        //                 localStorage.removeItem('check')
-        //                 navigate('/request')
-        //             }
-        //         })
-        //     }else if(!jwtDecode(JSON.parse(localStorage.getItem('check')).user).isRecipient){
-        //         setLoadingPage(true)
-        //         Swal.fire({
-        //             title : 'You are not authorized to view this Page!',
-        //             text :  'Pleaase Register, to Continue!',
-        //             icon : 'warning'
-        //         }).then((res)=>{
-        //             if(res.isConfirmed || res.dismiss === 'backdrop'){
-        //                 navigate('/request')
-        //             }
-        //         })
-        //     }else{
-        //         setLoadingApi(true)
-        //     } 
-        // }else{
-        //     setLoadingPage(true)
-        //     Swal.fire({
-        //         title : 'You are not authorized to view this page.',
-        //         text : 'Please Login to Continue.',
-        //         icon : 'warning'
-        //     }).then((res)=>{
-        //         if(res.isConfirmed || res.dismiss==='backdrop'){
-        //             navigate('/request')
-        //         }
-        //     })
-        // }
+        if(localStorage.getItem('check') !== null){
+            const now  =  new Date().getTime()
+            if(JSON.parse(localStorage.getItem('check')).expire < now){
+                setLoadingPage(true)
+                Swal.fire({
+                    title : 'Session Expired! Please Login Again!',
+                    icon : 'warning'
+                }).then((res)=>{
+                    if(res.isConfirmed || res.dismiss==='backdrop'){
+                        localStorage.removeItem('check')
+                        navigate('/request')
+                    }
+                })
+            }else if(!jwtDecode(JSON.parse(localStorage.getItem('check')).user).isRecipient){
+                setLoadingPage(true)
+                Swal.fire({
+                    title : 'You are not authorized to view this Page!',
+                    text :  'Pleaase Register, to Continue!',
+                    icon : 'warning'
+                }).then((res)=>{
+                    if(res.isConfirmed || res.dismiss === 'backdrop'){
+                        navigate('/request')
+                    }
+                })
+            }else{
+                setLoadingApi(true)
+            } 
+        }else{
+            setLoadingPage(true)
+            Swal.fire({
+                title : 'You are not authorized to view this page.',
+                text : 'Please Login to Continue.',
+                icon : 'warning'
+            }).then((res)=>{
+                if(res.isConfirmed || res.dismiss==='backdrop'){
+                    navigate('/request')
+                }
+            })
+        }
     },[])
 
 
@@ -926,7 +921,6 @@ export default function RequestDashboard() {
                     
                         <div className="req_dashboard_content">
                             <div className="actual_content">
-                            {/* <Registration /> */}
                             {
                                 !loadingPage ? (
                                     <>

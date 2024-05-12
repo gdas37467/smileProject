@@ -281,14 +281,11 @@ const DonateBlood = () => {
                 icon : 'error'
             })
         }else{
-            const phoneNumber = {
-                phoneNumber : `+91${donorInfo.phoneNumber}`
-            }
+            
 
-            console.log(phoneNumber)
-            timer()
+            // timer()
             try{
-                const res =  await axios.post('http://192.168.29.55:8000/donor/send_otp/', JSON.stringify(phoneNumber))
+                const res =  await axios.post('http://192.168.29.55:8000/donor/send_otp/', JSON.stringify({email : donorInfo.email}))
                 if('success' in res.data){
                     toast.success(res.data.success, {
                         position : toast.POSITION.TOP_RIGHT
@@ -748,6 +745,8 @@ const DonateBlood = () => {
                                             </VStack>
                                         </motion.div>
                                     </div>
+                                    <ToastContainer />
+
                                 </ChakraProvider>
                             </>
                         )

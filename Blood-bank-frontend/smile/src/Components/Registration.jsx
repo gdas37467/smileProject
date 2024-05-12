@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, ChakraProvider, Checkbox, FormControl, FormHelperText, FormLabel, Grid, GridItem, Heading, Icon, IconButton, Input, InputGroup, InputLeftAddon, Radio, RadioGroup, Select, Stack, Textarea, VStack } from '@chakra-ui/react';
+import { Button, ChakraProvider, Checkbox, FormControl, FormHelperText, FormLabel, Grid, GridItem, Heading, Icon, IconButton, Input, InputGroup, InputLeftAddon, Radio, RadioGroup, Select, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Textarea, VStack } from '@chakra-ui/react';
 import { Backdrop, Box, Fade, Modal } from '@mui/material'
 import { IdentificationBadge, Envelope, Phone ,Calendar, Password, Eye, EyeSlash, HouseLine, Drop, Gauge, CalendarCheck      } from '@phosphor-icons/react'
 import axios from 'axios';
@@ -24,6 +24,9 @@ const style = {
         width: '36rem',
         height : '50rem',
         overflowY : 'scrollY',
+    },
+    '& .chakra-radio__control' : {
+        borderColor: '#d22228'
     }
     // zIndex : 3,
 };
@@ -32,7 +35,7 @@ const style = {
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 
-const Registration = () => {
+const Registration = (props) => {
     axios.defaults.withCredentials=true;
 
     const isRecipient = true //props.isRecipient
@@ -81,7 +84,8 @@ const Registration = () => {
     // Handlers
     const handleClose = () => {
         console.log("Closed")
-        // setOpen(false)
+        setOpen(false)
+        props.setRegister()
     }
 
 
@@ -174,12 +178,14 @@ const Registration = () => {
                 <Fade in={open}>
                     <Box sx={style}>
                         <ChakraProvider>
-                            {
-                                !isRecipient ? (
-                                    <>
-                                        <VStack>
-                                            <Heading> Recipient Registration </Heading>
-                                        </VStack>
+                            
+                            <Tabs isFitted variant='soft-rounded' colorScheme='red'>
+                                <TabList mb='2em' >
+                                    <Tab fontSize='1.8rem'>Recipient Registration</Tab>
+                                    <Tab fontSize='1.8rem'>Donor Registration</Tab>
+                                </TabList>
+                                <TabPanels>
+                                    <TabPanel>
                                         <Grid mt={10} templateColumns={{ lg: 'repeat(2, 1fr)' }} gap={10}>
                                             <GridItem>
                                                 <FormControl isRequired>
@@ -243,16 +249,12 @@ const Registration = () => {
                                                 </FormControl>
                                             </GridItem>
                                         </Grid>
-                                    </>
-                                ) : (
-                                    <>
-                                        <VStack>
-
-                                            <Heading> Donor Registration </Heading>
-                                        </VStack>
+                                    </TabPanel>
+                                    
+                                    <TabPanel>
                                         <Grid mt={10} templateColumns={{ lg: 'repeat(2, 1fr)' }} gap={10}>
                                                 
-                                        <GridItem>
+                                                <GridItem>
                                                     <FormControl isRequired>
                                                         <FormLabel htmlFor='email'>Email</FormLabel>
                                                         <InputGroup>
@@ -370,10 +372,10 @@ const Registration = () => {
                                                 </GridItem>
 
                                         </Grid>
-                                    </>
-                                )
-
-                            }
+                                    </TabPanel>
+                                </TabPanels>
+                            </Tabs>
+                            
                             <VStack>
                                 <Button 
                                     color="black" bg="#d7141450" 

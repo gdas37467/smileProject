@@ -6,6 +6,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
+import Registration from './Registration';
 
 
 //Add Top Donor Modal Style
@@ -38,6 +39,8 @@ function AdminNavbar (){
     const handleClose = () => setOpen(false);
     const addTopDonor = () => setOpen(true);
     const [selectedImgs , setSelectedImgs] = useState([])
+    // Register Recipient/Donor state
+    const [register,setRegister] = useState(false)
     const inpRef = useRef(null)
 
     const topDonorImages = (e) => {
@@ -98,6 +101,12 @@ function AdminNavbar (){
                         <button className="nav-link " onClick={addTopDonor} to='#'> Add Top Donor</button> 
                     </ListItemButton>
                 </ListItem>
+                <ListItem >
+                    <ListItemButton sx={{ textAlign: 'center' }}>
+                        <button className="nav-link " to='#'> Add Top Donor</button> 
+                        {/* <button className="nav-link " onClick={addTopDonor} to='#'> Add Top Donor</button>  */}
+                    </ListItemButton>
+                </ListItem>
                 
             </List>
         </Box>
@@ -127,6 +136,7 @@ function AdminNavbar (){
                     <NavLink className="nav-link " to="/admindashboard/requestlist"> Request List</NavLink>  
                     <NavLink className="nav-link " to='/admindashboard/donorlist'> Donor List </NavLink> 
                     <button className='nav-link' to='#' onClick={addTopDonor}> Add Top Donors  </button>
+                    <button className='nav-link' to='#' onClick={e => setRegister(true)} > Register Donor/Recipient  </button>
                 </nav>
                 <Drawer
                     container={container}
@@ -196,8 +206,15 @@ function AdminNavbar (){
                         </Box>
                     </Fade>
                 </Modal>
-                <ToastContainer />
             </div>
+                {
+                    register && (
+                        <Registration 
+                            setRegister={e=> setRegister(false)}
+                        />
+                    )
+                }
+                <ToastContainer />
 
         </>
     )

@@ -75,10 +75,10 @@ export default function LoginPage(props){
     
     
     
-        // SEND OTP
+        // SEND OTP and Next Page
         const sendOtp = async(email) =>{
             setCheck(false)
-            return
+            // return
 
             if(!emailRegex.test(email)){
                 console.log("Validation")
@@ -88,15 +88,15 @@ export default function LoginPage(props){
                 }))
                 return
             }else{
-                setShowTime(!showTime)
-                timer()
+                // setShowTime(!showTime)
+                // timer()
                 setErrorMsg({
                     isErr : false,
                     msg : ""
                 })
                 
                 let data =  JSON.stringify({
-                    phoneNumber : email
+                    email : email
                 })
                 // console.log(data)
                 let url = ''
@@ -119,6 +119,7 @@ export default function LoginPage(props){
                     }
                     const res = await axios.post(`http://192.168.29.55:8000/${url}`, data)
                     console.log(res)
+                    setCheck(true)
                     toast.success("OTP Sent Successfully !",{
                         position : toast.POSITION.TOP_CENTER
                     })
@@ -257,8 +258,7 @@ export default function LoginPage(props){
                             !check ? (
                                 <IconButton
                                     isRound={true}
-                                    // isDisabled={activeStep === 0}
-                                    onClick={handleNext}
+                                    onClick={e => sendOtp(email)}
                                     sx={{ ml: 'auto', mr : 10}}
                                     className='reg_btn'
                                     color="black" bg="#d7141450" 
@@ -279,52 +279,6 @@ export default function LoginPage(props){
                                         type='easeInOut'
 
                                     >
-                                        {
-                                            userExists ? (
-                                                <>
-                                                    <VStack>
-
-                                                    <FormControl mt={15} isRequired width={{base : '28rem', lg : '35rem'}}>
-                                                        <FormLabel fontSize='1.4rem' htmlFor='password'>Enter your Password</FormLabel>
-                                                        <InputGroup>
-                                                            <InputLeftAddon backgroundColor='#d71414' height={30}>
-                                                                <Icon as={Password} boxSize={8} weight='duotone' color='#f0e3e4' />
-                                                            </InputLeftAddon>
-                                                            <Input variant='outline'
-                                                                    backgroundColor='red.50'
-                                                                    isInvalid={isEmailValid}
-                                                                    focusBorderColor={isEmailValid ? 'red.400' : 'green.300'}
-                                                                    errorBorderColor='red.400'
-                                                                    height={30} 
-                                                                    fontSize={14}  
-                                                                    type="password" 
-                                                                    name="password" 
-                                                                    value={password} 
-                                                                    required
-                                                                    onChange={e =>  setPassword(e.target.value)} 
-                                                            />
-                                                        </InputGroup>
-                                                        {/* {errMsg.isErr ? (
-                                                                <FormHelperText fontSize={12} color="red" fontWeight={500} >{errMsg.msg}</FormHelperText>
-                                                            ) : null}                                         */}
-                                                    </FormControl>
-                                                    <Button size='lg' 
-                                                        color="black" bg="#d7141450" 
-                                                        _hover={{color:'#f0e3e4' , bg: '#d71414'}} 
-                                                        height='35px'
-                                                        sx={{mt: 7}}
-                                                        width='120px'
-                                                        fontSize='16px'
-                                                        fontWeight='400'
-                                                        onClick={login}
-                                                        isDisabled={disability}
-                                                    >
-                                                        Login
-                                                    </Button>
-                                                    </VStack>
-                                                </>
-                                            ) : (
-                                                <>
                                                 <VStack>
 
                                                     <HStack mt={2} mb={1}>
@@ -375,10 +329,6 @@ export default function LoginPage(props){
                                                         Verify OTP
                                                     </Button>   
                                                 </VStack>
-
-                                                </>
-                                            )
-                                        }
                                     </motion.div>
                                 </AnimatePresence>
                             )
