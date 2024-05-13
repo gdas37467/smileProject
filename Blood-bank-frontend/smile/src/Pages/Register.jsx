@@ -22,7 +22,6 @@ const Register = () => {
         if(localStorage.getItem('adminCheck') !== null){
             const now = new Date().getTime()
             if(JSON.parse(localStorage.getItem('adminCheck')).expire < now ){
-                setLoadingPage(true)
                     Swal.fire({
                         title: 'Session Expired! Please Login Again!',
                         icon : 'warning'
@@ -33,7 +32,6 @@ const Register = () => {
                         }
                     })
             }else if(!jwtDecode(JSON.parse(localStorage.getItem('adminCheck')).isAdmin)){
-                setLoadingPage(true)
                 Swal.fire({
                     title : 'You are not authorized to view this Page!',
                     text :  'Pleaase Login with correct Admin Credentials to Continue!',
