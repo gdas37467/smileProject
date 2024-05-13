@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_crontab',
 ]
 
 MIDDLEWARE = [
@@ -244,9 +245,16 @@ API_KEY = os.environ.get('API_KEY')
 API_SECRET = os.environ.get('API_SECRET')
 
 
-EMAIL_HOST = 'smtp.hostinger.com'
-EMAIL_PORT = '587'
-EMAIL_HOST_USER='support@smileorganization.in'
-EMAIL_HOST_PASSWORD='smileorg99aA@'
-EMAIL_USE_TLS = True
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = os.environ.get('EMAIL_HOST')
+EMAIL_PORT = os.environ.get('EMAIL_PORT')
+EMAIL_HOST_USER=os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD=os.environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS')
+EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND')
+
+
+#cron job
+CRONJOBS = [
+    ('* * * * *', 'smile.cronjob.updateUnits', '>> ' + os.path.join(BASE_DIR,'log/debug7.log' + ' 2>&1 ')),
+    # Add more cron jobs as needed
+]

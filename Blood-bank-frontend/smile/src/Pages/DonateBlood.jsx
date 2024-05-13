@@ -406,7 +406,7 @@ const DonateBlood = () => {
                                     <InputLeftAddon backgroundColor='#d71414' height={30}>
                                         <Icon as={Calendar} boxSize={8} weight="duotone" color="#f0e3e4" />
                                     </InputLeftAddon>
-                                    <Input variant='outline' backgroundColor='red.50' height={30} fontSize={14} type="date" name="dob" value={donorInfo.dob} onChange={e => setDetails(e)} />
+                                    <Input variant='outline' backgroundColor='red.50' height={30} fontSize={14} type="date" name="dob" value={donorInfo.dob} onChange={e => setDetails(e)} max={new Date().toISOString().split("T")[0]} />
                                 </InputGroup>
                             </FormControl>
                         </GridItem>

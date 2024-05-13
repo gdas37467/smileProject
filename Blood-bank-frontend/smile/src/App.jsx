@@ -10,6 +10,7 @@ import RequestDashboard from './Pages/RequestDashboard.jsx'
 import AdminLogin from './Pages/AdminLogin.jsx'
 import DonorList from './Pages/DonorList.jsx'
 import RequestList from './Pages/RequestList.jsx'
+import Register from './Pages/Register.jsx'
 
 
 
@@ -18,12 +19,13 @@ function App() {
   
   return (
     
-        (window.location.pathname == '/admin' || window.location.pathname == '/admindashboard/requestlist' || window.location.pathname == '/admindashboard/donorlist') ? (
+        (window.location.pathname == '/admin' || window.location.pathname == '/admindashboard/requestlist' || window.location.pathname == '/admindashboard/donorlist'  || window.location.pathname == '/admindashboard/register') ? (
           <>
               <Routes>
                   <Route exact path='/admin' element={<AdminLogin />} />
                   <Route exact path='/admindashboard/requestlist' element={<RequestList />} />
                   <Route exact path='/admindashboard/donorlist' element={<DonorList />} />
+                  <Route exact path='/admindashboard/register' element={<Register />} />
               </Routes>
           </>
         ) : (

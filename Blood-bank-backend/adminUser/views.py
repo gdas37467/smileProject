@@ -89,6 +89,7 @@ def get_donor_list(request):
                                     'gender' : donor.gender,
                                     'isAvailable' : (True if (donor.lastDonated== None) else donor.lastDonated <= three_months_ago),
                                     'totalDonation' : donor.totalDonation,
+                                    'registrationDate' : donor.registrationDate
                                     } for index, donor in enumerate(donor_list_obj)]
             
         
@@ -623,7 +624,7 @@ def admin_registerDonor(request) :
         dob = body['dob']
         bloodGroup = body['bloodGroup']
         phoneNumber = body['phoneNumber']
-        # otp = body['otp']
+        #otp = body['otp']
         address = body['address']
         gender = body['gender']
         lastDonated = body['lastDonated']
@@ -640,6 +641,8 @@ def admin_registerDonor(request) :
         print(id)
         print(dob)
         date_obj = datetime.strptime(dob, date_format)
+        current_date_string= datetime.now(tz=pytz.timezone('Asia/Kolkata')).date().isoformat()
+        current_date = datetime.strptime(current_date_string, "%Y-%m-%d").date()
         # isDonor2 = Donor.objects.filter(firstName = firstName , lastName = lastName , bloodGroup = bloodGroup ,dob =date_obj.date()).first()
         # if isDonor2 is not None : 
         #     return JsonResponse({"error" : "Kindly contact admin as you are already registered as a donor"},status=400)
@@ -659,8 +662,8 @@ def admin_registerDonor(request) :
                 id = id,
                 lastDonated=lastDonated,
                 isThalassemia = isThalassemia,
-                registeredByAdmin = True
-
+                registeredByAdmin = True,
+                registrationDate = current_date
 
             )
             new_donor.save()

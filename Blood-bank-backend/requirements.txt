@@ -12,6 +12,7 @@ click==8.1.7
 colorama==0.4.6
 Django==4.1.11
 django-cors-headers==4.3.1
+django-crontab==0.7.1
 django-dotenv==1.4.2
 django-environ==0.11.2
 django-sms==0.6.0
