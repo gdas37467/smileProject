@@ -122,7 +122,11 @@ label+.css-v4u5dn-MuiInputBase-root-MuiInput-root, label + .css-zrqpq1 {
 .css-v4u5dn-MuiInputBase-root-MuiInput-root, .css-zrqpq1 {
     font-size: 1.4rem !important ;
 }
-
+// Date Field in Filter
+.css-l4u8b9-MuiInputBase-root-MuiInput-root{
+    margin-top: 3rem !important;
+    font-size: 1.4rem !important;
+}
 .css-rne967-MuiFormControl-root-MuiDataGrid-filterFormDeleteIcon, .css-1fmndo1{
     margin-bottom: 0.6rem !important;
 }
@@ -1022,7 +1026,11 @@ label+.css-v4u5dn-MuiInputBase-root-MuiInput-root, label + .css-zrqpq1 {
     .css-v4u5dn-MuiInputBase-root-MuiInput-root, .css-zrqpq1{
         font-size: 1.4rem !important ;
     }
-
+    // Date Field Filter
+    .css-l4u8b9-MuiInputBase-root-MuiInput-root{
+        margin-top: 2rem !important;
+        // fo
+    }
     .css-rne967-MuiFormControl-root-MuiDataGrid-filterFormDeleteIcon, .css-1fmndo1{
         margin-bottom: 0.6rem !important;
     }
@@ -1116,7 +1124,7 @@ label+.css-v4u5dn-MuiInputBase-root-MuiInput-root, label + .css-zrqpq1 {
 
     }
     //Side Navbar
-    .css-1d4vqq0-MuiButtonBase-root-MuiListItemButton-root, .css-1hhjps1 {
+    .MuiListItem-root, .css-1hhjps1 {
         & .nav-link{
             text-decoration: none;
             font-weight: 600;

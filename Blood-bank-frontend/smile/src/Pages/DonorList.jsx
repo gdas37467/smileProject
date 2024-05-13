@@ -149,7 +149,7 @@ const DonorList = () => {
                 try {
                     const res = await axios.get(`http://192.168.29.55:8000/adminUser/remove_donor/${id}`)
                     console.log(res)
-                    toast.warning("Donor has been deleted successfully!")
+                    toast.warning("Donor has been deleted!")
                     setReload(!reload)
                 } catch (error) {
                     console.log(error)

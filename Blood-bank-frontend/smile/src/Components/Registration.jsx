@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Button, ChakraProvider, Checkbox, FormControl, FormHelperText, FormLabel, Grid, GridItem, HStack, Heading, Icon, IconButton, Input, InputGroup, InputLeftAddon, Radio, RadioGroup, Select, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Textarea, VStack } from '@chakra-ui/react';
-import { Backdrop, Box, Fade, Modal } from '@mui/material'
+import { Box } from '@mui/material'
 import { IdentificationBadge, Envelope, Phone ,Calendar, Password, Eye, EyeSlash, HouseLine, Drop, Gauge, CalendarCheck , Bed     } from '@phosphor-icons/react'
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -10,10 +10,10 @@ import Swal from 'sweetalert2';
 
 //Style for Modal
 const style = {
-    position: 'relative',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
+    // position: 'relative',
+    // top: '50%',
+    // left: '50%',
+    // transform: 'translate(-50%, -50%)',
     width: {lg : '75rem' , xs : '40rem'},
     minHeight : '35rem',
     maxHeight : '65rem',
@@ -38,7 +38,6 @@ const Registration = (props) => {
     axios.defaults.withCredentials=true;
 
     // State variables
-    const [open, setOpen] = useState(true)
     // Check for Invalid Registration
     const [isDonorValid , setIsDonorValid] = useState({
         firstName : false,
@@ -80,12 +79,6 @@ const Registration = (props) => {
         hasCancer : false,
     })
     
-
-    // Handlers
-    const handleClose = () => {
-        setOpen(false)
-        props.setRegister()
-    }
 
     //Handle State Change of Recipient Details
     const setRecipientDetails = (e) =>{
@@ -268,9 +261,24 @@ const Registration = (props) => {
                 text : res.data.success,
                 icon : 'success'
             })
-            
+            setRecipientInfo({
+                firstName : '',
+                lastName : '',
+                dob : '',
+                phoneNumber : '',
+                address : '',
+                gender: '',
+                bloodGroup : '',
+                isThalassemia : false,
+                hasCancer : false,
+            })
+            setIsRecipientValid({
+                firstName : false,
+                lastName : false,
+                phoneNumber : false,
+                address : false,
+            })
         } catch (error) {
-            
             toast.error(error.response.statusText || error.response.data.error)
             console.log(error.response.statusText || error.response.data.error)
         }
@@ -303,35 +311,32 @@ const Registration = (props) => {
                 text : res.data.success,
                 icon : 'success'
             })
+            setDonorInfo({
+                firstName : '',
+                lastName : '',
+                dob : '',
+                bloodGroup : '',
+                gender: '',
+                lastDonated : '',
+                isThalassemia : false,
+                phoneNumber : '',
+                address : '',
+            })
+            setIsDonorValid({
+                firstName : false,
+                lastName : false,
+                phoneNumber : false,
+                address : false,
+            })
         } catch (error) {
             toast.error(error.response.statusText || error.response.data.error)
-            
         }
-
-
-
     }
 
 
-
-
-    
     return (
         <>
-            <Modal
-                aria-labelledby="transition-modal-title"
-                aria-describedby="transition-modal-description"
-                open={open}
-                onClose={handleClose}
-                closeAfterTransition
-                slots={{ backdrop: Backdrop }}
-                slotProps={{
-                    backdrop: {
-                        timeout: 500,
-                    },
-                }}
-            >
-                <Fade in={open}>
+
                     <Box sx={style}>
                         <ChakraProvider>
                             
@@ -400,7 +405,7 @@ const Registration = (props) => {
                                                         <InputLeftAddon height={30}>
                                                             <Icon as={Calendar }  boxSize={8} weight="duotone" color="#ce2432" />
                                                         </InputLeftAddon>
-                                                        <Input variant='outline' backgroundColor='red.50' height={30} fontSize={14}  type="date" name="dob" value={recipientInfo.dob} onChange={e =>  setRecipientDetails(e)} />
+                                                        <Input variant='outline' backgroundColor='red.50' height={30} fontSize={14}  type="date" name="dob" value={recipientInfo.dob} onChange={e =>  setRecipientDetails(e)} max={new Date().toISOString().split("T")[0]} />
                                                     </InputGroup>
                                                 </FormControl>
                                             </GridItem>
@@ -529,7 +534,7 @@ const Registration = (props) => {
                                                         <InputLeftAddon backgroundColor='#d71414' height={30}>
                                                             <Icon as={Calendar} boxSize={8} weight="duotone" color="#f0e3e4" />
                                                         </InputLeftAddon>
-                                                        <Input variant='outline' backgroundColor='red.50' height={30} fontSize={14} type="date" name="dob" value={donorInfo.dob} onChange={e => setDonorDetails(e)} />
+                                                        <Input variant='outline' backgroundColor='red.50' height={30} fontSize={14} type="date" name="dob" value={donorInfo.dob} onChange={e => setDonorDetails(e)} max={new Date().toISOString().split("T")[0]}/>
                                                     </InputGroup>
                                                 </FormControl>
                                             </GridItem>
@@ -561,7 +566,7 @@ const Registration = (props) => {
                                                         <InputLeftAddon backgroundColor='#d71414' height={30}>
                                                             <Icon as={CalendarCheck} boxSize={8} weight='duotone' color='#f0e3e4' />
                                                         </InputLeftAddon>
-                                                        <Input variant='outline' backgroundColor='red.50' height={30} fontSize={14} type="date" name="lastDonated" value={donorInfo.lastDonated} onChange={e => setDonorDetails(e)} />
+                                                        <Input variant='outline' backgroundColor='red.50' height={30} fontSize={14} type="date" name="lastDonated" value={donorInfo.lastDonated} onChange={e => setDonorDetails(e)} max={new Date().toISOString().split("T")[0]} />
                                                     </InputGroup>
                                                 </FormControl>
                                             </GridItem>
@@ -620,8 +625,7 @@ const Registration = (props) => {
                             
                         </ChakraProvider>
                     </Box>
-                </Fade>
-            </Modal>
+               
         </>
     )
 }
