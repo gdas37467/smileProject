@@ -36,7 +36,7 @@ key = settings.SECRET_KEY
 #ADMIN API's
 
 #Base URL form image store and get
-base_url = 'http://192.168.29.55:8000'
+base_url = 'http://91.108.105.42'
 
 
 #Get all matched donors and recipients
