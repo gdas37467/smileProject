@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import AdminNavbar from '../Components/AdminNavbar'
 import { jwtDecode } from 'jwt-decode'
 import Registration from '../Components/Registration'
+import Swal from 'sweetalert2'
 
 
 
