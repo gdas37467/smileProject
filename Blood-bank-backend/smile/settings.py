@@ -89,7 +89,7 @@ SESSION_COOKIE_AGE = 24*60
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
-
+CSRF_COOKIE_AGE = 86400 
 
 # custom added
 CORS_ALLOWED_ORIGINS = [
@@ -235,15 +235,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# Twilio Account SID and Auth Token
-TWILIO_ACCOUNT_SID = os.environ.get('TWILIO_ACCOUNT_SID')
-TWILIO_AUTH_TOKEN = os.environ.get('TWILIO_AUTH_TOKEN')
 
-# Twilio Phone Number (from which you'll send SMS)
-TWILIO_PHONE_NUMBER = os.environ.get('TWILIO_PHONE_NUMBER')
-
-API_KEY = os.environ.get('API_KEY')
-API_SECRET = os.environ.get('API_SECRET')
 
 
 EMAIL_HOST = os.environ.get('EMAIL_HOST')

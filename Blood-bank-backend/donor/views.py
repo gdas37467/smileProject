@@ -21,7 +21,7 @@ from django.core.validators import validate_email
 from django.core.mail import send_mail
 import time
 import pytz
-
+from smtplib import SMTPException
 
 
 
@@ -157,8 +157,8 @@ def send_otp(request):
         request.session['secret_key'] = secret_key
         #request.session['otp_creation_time'] = time.time()
         request.session['email'] = email
-        
-        
+        print(email)
+        print(otp)
 
 
         try: 
@@ -170,10 +170,8 @@ def send_otp(request):
                 'support@smileorganization.in',
                 [email],
                 fail_silently=False,
-                )
-            
-            
-        except Exception as e:
+            )
+        except SMTPException as e:
             print(e) 
             return JsonResponse({"error" : "error occured while sending sms"}, status=500)
         

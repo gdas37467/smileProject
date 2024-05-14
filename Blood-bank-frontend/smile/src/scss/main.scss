@@ -439,6 +439,37 @@ label+.css-v4u5dn-MuiInputBase-root-MuiInput-root, label + .css-zrqpq1 {
     }
 }
 
+
+// Developer Contact
+.developer_outer{
+    height: 100vh;
+    width:100%;
+    background-color: $bg;
+    position: relative;
+    overflow: hidden ;
+
+    & .developer_inner{
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden ;
+        &::before{
+            content: "";
+            top: -90rem;
+            left: 0rem;
+            width: 130rem;
+            height: 150rem;
+            background-color: $request-bg;
+            position: absolute;
+            z-index: 1;
+            transform: rotate(114deg);
+            // left: -61rem;
+            box-shadow: 0 0 10rem rgba(0 , 0 , 0 , 0.7);
+        }
+    }
+}
 .donate_outer_div, .request_outer_div , .req_dashboard_outer_div , .don_dashboard_outer_div {
     min-height: $main-height;
     width: $main-width;
@@ -446,6 +477,9 @@ label+.css-v4u5dn-MuiInputBase-root-MuiInput-root, label + .css-zrqpq1 {
     position: relative;
     overflow: hidden ;
     
+
+    
+
     //Donor and Request Signup/Login Pages
     & .donate_register, & .request_register , & .donate_login{
         // z-index: 6;
@@ -816,13 +850,21 @@ label+.css-v4u5dn-MuiInputBase-root-MuiInput-root, label + .css-zrqpq1 {
             & .part1{
                 grid-column: 2/3;
                 display: flex;
+                flex-direction: column;
                 z-index: 4;
                 justify-content: center;
                 align-items : center;
+                gap: 4rem;
                 & .footLogo{
                     // bottom: 7rem;
                     max-height: 12rem;
                     width: auto;
+                }
+                & .devContact{
+                    font-size: 12px;
+                    cursor: pointer;
+                    padding: 5px;
+                    color: #000000;
                 }
             }
             & .part2{

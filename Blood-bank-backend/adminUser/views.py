@@ -27,6 +27,8 @@ import uuid
 import jwt
 import pytz
 from django.core.mail import send_mail
+from django.http import JsonResponse
+from django.middleware.csrf import get_token
 
 # Create your views here.
 
@@ -709,3 +711,15 @@ def remove_donor(request,donor_id):
             return JsonResponse({"error" : "Something went wrong"},status=500)
     
     return JsonResponse({"error" : "Invalid request method"}, status=400)
+
+
+
+def get_csrf_token(request):
+    if request.method == "GET":
+        token = get_token(request)
+        return JsonResponse({'csrfToken': token})
+@csrf_exempt
+def get_total_quantity(request):
+    if request.method=="GET":
+        calenderObj = Calender.objects.first()
+        return JsonResponse({'quantity' : calenderObj.quantity},status=200)
