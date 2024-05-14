@@ -19,7 +19,9 @@ urlpatterns = [
     path('admin_booking/', views.admin_request_blood),
     path('admin_donor_registration/' ,views.admin_registerDonor),
     path('update_email/' ,views.updateEmail),
-    path('remove_donor/<str:donor_id>',views.remove_donor)
+    path('remove_donor/<str:donor_id>',views.remove_donor),
+    path('get_total_cquantity/',views.get_total_quantity),
+     path('get_csrf_token/', views.get_csrf_token, name='get_csrf_token'),
 
  
 ]
