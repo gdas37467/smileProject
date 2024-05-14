@@ -11,6 +11,7 @@ import AdminLogin from './Pages/AdminLogin.jsx'
 import DonorList from './Pages/DonorList.jsx'
 import RequestList from './Pages/RequestList.jsx'
 import Register from './Pages/Register.jsx'
+import DeveloperContact from './Pages/DeveloperContact.jsx'
 
 
 
@@ -30,15 +31,27 @@ function App() {
           </>
         ) : (
           <>
-            <Navbar /> 
-              <Routes> 
-                  <Route exact path='/' element={<Home />} />       
-                  <Route exact path='/request' element={<RequestBlood />} />
-                  <Route exact path='/request/requestdashboard' element={<RequestDashboard />} /> 
-                  <Route exact path='/donate' element={<DonateBlood />} />           
-                  <Route exact path='/donate/donordashboard' element={<DonorDashboard />} />       
-              </Routes> 
-            <Footer />
+            {
+                window.location.pathname !== '/developer' ? (
+                  <>
+                    <Navbar /> 
+                      <Routes> 
+                          <Route exact path='/' element={<Home />} />       
+                          <Route exact path='/request' element={<RequestBlood />} />
+                          <Route exact path='/request/requestdashboard' element={<RequestDashboard />} /> 
+                          <Route exact path='/donate' element={<DonateBlood />} />           
+                          <Route exact path='/donate/donordashboard' element={<DonorDashboard />} />       
+                      </Routes> 
+                    <Footer />
+                  </>
+                ) : (
+                  <>
+                    <Routes>
+                        <Route exact path='/developer' element={<DeveloperContact />} />
+                    </Routes>
+                  </>
+                )
+            }
           </>
         )
   )

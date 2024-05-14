@@ -20,6 +20,7 @@ const Footer = () => {
                     <div className="footer_details">
                         <div className="part1">
                             <img src={SmileLogo} className='footLogo' alt="logo" />
+                            <div className="devContact"> Contact Developers</div>
                         </div>
                         <div className="part2">
                             
