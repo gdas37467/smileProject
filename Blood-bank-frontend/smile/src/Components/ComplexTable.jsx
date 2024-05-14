@@ -43,6 +43,7 @@ const ComplexTable = (props) => {
     
     const columnVisibility = { 
         id : false,
+        registrationDate : false,
     }
 
 
@@ -183,6 +184,19 @@ const ComplexTable = (props) => {
             headerAlign: 'center',
             sortable : false,   
             filterable : true,
+        },
+        {
+            field: 'registrationDate',
+            headerName: "Date",
+            type : 'date',
+            width: 150,
+            align: 'center',
+            headerAlign: 'center',
+            sortable : false,   
+            filterable : true,
+            valueGetter : (params) => {
+                return new Date(params.row.registrationDate)
+            }
         },
         {
             field: 'bloodGroup',

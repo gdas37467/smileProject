@@ -8,7 +8,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
 import Registration from './Registration';
 
-
 //Add Top Donor Modal Style
 const style = {
     position: 'relative',
@@ -102,8 +101,9 @@ function AdminNavbar (){
                     </ListItemButton>
                 </ListItem>
                 <ListItem >
-                    <ListItemButton sx={{ textAlign: 'center' }} >
-                        <button className="nav-link " onClick={e => setRegister(true)} to='#'> Register Donor/Recipient</button> 
+                    <ListItemButton sx={{ textAlign: 'left' }} >
+                        <NavLink className="nav-link " to='/admindashboard/register'> Register Donor/Recipient</NavLink> 
+                        {/* <button className="nav-link " onClick={e => setRegister(true)} to='#'> </button>  */}
                     </ListItemButton>
                 </ListItem>
                 
@@ -135,7 +135,8 @@ function AdminNavbar (){
                     <NavLink className="nav-link " to="/admindashboard/requestlist"> Request List</NavLink>  
                     <NavLink className="nav-link " to='/admindashboard/donorlist'> Donor List </NavLink> 
                     <button className='nav-link' to='#' onClick={addTopDonor}> Add Top Donors  </button>
-                    <button className='nav-link' to='#' onClick={e => setRegister(true)} > Register Donor/Recipient  </button>
+                    <NavLink className="nav-link " to='/admindashboard/register'> Register Donor/Recipient </NavLink> 
+                    {/* <button className='nav-link' to='#' onClick={e => setRegister(true)} >   </button> */}
                 </nav>
                 <Drawer
                     container={container}
