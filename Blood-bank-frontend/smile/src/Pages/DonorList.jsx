@@ -134,7 +134,31 @@ const DonorList = () => {
             })
         }
     }
-
+    // Delete Donor
+    const deleteDonor = async (id) =>{
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete Donor!"
+        }).then(async (res) => {
+            if(res.isConfirmed){
+                try {
+                    const res = await axios.get(`/adminUser/remove_donor/${id}`)
+                    console.log(res)
+                    toast.warning("Donor has been deleted!")
+                    setReload(!reload)
+                } catch (error) {
+                    console.log(error)
+                    toast.error(error.response.data.error || error.response.statusText)
+                }
+            }
+        })
+        
+    }
 
 
     const getAvailableDonors = async () => {
@@ -219,6 +243,7 @@ const DonorList = () => {
                                     addLoan={addLoan}
                                     sendSMS={sendSMS}
                                     sendReminder={sendReminder}
+                                    deleteDonor={deleteDonor}
                                 />
                             </>
                         )

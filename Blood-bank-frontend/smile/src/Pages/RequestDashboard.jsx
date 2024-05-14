@@ -11,7 +11,7 @@ import ContactPageIcon from '@mui/icons-material/ContactPage';
 import VaccinesIcon from '@mui/icons-material/Vaccines';
 import PropTypes from 'prop-types';
 import DoneIcon from '@mui/icons-material/Done';
-import { ChakraProvider,  Flex,  HStack,  RadioGroup,  Skeleton, Spacer, VStack, position } from '@chakra-ui/react';
+import { ChakraProvider, FormHelperText, RadioGroup } from '@chakra-ui/react';
 import {
     FormControl,
     FormLabel,
@@ -192,7 +192,6 @@ export default function RequestDashboard() {
         firstName : '',
         lastName : '',
         dob : '',
-        email : '',
         phoneNumber : '',
         address : '',
         bloodGroup : '',
@@ -211,7 +210,6 @@ export default function RequestDashboard() {
     const [patInValid, setPatInValid] = useState({
         firstName : false,
         lastName : false,
-        email : false,
         phoneNumber : false,
         address : false,
         hospitalName : false,
@@ -237,6 +235,7 @@ export default function RequestDashboard() {
 
     //Page Validation
     useEffect(()=>{
+
         if(localStorage.getItem('check') !== null){
             const now  =  new Date().getTime()
             if(JSON.parse(localStorage.getItem('check')).expire < now){
@@ -301,7 +300,7 @@ export default function RequestDashboard() {
             
             case 1:
                 
-                if(!emailRegex.test(patientDetails.email) || patientDetails.address.length <= 10 || patInValid.phoneNumber){
+                if(patientDetails.address.length <= 10 || patientDetails.phoneNumber.length !== 10 ){
                     toast.error("Please enter your details correctly before continuing.")
                     return
                 }
@@ -365,19 +364,6 @@ export default function RequestDashboard() {
                     setPatInValid(pS => ({
                         ...pS,
                         [name] : false    
-                    }))
-                }
-                break
-
-            case 'email':
-                if(!emailRegex.test(value.trim())){
-                    setPatInValid(pS => ({
-                        ...pS,
-                        [name] : true
-                    }))
-                }else{
-                    setPatInValid(pS => ({
-                        [name] : false
                     }))
                 }
                 break
@@ -512,6 +498,8 @@ export default function RequestDashboard() {
                                         </InputLeftAddon>
                                         <Input variant='outline' isInvalid={patInValid.firstName}  focusBorderColor={patInValid.firstName ? 'red.400' : 'green.300'} backgroundColor='red.50'  height={30} fontSize={14} type="text" name="firstName" required value={patientDetails.firstName} onChange={e =>  setDetails(e)}  colorScheme='pink'/>
                                     </InputGroup>
+                                    {patInValid.firstName ? <FormHelperText color="red" fontWeight={500}> Name is too Short, Minimum 3 Characters is required  </FormHelperText> : null}
+
                                 </FormControl>
                             </GridItem>
                             <GridItem>
@@ -523,6 +511,8 @@ export default function RequestDashboard() {
                                         </InputLeftAddon>
                                         <Input variant='outline' backgroundColor='red.50' isInvalid={patInValid.lastName} focusBorderColor={patInValid.lastName  ? 'red.400' : 'green.300'} height={30} fontSize={14} type="text" name="lastName" value={patientDetails.lastName} onChange={e =>  setDetails(e)} />
                                     </InputGroup>
+                                    {patInValid.lastName ? <FormHelperText color="red" fontWeight={500}> Name is too Short, Minimum 3 Characters is required  </FormHelperText> : null}
+                                    
                                 </FormControl>
                             </GridItem>
                             <GridItem>
@@ -544,7 +534,7 @@ export default function RequestDashboard() {
                                         <InputLeftAddon height={30}>
                                             <Icon as={Calendar }  boxSize={8} weight="duotone" color="#ce2432" />
                                         </InputLeftAddon>
-                                        <Input variant='outline' backgroundColor='red.50' height={30} fontSize={14}  type="date" name="dob" value={patientDetails.dob} onChange={e =>  setDetails(e)} />
+                                        <Input variant='outline' backgroundColor='red.50' height={30} fontSize={14}  type="date" name="dob" value={patientDetails.dob} onChange={e =>  setDetails(e)} max={new Date().toISOString().split("T")[0]} />
                                     </InputGroup>
                                 </FormControl>
                             </GridItem>
@@ -560,24 +550,15 @@ export default function RequestDashboard() {
 
                         <GridItem>
                             <FormControl isRequired>
-                                <FormLabel fontSize={12} htmlFor='email'>Patient's Email</FormLabel>
-                                <InputGroup>
-                                <InputLeftAddon height={30}>
-                                    <Icon as={Envelope} boxSize={8} weight="duotone" color="#ce2432" />
-                                </InputLeftAddon>
-                                <Input variant='outline' backgroundColor='red.50' height={30} fontSize={14} isInvalid={patInValid.email} focusBorderColor={patInValid.email ? 'red.400' : 'green.300'} type="email" name="email" value={patientDetails.email} onChange={e =>  setDetails(e)} />
-                                </InputGroup>
-                            </FormControl>
-                        </GridItem>
-                        <GridItem>
-                            <FormControl>
-                                <FormLabel fontSize={12} htmlFor='phoneNumber'>Alternate Phone Number (Optional)</FormLabel>
+                                <FormLabel fontSize={12} htmlFor='phoneNumber'>Patient's Phone Number (Please Enter Correct Phone Number)</FormLabel>
                                 <InputGroup>
                                     <InputLeftAddon height={30}>
                                         <Icon as={Phone} boxSize={8} weight='duotone' color='#ce2432' />
                                     </InputLeftAddon>
                                     <Input variant='outline' backgroundColor='red.50' height={30} fontSize={14}  type="number" name="phoneNumber" value={patientDetails.phoneNumber} onChange={e =>  setDetails(e)} isInvalid={patInValid.phoneNumber} focusBorderColor={patInValid.phoneNumber ? 'red.400' : 'green.300'} />
                                 </InputGroup>
+                                {patInValid.phoneNumber ? <FormHelperText color="red" fontWeight={500}> Enter a valid Phone Number  </FormHelperText> : null}
+
                             </FormControl>
                         </GridItem>
 
@@ -590,6 +571,8 @@ export default function RequestDashboard() {
                                         </InputLeftAddon>
                                         <Textarea variant='outline' backgroundColor='red.50' fontSize={14} resize='none' name="address" value={patientDetails.address} onChange={e =>  setDetails(e)} isInvalid={patInValid.address} focusBorderColor={patInValid.address ? 'red.400' : 'green.300'} />
                                     </InputGroup>
+                                    {patInValid.address ? <FormHelperText color="red" fontWeight={500}> Min 10 Characters are needed  </FormHelperText> : null}
+
                                 </FormControl>
                         </GridItem>
                     </Grid>
@@ -630,6 +613,8 @@ export default function RequestDashboard() {
                                     </InputLeftAddon>
                                     <Input variant='outline' backgroundColor='red.50' height={30} fontSize={14}  type="text" name="hospitalName" value={patientDetails.hospitalName} onChange={e =>  setDetails(e)} isInvalid={patInValid.hospitalName} focusBorderColor={patInValid.hospitalName ? 'red.400' : 'green.300'} />
                                 </InputGroup>
+                                {patInValid.hospitalName ? <FormHelperText color="red" fontWeight={500}> Minimum 3 Characters is required  </FormHelperText> : null}
+
                             </FormControl>
                         </GridItem>
 
@@ -694,6 +679,8 @@ export default function RequestDashboard() {
                                     </InputLeftAddon>
                                     <Input variant='outline' backgroundColor='red.50' height={30} fontSize={14}  type="text" name="bloodBankName" value={patientDetails.bloodBankName} onChange={e =>  setDetails(e)} isInvalid={patInValid.bloodBankName} focusBorderColor={patInValid.bloodBankName ? 'red.400' : 'green.300'} />
                                 </InputGroup>
+                                {patInValid.bloodBankName ? <FormHelperText color="red" fontWeight={500}> Minimum 3 Characters is required  </FormHelperText> : null}
+
                             </FormControl>
                         </GridItem>
                         <GridItem>
@@ -705,6 +692,8 @@ export default function RequestDashboard() {
                                     </InputLeftAddon>
                                     <Input variant='outline' backgroundColor='red.50' height={30} fontSize={14}  type="text" name="donorName" value={patientDetails.donorName} onChange={e =>  setDetails(e)} isInvalid={patInValid.donorName} focusBorderColor={patInValid.donorName ? 'red.400' : 'green.300'} />
                                 </InputGroup>
+                                {patInValid.donorName ? <FormHelperText color="red" fontWeight={500}> Name is too Short, Minimum 3 Characters is required  </FormHelperText> : null}
+
                             </FormControl>
                         </GridItem>
 
@@ -715,7 +704,7 @@ export default function RequestDashboard() {
                                     <InputLeftAddon height={30}>
                                         <Icon as={CalendarCheck} boxSize={8} weight='duotone' color='#ce2432' />
                                     </InputLeftAddon>
-                                    <Input variant='outline' backgroundColor='red.50' height={30} fontSize={14}  type="date" name="donationDate" value={patientDetails.donationDate} onChange={e =>  setDetails(e)} />
+                                    <Input variant='outline' backgroundColor='red.50' height={30} fontSize={14}  type="date" name="donationDate" value={patientDetails.donationDate} onChange={e =>  setDetails(e)} max={new Date().toISOString().split("T")[0]} />
                                 </InputGroup>
                             </FormControl>
                         </GridItem>
@@ -791,7 +780,7 @@ export default function RequestDashboard() {
             lastName : patDet.lastName,
             dob : patDet.dob,
             email : patDet.email,
-            phoneNumber : `+91${patDet.phoneNumber}`,
+            phoneNumber : patDet.phoneNumber,
             address : patDet.address,
             bloodGroup : patDet.bloodGroup,
             isThalassemia : patDet.isThalassemia,

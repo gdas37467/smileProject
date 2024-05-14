@@ -122,7 +122,11 @@ label+.css-v4u5dn-MuiInputBase-root-MuiInput-root, label + .css-zrqpq1 {
 .css-v4u5dn-MuiInputBase-root-MuiInput-root, .css-zrqpq1 {
     font-size: 1.4rem !important ;
 }
-
+// Date Field in Filter
+.css-l4u8b9-MuiInputBase-root-MuiInput-root, .css-12rx5qu{
+    margin-top: 3rem !important;
+    font-size: 1.4rem !important;
+}
 .css-rne967-MuiFormControl-root-MuiDataGrid-filterFormDeleteIcon, .css-1fmndo1{
     margin-bottom: 0.6rem !important;
 }
@@ -159,6 +163,22 @@ label+.css-v4u5dn-MuiInputBase-root-MuiInput-root, label + .css-zrqpq1 {
     color : #12807e !important;
 }
 
+.delete-donor{
+    font-size: 14px !important;
+    & .MuiListItemIcon-root{
+        color: #d22228;
+        min-width: 26px !important;        
+    }
+}
+
+.update-request{
+    font-size: 14px !important;
+    & .MuiListItemIcon-root{
+        color: rgb(9, 163, 9);
+        min-width: 26px !important;        
+    }
+}
+
 
 //Navbar
 .outer_nav{
@@ -169,7 +189,7 @@ label+.css-v4u5dn-MuiInputBase-root-MuiInput-root, label + .css-zrqpq1 {
     height: 10rem;
     background-color: $bg;
     display: grid;
-    grid-template-columns: 1fr 40rem 20rem 80rem 1fr;
+    grid-template-columns: 1fr 20rem 20rem 80rem 1.5fr;
     align-items: center;
     box-shadow: 0 0 5rem rgba(0 , 0 , 0 , 0.2);
     & .logo{
@@ -1006,7 +1026,11 @@ label+.css-v4u5dn-MuiInputBase-root-MuiInput-root, label + .css-zrqpq1 {
     .css-v4u5dn-MuiInputBase-root-MuiInput-root, .css-zrqpq1{
         font-size: 1.4rem !important ;
     }
-
+    // Date Field Filter
+    .css-l4u8b9-MuiInputBase-root-MuiInput-root, .css-12rx5qu{
+        margin-top: 2rem !important;
+        
+    }
     .css-rne967-MuiFormControl-root-MuiDataGrid-filterFormDeleteIcon, .css-1fmndo1{
         margin-bottom: 0.6rem !important;
     }
@@ -1100,7 +1124,7 @@ label+.css-v4u5dn-MuiInputBase-root-MuiInput-root, label + .css-zrqpq1 {
 
     }
     //Side Navbar
-    .css-1d4vqq0-MuiButtonBase-root-MuiListItemButton-root, .css-1hhjps1 {
+    .MuiListItem-root, .css-1hhjps1 {
         & .nav-link{
             text-decoration: none;
             font-weight: 600;
