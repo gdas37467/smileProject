@@ -7,7 +7,7 @@ import json
 from datetime import datetime
 from django.contrib.auth.models import User
 
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt,csrf_protect
 import pyotp
 from sms import send_sms
 from twilio.rest import Client
@@ -30,7 +30,7 @@ key = settings.SECRET_KEY
 #print(key)
 
 
-@csrf_exempt
+@csrf_protect
 def register(request) :
     if request.method == "POST":
         body = json.loads(request.body)
@@ -126,7 +126,6 @@ def register(request) :
 
 
 @csrf_exempt
-
 def user_logout(request):
     if request.method=="GET":
         try:
@@ -138,7 +137,7 @@ def user_logout(request):
 
 
 #only for recipient and donor registration
-@csrf_exempt
+@csrf_protect
 def send_otp(request):
     if request.method == "POST":
         body  = json.loads(request.body)
@@ -180,7 +179,7 @@ def send_otp(request):
         return JsonResponse({"success" : "OTP sent successfully"},status  =200) 
     return JsonResponse({"error" :"Invalid request Method"}, status=409)
 
-@csrf_exempt
+@csrf_protect
 def verify_otp(request):
     if request.method=="POST":
         try:
@@ -226,7 +225,7 @@ def verify_otp(request):
 
 
 
-@csrf_exempt
+@csrf_protect
 def donor_send_otp(request):
     if request.method== "POST": 
         body  = json.loads(request.body)
@@ -284,7 +283,7 @@ def donor_send_otp(request):
 
 #get donor past records
 
-@csrf_exempt
+@csrf_protect
 def get_donor_records(request):
     if request.method == "GET":
         email = request.session.get('member_id')
