@@ -14,8 +14,19 @@ const RequestBlood = () => {
     axios.defaults.withCredentials=true
     
     const navigate = useNavigate()
+
+        // Storing csrftoken
+        async function token(){
+            try {
+                const res1 = await axios.get('http://192.168.29.55:8000/adminUser/get_csrf_token/')
+                localStorage.setItem('csrfToken' , res1.data.csrfToken)
+            } catch (error) {
+                toast.error(error)
+            }
+        }
     
     useEffect(()=>{
+        token()
         const now = new Date().getTime()
         if(localStorage.getItem('check') !== null){
             if(JSON.parse(localStorage.getItem('check')).expire > now ) {
