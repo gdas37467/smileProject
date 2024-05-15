@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ChakraProvider, Heading, Button, FormControl, FormLabel, Input, Icon, InputGroup, InputLeftAddon, HStack, VStack, InputRightElement} from '@chakra-ui/react'
 import { User , Password, Eye, EyeSlash, SignIn} from '@phosphor-icons/react'
 import axios from 'axios'
-import { toast } from 'react-toastify'
+// import { toast } from 'react-toastify'
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom'
 import LoginIcon from '@mui/icons-material/Login';
@@ -34,7 +34,9 @@ const AdminLogin = () => {
         }else{
             try {
                 setIsLoading(true)
-                const res = await axios.post('/adminUser/admin_login/', JSON.stringify(data))
+                const res = await axios.post('/adminUser/admin_login/', JSON.stringify(data),{
+                    headers : {'X-CSRFToken': localStorage.getItem('csrfToken'),}
+                })
                 console.log(res)
                 if('success' in res.data){
                     const now = new Date().getTime()
@@ -63,6 +65,21 @@ const AdminLogin = () => {
         }
     }
 
+    // Get CSRF token
+    const token = async () =>{ 
+        
+        try {
+            const res = await axios.get('http://192.168.29.55:8000/adminUser/get_csrf_token/')
+            console.log(res)
+            localStorage.setItem('csrfToken',res.data.csrfToken)
+        } catch (error) {
+            
+        }
+    }
+
+    useEffect( ()=>{
+        token()
+    },[])
 
     return (
         <>

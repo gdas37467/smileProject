@@ -68,8 +68,18 @@ const DonateBlood = () => {
 
     const navigate = useNavigate()
 
+    // Storing csrftoken
+    async function token(){
+        try {
+            const res1 = await axios.get('/adminUser/get_csrf_token/')
+            localStorage.setItem('csrfToken' , res1.data.csrfToken)
+        } catch (error) {
+            toast.error(error)
+        }
+    }
 
     useEffect(()=>{
+        token()
         if(localStorage.getItem('check')!== null){
             const now = new Date().getTime()
             if(JSON.parse(localStorage.getItem('check')).expire > now ) {
@@ -285,7 +295,9 @@ const DonateBlood = () => {
 
             // timer()
             try{
-                const res =  await axios.post('/donor/send_otp/', JSON.stringify(donorInfo.email))
+                const res =  await axios.post('/donor/send_otp/', JSON.stringify({email : donorInfo.email}),{
+                    headers : {'X-CSRFToken': localStorage.getItem('csrfToken'),}
+                })
                 if('success' in res.data){
                     toast.success(res.data.success, {
                         position : toast.POSITION.TOP_RIGHT
@@ -324,7 +336,9 @@ const DonateBlood = () => {
         }
         console.log(JSON.stringify(donorDet))
         try {
-            const res = await axios.post('/donor/register/',JSON.stringify(donorDet))
+            const res = await axios.post('/donor/register/',JSON.stringify(donorDet),{
+                headers : {'X-CSRFToken': localStorage.getItem('csrfToken'),}
+            })
             if('success' in res.data){
                 const now = new Date().getTime()
                         let check = {

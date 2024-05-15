@@ -20,10 +20,10 @@ function App() {
   
   return (
     
-        (window.location.pathname == '/admin' || window.location.pathname == '/admindashboard/requestlist' || window.location.pathname == '/admindashboard/donorlist'  || window.location.pathname == '/admindashboard/register') ? (
+        (window.location.pathname == '/admindashboard' || window.location.pathname == '/admindashboard/requestlist' || window.location.pathname == '/admindashboard/donorlist'  || window.location.pathname == '/admindashboard/register') ? (
           <>
               <Routes>
-                  <Route exact path='/admin' element={<AdminLogin />} />
+                  <Route exact path='/admindashboard' element={<AdminLogin />} />
                   <Route exact path='/admindashboard/requestlist' element={<RequestList />} />
                   <Route exact path='/admindashboard/donorlist' element={<DonorList />} />
                   <Route exact path='/admindashboard/register' element={<Register />} />
