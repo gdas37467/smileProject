@@ -105,7 +105,13 @@ CORS_ALLOWED_ORIGINS = [
 
   ]
 CSRF_TRUSTED_ORIGINS = [
-    
+    'http://127.0.0.1:3000',
+    'http://localhost:3000',
+    'http://192.168.1.12:3000',
+    'http://192.168.56.1:3000',
+    'http://192.168.1.15:3000',
+    'http://192.168.1.15:4173',
+    'http://192.168.29.55:3000',
 ]
 
 
@@ -125,7 +131,7 @@ CORS_ALLOW_HEADERS = [
     'Accept-Language',
     'token',  # custom added
     'content-type',  # custom added
-    
+    'x-csrftoken',
     'Authorization',
 ]
 
@@ -248,6 +254,6 @@ EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND')
 
 #cron job
 CRONJOBS = [
-    ('* * * * *', 'smile.cronjob.updateUnits', '>> ' + os.path.join(BASE_DIR,'log/debug7.log' + ' 2>&1 ')),
+    ('0 0 * * *', 'smile.cronjob.updateUnits', '>> ' + os.path.join(BASE_DIR,'log/debug7.log' + ' 2>&1 ')),
     # Add more cron jobs as needed
 ]

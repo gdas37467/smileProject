@@ -12,7 +12,7 @@ from twilio.rest import Client
 from sms import send_sms
 import jwt
 from django.conf import settings
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt,csrf_protect
 from django.core.files.storage import FileSystemStorage
 from django.core.mail import send_mail
 
@@ -55,7 +55,7 @@ from django.core.mail import send_mail
     
 
 # Create your views here.
-@csrf_exempt
+@csrf_protect
 def request_blood(request):
     if request.method == "POST" : 
 

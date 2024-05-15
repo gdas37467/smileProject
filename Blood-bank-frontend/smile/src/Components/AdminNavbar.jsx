@@ -70,8 +70,9 @@ function AdminNavbar (){
         console.log(formData.getAll('images'))
         
         try {
-            const res = await axios.post('/adminUser/addPhotos/',formData)
-            console.log(res)
+            const res = await axios.post('/adminUser/addPhotos/',formData,{
+                headers : {'X-CSRFToken': localStorage.getItem('csrfToken'),}
+            })
             toast.success('Images added successfully!')
         } catch (error) {
             toast.error('Something went wrong!')

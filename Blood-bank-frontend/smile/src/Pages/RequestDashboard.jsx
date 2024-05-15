@@ -800,7 +800,9 @@ export default function RequestDashboard() {
         }
 
         try {
-            const res = await axios.post('/recipient/request_blood/',formData);
+            const res = await axios.post('/recipient/request_blood/',formData,{
+                headers : {'X-CSRFToken': localStorage.getItem('csrfToken'),}
+            });
             console.log(res)
             Swal.fire({
                 text : res.data.success,

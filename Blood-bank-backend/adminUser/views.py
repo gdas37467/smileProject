@@ -9,7 +9,7 @@ import json
 from datetime import datetime,timedelta
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login,logout
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt,csrf_protect
 import pyotp
 import time
 from sms import send_sms
@@ -253,8 +253,7 @@ def reject_request(request,recipient_id):
 
 
 
-
-@csrf_exempt
+@csrf_protect
 def admin_login(request):
     if request.method == "POST":
         body = json.loads(request.body)
@@ -407,7 +406,7 @@ def confirm_loan(request, donor_id):
         
     return JsonResponse({"error" : "Invalid request method"},status = 400)
 
-@csrf_exempt
+@csrf_protect
 def addPhotos(request):
     if request.method == 'POST':
         if authorize_admin(request) == False:
@@ -504,7 +503,7 @@ def getFirstDon(request, recipient_id):
             return JsonResponse({"error" : "Something Went Wrong"},status=500)
     return JsonResponse({"error" : "Invalid Request Method"},status=400)   
 
-@csrf_exempt
+@csrf_protect
 def admin_request_blood(request):
     if request.method == "POST" : 
 
@@ -610,7 +609,7 @@ def admin_request_blood(request):
         
     return JsonResponse({"error" : "Invalid request method"},status =400)
 
-@csrf_exempt
+@csrf_protect
 def admin_registerDonor(request) :
     if request.method == "POST":
         if authorize_admin(request) == False:
