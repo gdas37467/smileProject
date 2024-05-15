@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, ChakraProvider, Checkbox, FormControl, FormHelperText, FormLabel, Grid, GridItem, HStack, Heading, Icon, IconButton, Input, InputGroup, InputLeftAddon, Radio, RadioGroup, Select, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Textarea, VStack } from '@chakra-ui/react';
 import { Box } from '@mui/material'
 import { IdentificationBadge, Envelope, Phone ,Calendar, Password, Eye, EyeSlash, HouseLine, Drop, Gauge, CalendarCheck , Bed     } from '@phosphor-icons/react'
@@ -16,7 +16,7 @@ const style = {
     // transform: 'translate(-50%, -50%)',
     width: {lg : '75rem' , xs : '40rem'},
     minHeight : '35rem',
-    maxHeight : '65rem',
+    maxHeight : '68rem',
     backgroundColor: 'rgb(214, 205, 205)',
     borderRadius: '2rem',
     borderLeft: '2px solid rgb(214,205,205)',
@@ -79,7 +79,12 @@ const Registration = (props) => {
         hasCancer : false,
     })
     
+    // Daily Count 
+    const [dailyCount, setDailyCount] = useState()
+    // Page Reloader flag
+    const [reload,setReload] = useState(true)
 
+    // Handlers
     //Handle State Change of Recipient Details
     const setRecipientDetails = (e) =>{
         let name = e.target.name
@@ -255,7 +260,9 @@ const Registration = (props) => {
         }
 
         try {   
-            const res = await axios.post('http://192.168.29.55:8000/adminUser/admin_booking/', formData)
+            const res = await axios.post('http://192.168.29.55:8000/adminUser/admin_booking/', formData,{
+                headers : {'X-CSRFToken': localStorage.getItem('csrfToken'),}
+            })
             console.log(res)
             Swal.fire({
                 text : res.data.success,
@@ -278,9 +285,10 @@ const Registration = (props) => {
                 phoneNumber : false,
                 address : false,
             })
+            setReload(!reload)
         } catch (error) {
-            toast.error(error.response.statusText || error.response.data.error)
-            console.log(error.response.statusText || error.response.data.error)
+            toast.error(error.response.data.error || error.response.statusText)
+            setReload(!reload)
         }
     }
 
@@ -305,7 +313,9 @@ const Registration = (props) => {
         }
 
         try {
-            const res = await axios.post('http://192.168.29.55:8000/adminUser/admin_donor_registration/', JSON.stringify(payload))
+            const res = await axios.post('http://192.168.29.55:8000/adminUser/admin_donor_registration/', JSON.stringify(payload),{
+                headers : {'X-CSRFToken': localStorage.getItem('csrfToken'),}
+            })
             console.log(res)
             Swal.fire({
                 text : res.data.success,
@@ -334,6 +344,23 @@ const Registration = (props) => {
     }
 
 
+    // API Calls
+    const getCount = async () => {
+        try{
+            const res = await axios.get('http://192.168.29.55:8000/adminUser/get_total_cquantity/');
+            console.log(res)
+            setDailyCount(res.data.quantity)
+        }catch(e){
+            console.log(e)
+        }
+    }
+
+    useEffect(() =>{
+        getCount();
+    },[reload])
+
+
+
     return (
         <>
 
@@ -348,6 +375,9 @@ const Registration = (props) => {
                                 <TabPanels>
                                 {/* Recipient Panel */}
                                     <TabPanel>
+                                        <VStack>
+                                            <Heading> Total Slots Left is : {dailyCount} </Heading>
+                                        </VStack>
                                         <Grid mt={10} templateColumns={{ lg: 'repeat(2, 1fr)' }} gap={10}>
                                             <GridItem>
                                                 <FormControl isRequired>

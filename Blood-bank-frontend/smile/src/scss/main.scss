@@ -448,26 +448,81 @@ label+.css-v4u5dn-MuiInputBase-root-MuiInput-root, label + .css-zrqpq1 {
     position: relative;
     overflow: hidden ;
 
+    &::before{
+        content: "";
+        top: -90rem;
+        left: 0rem;
+        width: 130rem;
+        height: 150rem;
+        background-color: $request-bg;
+        position: absolute;
+        // z-index: 1;
+        transform: rotate(114deg);
+        // left: -61rem;
+        box-shadow: 0 0 10rem rgba(0 , 0 , 0 , 0.7);
+    }
     & .developer_inner{
         width: 100%;
         height: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
-        overflow: hidden ;
-        &::before{
-            content: "";
-            top: -90rem;
-            left: 0rem;
-            width: 130rem;
-            height: 150rem;
-            background-color: $request-bg;
-            position: absolute;
+        // overflow: hidden ;
+
+        & .card_outer{
+            // background-color: #000000;
             z-index: 1;
-            transform: rotate(114deg);
-            // left: -61rem;
-            box-shadow: 0 0 10rem rgba(0 , 0 , 0 , 0.7);
+            & .card_inner{
+                width: 35rem;
+                height: 22rem;
+                background-color:  #9adddb;
+                position: relative;
+                overflow: hidden;
+                transition: all 0.6s ease;
+                cursor: pointer;
+                & .top{
+                    height: 10rem;
+                    background-color: #12807e;
+                }
+                & .avatar{
+                    position: absolute;
+                    width: 100%;
+                    top: 4rem;
+                    display: flex;
+                    justify-content: center;
+                    transition: all 0.6s ease;
+
+                    & img{
+                        border-radius: 50% ;
+                        width: 12rem;
+                        height: 12rem;
+                        
+                    }
+                }
+
+                & .about{
+                    margin-top: 6rem;
+                    display: flex;
+                    flex-direction: column;
+                    // justify-content: center;
+                    align-items: center;
+                    padding: 2rem;
+                    // height: 25rem;
+                    gap: 2rem;
+                    transition: all 0.6s ease;
+                    & p{
+                        font-size: 1.4rem;
+                    }
+                    
+                }
+                &:hover{
+                    height: 38rem;
+                    transition: all 0.6s ease;
+                }
+
+            }
         }
+
     }
 }
 .donate_outer_div, .request_outer_div , .req_dashboard_outer_div , .don_dashboard_outer_div {

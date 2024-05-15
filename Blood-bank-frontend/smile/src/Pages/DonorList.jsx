@@ -179,7 +179,7 @@ const DonorList = () => {
                     icon : 'success',
                 }).then((res) =>{
                     if(res.isConfirmed || res.dismiss === 'backdrop'){
-                        navigate('/admin')
+                        navigate('/admindashboard')
                     }
                 })
             })

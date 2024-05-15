@@ -28,7 +28,6 @@ import {
 } from '@chakra-ui/react'
 import { IdentificationBadge, Envelope, Phone ,Calendar, HouseLine, Drop, CalendarCheck , Bed , FirstAid , Receipt, UserCircle, CloudArrowUp, UserCirclePlus} from '@phosphor-icons/react'
 import TableComp from '../Components/Table';
-import CalendarComp from '../Components/Calendar';
 import axios from 'axios';
 import { ToastContainer , toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -801,7 +800,9 @@ export default function RequestDashboard() {
         }
 
         try {
-            const res = await axios.post('http://192.168.29.55:8000/recipient/request_blood/',formData);
+            const res = await axios.post('http://192.168.29.55:8000/recipient/request_blood/',formData,{
+                headers : {'X-CSRFToken': localStorage.getItem('csrfToken'),}
+            });
             console.log(res)
             Swal.fire({
                 text : res.data.success,

@@ -77,7 +77,7 @@ export default function LoginPage(props){
     
         // SEND OTP and Next Page
         const sendOtp = async(email) =>{
-            setCheck(false)
+            setCheck(true)
             // return
 
             if(!emailRegex.test(email)){
@@ -117,16 +117,18 @@ export default function LoginPage(props){
                             })
                             break
                     }
-                    const res = await axios.post(`http://192.168.29.55:8000/${url}`, data)
+                    const res = await axios.post(`http://192.168.29.55:8000/${url}`, data,{
+                        headers : {'X-CSRFToken': localStorage.getItem('csrfToken'),}
+                    })
                     console.log(res)
-                    setCheck(true)
+                    // setCheck(true)
                     toast.success("OTP Sent Successfully !",{
                         position : toast.POSITION.TOP_CENTER
                     })
                 } catch (err) {
                     console.log(err)
-
-                    toast.error(err.response.data.error,{
+                    setCheck(false)
+                    toast.error("Something Went Wrong",{
                         position : toast.POSITION.TOP_CENTER
                     })                
                 }
@@ -152,7 +154,9 @@ export default function LoginPage(props){
                     otp : otpVal
                 })
                 try {
-                    const res = await axios.post('http://192.168.29.55:8000/donor/verify_otp/',data)
+                    const res = await axios.post('http://192.168.29.55:8000/donor/verify_otp/',data,{
+                        headers : {'X-CSRFToken': localStorage.getItem('csrfToken'),}
+                    })
                     console.log(res)
                     if( 'success' in res.data){
                         const now = new Date().getTime()
