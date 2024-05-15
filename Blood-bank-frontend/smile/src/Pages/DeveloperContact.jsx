@@ -1,7 +1,7 @@
 import React from 'react'
 import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
-import Home1 from '../assets/Home1.jpeg'
+import Home1 from '../assets/SmileLogo.png'
 import DeleteIcon from '@mui/icons-material/Delete';
 
 const DeveloperContact = () => {
