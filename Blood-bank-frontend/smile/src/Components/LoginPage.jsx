@@ -48,36 +48,10 @@ export default function LoginPage(props){
         const [check , setCheck] = useState(false)
         
         //Handlers
-        // OTP Timer
-        const timer= () => {
-    
-            setChangeText('Resend OTP')
-            setDisability(!disability)
-            const end = new Date(Date.now()  + n*15*1000)
-            const int = setInterval(()=>{
-                const now = new Date()
-                const diff = (end - now) / 1000
-                let min = Math.floor((diff / 60) % 60)
-                let sec = Math.floor(diff % 60)
-                if(sec<10){
-                    sec = `0${sec}`
-                }
-                setTime(`0${min} : ${sec}`)
-                if(min == '00' && sec == '00'){
-                    setShowTime(prev => !prev)
-                    setDisability(prev => !prev)
-                    clearInterval(int)
-                }
-            },1000)
-            setN(prev => prev+1)
-    
-        }
-    
-    
+       
     
         // SEND OTP and Next Page
         const sendOtp = async(email) =>{
-            setCheck(true)
             // return
 
             if(!emailRegex.test(email)){
@@ -90,6 +64,8 @@ export default function LoginPage(props){
             }else{
                 // setShowTime(!showTime)
                 // timer()
+                setCheck(true)
+
                 setErrorMsg({
                     isErr : false,
                     msg : ""
@@ -293,7 +269,7 @@ export default function LoginPage(props){
                                                                 textDecoration='underline'
                                                                 fontSize='10px'
                                                                 fontWeight='200'
-                                                                onClick={() => sendOtp(email)}
+                                                                onClick={() => setCheck(false)}
                                                                 // isDisabled={disability}
                                                         >
                                                             Wrong Email? Update Here!
