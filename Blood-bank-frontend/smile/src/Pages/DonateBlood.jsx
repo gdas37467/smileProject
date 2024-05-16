@@ -71,7 +71,7 @@ const DonateBlood = () => {
     // Storing csrftoken
     async function token(){
         try {
-            const res1 = await axios.get('/adminUser/get_csrf_token/')
+            const res1 = await axios.get('/api/v1/adminUser/get_csrf_token/')
             localStorage.setItem('csrfToken' , res1.data.csrfToken)
         } catch (error) {
             toast.error(error)
@@ -295,7 +295,7 @@ const DonateBlood = () => {
 
             // timer()
             try{
-                const res =  await axios.post('/donor/send_otp/', JSON.stringify({email : donorInfo.email}),{
+                const res =  await axios.post('/api/v1/donor/send_otp/', JSON.stringify({email : donorInfo.email}),{
                     headers : {'X-CSRFToken': localStorage.getItem('csrfToken'),}
                 })
                 if('success' in res.data){
@@ -336,7 +336,7 @@ const DonateBlood = () => {
         }
         console.log(JSON.stringify(donorDet))
         try {
-            const res = await axios.post('/donor/register/',JSON.stringify(donorDet),{
+            const res = await axios.post('/api/v1/donor/register/',JSON.stringify(donorDet),{
                 headers : {'X-CSRFToken': localStorage.getItem('csrfToken'),}
             })
             if('success' in res.data){

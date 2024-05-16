@@ -18,7 +18,7 @@ const RequestBlood = () => {
         // Storing csrftoken
         async function token(){
             try {
-                const res1 = await axios.get('/adminUser/get_csrf_token/')
+                const res1 = await axios.get('/api/v1/adminUser/get_csrf_token/')
                 localStorage.setItem('csrfToken' , res1.data.csrfToken)
             } catch (error) {
                 toast.error(error)
