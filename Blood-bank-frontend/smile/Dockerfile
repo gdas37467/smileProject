@@ -1,19 +1,31 @@
-# Frontend Build 
 FROM node:18.19.0 as build
 WORKDIR /app
 
-COPY package* .
+COPY package* ./
 
 RUN npm install --silent
 
 COPY . .
 
-COPY vite.config.js .
+COPY vite.config.js ./
 RUN npm run build
 
-# Nginx to run frontend
-FROM nginx:1.16.0-alpine
+
+
+FROM ubuntu:18.04
+
+RUN apt update -y\
+    && apt install nginx curl vim -y \
+    && apt-get install software-properties-common -y \
+    && add-apt-repository ppa:certbot/certbot -y \
+    && apt-get update -y \
+    && apt-get install python-certbot-nginx -y \
+    && apt-get clean 
+
 COPY --from=build /app/dist /var/www/react
-COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
-EXPOSE 3000
-CMD ["nginx", "-g","daemon off;"]
+COPY ./nginx/default.conf /etc/nginx/sites-available/default
+
+EXPOSE 80
+STOPSIGNAL SIGTERM
+
+CMD ["nginx", "-g", "daemon off;"]

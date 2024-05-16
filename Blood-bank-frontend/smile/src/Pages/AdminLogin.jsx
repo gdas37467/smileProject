@@ -69,7 +69,7 @@ const AdminLogin = () => {
     const token = async () =>{ 
         
         try {
-            const res = await axios.get('http://192.168.29.55:8000/adminUser/get_csrf_token/')
+            const res = await axios.get('/adminUser/get_csrf_token/')
             console.log(res)
             localStorage.setItem('csrfToken',res.data.csrfToken)
         } catch (error) {
