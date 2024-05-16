@@ -29,7 +29,7 @@ const Register = () => {
                     }).then((res)=>{
                         if(res.isConfirmed || res.dismiss === 'backdrop'){
                             localStorage.removeItem('adminCheck')
-                            navigate('/admin')
+                            navigate('/admindashboard')
                         }
                     })
             }else if(!jwtDecode(JSON.parse(localStorage.getItem('adminCheck')).isAdmin)){
@@ -39,7 +39,7 @@ const Register = () => {
                     icon : 'warning'
                 }).then((res)=>{
                     if(res.isConfirmed || res.dismiss === 'backdrop'){
-                        navigate('/admin')
+                        navigate('/admindashboard')
                     }
                 })
             }else{
@@ -51,7 +51,7 @@ const Register = () => {
                 icon : 'warning'
             }).then((res)=>{
                 if(res.isConfirmed || res.dismiss === 'backdrop'){
-                    navigate('/admin')
+                    navigate('/admindashboard')
                 }
             })
         }

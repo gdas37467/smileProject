@@ -93,7 +93,7 @@ export default function LoginPage(props){
                             })
                             break
                     }
-                    const res = await axios.post(`http://192.168.29.55:8000/${url}`, data,{
+                    const res = await axios.post(`http://192.168.29.55:8000/api/v1/${url}`, data,{
                         headers : {'X-CSRFToken': localStorage.getItem('csrfToken'),}
                     })
                     console.log(res)
@@ -130,7 +130,7 @@ export default function LoginPage(props){
                     otp : otpVal
                 })
                 try {
-                    const res = await axios.post('http://192.168.29.55:8000/donor/verify_otp/',data,{
+                    const res = await axios.post('http://192.168.29.55:8000/api/v1/donor/verify_otp/',data,{
                         headers : {'X-CSRFToken': localStorage.getItem('csrfToken'),}
                     })
                     console.log(res)

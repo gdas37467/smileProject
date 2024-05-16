@@ -34,7 +34,7 @@ const AdminLogin = () => {
         }else{
             try {
                 setIsLoading(true)
-                const res = await axios.post('http://192.168.29.55:8000/adminUser/admin_login/', JSON.stringify(data),{
+                const res = await axios.post('http://192.168.29.55:8000/api/v1/adminUser/admin_login/', JSON.stringify(data),{
                     headers : {'X-CSRFToken': localStorage.getItem('csrfToken'),}
                 })
                 console.log(res)
@@ -69,7 +69,7 @@ const AdminLogin = () => {
     const token = async () =>{ 
         
         try {
-            const res = await axios.get('http://192.168.29.55:8000/adminUser/get_csrf_token/')
+            const res = await axios.get('http://192.168.29.55:8000/api/v1/adminUser/get_csrf_token/')
             console.log(res)
             localStorage.setItem('csrfToken',res.data.csrfToken)
         } catch (error) {

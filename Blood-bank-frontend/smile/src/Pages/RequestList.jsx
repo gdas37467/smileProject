@@ -75,7 +75,7 @@ const RequestList = () => {
                     }).then((res)=>{
                         if(res.isConfirmed || res.dismiss === 'backdrop'){
                             localStorage.removeItem('adminCheck')
-                            navigate('/admin')
+                            navigate('/admindashboard')
                         }
                     })
             }else if(!jwtDecode(JSON.parse(localStorage.getItem('adminCheck')).isAdmin)){
@@ -86,7 +86,7 @@ const RequestList = () => {
                     icon : 'warning'
                 }).then((res)=>{
                     if(res.isConfirmed || res.dismiss === 'backdrop'){
-                        navigate('/admin')
+                        navigate('/admindashboard')
                     }
                 })
             }else{
@@ -100,7 +100,7 @@ const RequestList = () => {
                 icon : 'warning'
             }).then((res)=>{
                 if(res.isConfirmed || res.dismiss === 'backdrop'){
-                    navigate('/admin')
+                    navigate('/admindashboard')
                 }
             })
         }
@@ -122,7 +122,7 @@ const RequestList = () => {
 
             if(res.isConfirmed){
                 try {
-                    const res = await axios.get(`http://192.168.29.55:8000/adminUser/reject_request/${id}`)
+                    const res = await axios.get(`http://192.168.29.55:8000/api/v1/adminUser/reject_request/${id}`)
                     console.log(res)
                     Swal.fire({
                         text : "The Request Has Been Rejected",
@@ -146,7 +146,7 @@ const RequestList = () => {
     const acceptRequest = async (id) =>{
         console.log(id)
         try {
-            const res = await axios.get(`http://192.168.29.55:8000/adminUser/confirm_recipient_donation/${id}`)
+            const res = await axios.get(`http://192.168.29.55:8000/api/v1/adminUser/confirm_recipient_donation/${id}`)
             console.log(res)
             toast.success( res.data.status)
         } catch (error) {
@@ -173,7 +173,7 @@ const RequestList = () => {
             }).then(async (res) => {
                 if(res.isConfirmed){
                     try {
-                        const res = await axios.get(`http://192.168.29.55:8000/adminUser/confirm_recipient_donation/${id}`)
+                        const res = await axios.get(`http://192.168.29.55:8000/api/v1/adminUser/confirm_recipient_donation/${id}`)
                         console.log(res)
                         toast.success("Request Accepted Successfully!")
                         setReload(!reload)
@@ -190,7 +190,7 @@ const RequestList = () => {
     const getTableData = async () =>{
         setLoadingPage(true)
         try{
-            const res = await axios.get('http://192.168.29.55:8000/adminUser/get_recipient_list/')
+            const res = await axios.get('http://192.168.29.55:8000/api/v1/adminUser/get_recipient_list/')
             console.log(res)
             let pendingReq = res.data.list.filter((el)=> { return el.status === 'Pending'})
             let nonPendingReq = res.data.list.filter((el)=> { return el.status !== 'Pending'})
@@ -218,7 +218,7 @@ const RequestList = () => {
         setModalLoad(true)
         console.log(id)
         try{
-            const data = await axios.get(`http://192.168.29.55:8000/adminUser/getFirstDon/${id}`)
+            const data = await axios.get(`http://192.168.29.55:8000/api/v1/adminUser/getFirstDon/${id}`)
             console.log(data.data.firstDonation)
             setModalData(data.data.firstDonation)
             setModalLoad(false)
@@ -232,7 +232,7 @@ const RequestList = () => {
     //Admin Logout
     const adminLogout = () => {
         try{
-            axios.get('http://192.168.29.55:8000/adminUser/admin_logout/').then((res)=>{
+            axios.get('http://192.168.29.55:8000/api/v1/adminUser/admin_logout/').then((res)=>{
                 setLoadingPage(true)
                 localStorage.removeItem('adminCheck')
                 Swal.fire({

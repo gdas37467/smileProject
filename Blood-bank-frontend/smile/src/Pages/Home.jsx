@@ -47,15 +47,16 @@ const sentence = {
 
 
 const Home = () => {
-
+    axios.defaults.withCredentials = true; 
+    
     const [images,setImages] = useState({})
 
     const loadImgs = async() =>{
         try{
     
-            const res = await axios.get('http://192.168.29.55:8000/adminUser/getLeaderboardImages/')
+            const res = await axios.get('http://192.168.29.55:8000/api/v1/adminUser/getLeaderboardImages/')
             setImages(res.data.data)
-            const res1 = await axios.get('http://192.168.29.55:8000/adminUser/get_csrf_token/')
+            const res1 = await axios.get('http://192.168.29.55:8000/api/v1/adminUser/get_csrf_token/')
             localStorage.setItem('csrfToken' , res1.data.csrfToken)
         }catch(e){
             console.log(e.data.status)
