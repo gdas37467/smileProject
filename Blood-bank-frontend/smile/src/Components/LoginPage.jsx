@@ -7,6 +7,7 @@ import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import {AnimatePresence, motion} from 'framer-motion'
+import getCookie from '../getToken'
 
 
 // Email Regex
@@ -93,8 +94,9 @@ export default function LoginPage(props){
                             })
                             break
                     }
+                    var token = getCookie('csrftoken')
                     const res = await axios.post(`http://192.168.29.55:8000/api/v1/${url}`, data,{
-                        headers : {'X-CSRFToken': localStorage.getItem('csrfToken'),}
+                        headers : {'X-CSRFToken': token}
                     })
                     console.log(res)
                     // setCheck(true)
@@ -130,8 +132,9 @@ export default function LoginPage(props){
                     otp : otpVal
                 })
                 try {
+                    var token = getCookie('csrftoken')
                     const res = await axios.post('http://192.168.29.55:8000/api/v1/donor/verify_otp/',data,{
-                        headers : {'X-CSRFToken': localStorage.getItem('csrfToken'),}
+                        headers : {'X-CSRFToken': token}
                     })
                     console.log(res)
                     if( 'success' in res.data){

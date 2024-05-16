@@ -39,6 +39,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import {BallTriangle} from 'react-loader-spinner';
+import getCookie from '../getToken';
 
 
 
@@ -800,8 +801,9 @@ export default function RequestDashboard() {
         }
 
         try {
+            var token = getCookie('csrftoken')
             const res = await axios.post('http://192.168.29.55:8000/api/v1/recipient/request_blood/',formData,{
-                headers : {'X-CSRFToken': localStorage.getItem('csrfToken'),}
+                headers : {'X-CSRFToken': token}
             });
             console.log(res)
             Swal.fire({
@@ -854,7 +856,7 @@ export default function RequestDashboard() {
 
         } catch (error) {
             console.log(error)
-            toast.error(error.resoponse.data.error, {
+            toast.error(error.resoponse.data.error || error.response.statusText, {
                 position : toast.POSITION.TOP_RIGHT
             })
         }

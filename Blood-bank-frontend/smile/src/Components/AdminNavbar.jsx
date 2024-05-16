@@ -7,6 +7,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
 import Registration from './Registration';
+import getCookie from '../getToken';
 
 //Add Top Donor Modal Style
 const style = {
@@ -70,10 +71,12 @@ function AdminNavbar (){
         console.log(formData.getAll('images'))
         
         try {
+            var token = getCookie('csrftoken');
             const res = await axios.post('http://192.168.29.55:8000/api/v1/adminUser/addPhotos/',formData,{
-                headers : {'X-CSRFToken': localStorage.getItem('csrfToken'),}
+                headers : {'X-CSRFToken': token}
             })
             toast.success('Images added successfully!')
+            setOpen(false)
         } catch (error) {
             toast.error('Something went wrong!')
         }
@@ -203,7 +206,23 @@ function AdminNavbar (){
                                         })
                                     }
                                 </div>
-                                <Button onClick={uploadImg} variant='contained'> Upload </Button>
+                                <Button onClick={uploadImg} sx={{
+                                        backgroundColor : '#d71414',
+                                        borderRadius : '2.5rem',
+                                        color : '#f0e3e4',
+                                        fontWeight : 'bold',
+                                        width : '12rem',
+                                        placeSelf : 'center',
+                                        fontSize : '1rem',
+                                        "&:hover" : {
+                                            backgroundColor : '#d71414',
+                                            color : '#f0e3e4',
+                                        }
+                                    }}
+                                    variant='contained'
+                                > 
+                                         Upload 
+                                </Button>
                             </div>
                         </Box>
                     </Fade>

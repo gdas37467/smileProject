@@ -8,6 +8,8 @@ import { useNavigate } from 'react-router-dom'
 import LoginIcon from '@mui/icons-material/Login';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import getCookie from '../getToken'
+
 
 const AdminLogin = () => {
     axios.defaults.withCredentials = true
@@ -34,8 +36,9 @@ const AdminLogin = () => {
         }else{
             try {
                 setIsLoading(true)
+                var token = getCookie('csrftoken')
                 const res = await axios.post('http://192.168.29.55:8000/api/v1/adminUser/admin_login/', JSON.stringify(data),{
-                    headers : {'X-CSRFToken': localStorage.getItem('csrfToken'),}
+                    headers : {'X-CSRFToken': token}
                 })
                 console.log(res)
                 if('success' in res.data){
@@ -56,8 +59,9 @@ const AdminLogin = () => {
                     setIsLoading(false)
                 }
             } catch (error) {
+                console.log(error)
                 Swal.fire({
-                    title : error.response.data.error,
+                    title : "Something went wrong",
                     icon : 'error'
                 })
                 setIsLoading(false)
@@ -65,21 +69,21 @@ const AdminLogin = () => {
         }
     }
 
-    // Get CSRF token
-    const token = async () =>{ 
+    // // Get CSRF token
+    // const token = async () =>{ 
         
-        try {
-            const res = await axios.get('http://192.168.29.55:8000/api/v1/adminUser/get_csrf_token/')
-            console.log(res)
-            localStorage.setItem('csrfToken',res.data.csrfToken)
-        } catch (error) {
+    //     try {
+    //         const res = await axios.get('http://192.168.29.55:8000/api/v1/adminUser/get_csrf_token/')
+    //         console.log(res)
+    //         localStorage.setItem('csrfToken',res.data.csrfToken)
+    //     } catch (error) {
             
-        }
-    }
+    //     }
+    // }
 
-    useEffect( ()=>{
-        token()
-    },[])
+    // useEffect( ()=>{
+    //     token()
+    // },[])
 
     return (
         <>

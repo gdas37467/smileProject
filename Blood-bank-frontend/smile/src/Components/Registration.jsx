@@ -5,6 +5,7 @@ import { IdentificationBadge, Envelope, Phone ,Calendar, Password, Eye, EyeSlash
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
+import getCookie from '../getToken';
 
 
 
@@ -259,9 +260,10 @@ const Registration = (props) => {
             formData.append(key,recipientInfo[key])
         }
 
-        try {   
+        try { 
+            var token = getCookie('csrftoken')  
             const res = await axios.post('http://192.168.29.55:8000/api/v1/adminUser/admin_booking/', formData,{
-                headers : {'X-CSRFToken': localStorage.getItem('csrfToken'),}
+                headers : {'X-CSRFToken': token}
             })
             console.log(res)
             Swal.fire({
@@ -313,8 +315,9 @@ const Registration = (props) => {
         }
 
         try {
+            var token = getCookie('csrftoken')
             const res = await axios.post('http://192.168.29.55:8000/api/v1/adminUser/admin_donor_registration/', JSON.stringify(payload),{
-                headers : {'X-CSRFToken': localStorage.getItem('csrfToken'),}
+                headers : {'X-CSRFToken': token}
             })
             console.log(res)
             Swal.fire({

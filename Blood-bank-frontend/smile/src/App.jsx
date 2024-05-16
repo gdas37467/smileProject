@@ -31,27 +31,16 @@ function App() {
           </>
         ) : (
           <>
-            {
-                window.location.pathname !== '/developer' ? (
-                  <>
-                    <Navbar /> 
-                      <Routes> 
-                          <Route exact path='/' element={<Home />} />       
-                          <Route exact path='/request' element={<RequestBlood />} />
-                          <Route exact path='/request/requestdashboard' element={<RequestDashboard />} /> 
-                          <Route exact path='/donate' element={<DonateBlood />} />           
-                          <Route exact path='/donate/donordashboard' element={<DonorDashboard />} />       
-                      </Routes> 
-                    <Footer />
-                  </>
-                ) : (
-                  <>
-                    <Routes>
-                        <Route exact path='/developer' element={<DeveloperContact />} />
-                    </Routes>
-                  </>
-                )
-            }
+            <Navbar /> 
+            <Routes> 
+              <Route exact path='/' element={<Home />} />       
+              <Route exact path='/request' element={<RequestBlood />} />
+              <Route exact path='/request/requestdashboard' element={<RequestDashboard />} /> 
+              <Route exact path='/donate' element={<DonateBlood />} />           
+              <Route exact path='/donate/donordashboard' element={<DonorDashboard />} />       
+              <Route exact path='/developer' element={<DeveloperContact />} />
+            </Routes>               
+            <Footer />
           </>
         )
   )
