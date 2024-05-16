@@ -113,7 +113,7 @@ def register(request) :
             )
             new_donor.save()
             
-            request.session.set_expiry(24*20*60)
+            request.session.set_expiry(45*60)
             
         except Exception as e:
             print(e)
@@ -205,7 +205,7 @@ def verify_otp(request):
             print("isrecipient" + str(isRecipient))
             type = jwt.encode({'isDonor': isDonor,"isRecipient" : isRecipient}, key, algorithm='HS256')
 
-            request.session.set_expiry(24*60*60)
+            request.session.set_expiry(45*60)
             
             if status == False:
                 return JsonResponse({"error" : "Incorrect OTP"  },status=400)
