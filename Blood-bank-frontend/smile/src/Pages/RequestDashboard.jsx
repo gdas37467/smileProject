@@ -232,8 +232,8 @@ export default function RequestDashboard() {
     const [time, setTime] = useState(['', '' , ''])
     //Set Date
     const [date, setDate] = useState(['','',''])
-
-
+    // Registration Disabled
+    const [disT,setDisT] = useState('')
     //Page Validation
     useEffect(()=>{
 
@@ -284,7 +284,16 @@ export default function RequestDashboard() {
 
     //Handlers
     //Handles Modal Open and Close
-    const handleOpen = () => setOpen(true);
+    const handleOpen = () => {
+        if(disT > '00:00:00' && disT < '06:59:59'){
+            Swal.fire({
+                text : 'You can Register Patient after 7:00 AM',
+                icon : 'warning'
+            })
+        } else{
+            setOpen(true);
+        }
+    }
     const handleClose = () => setOpen(false);
 
     // Stepper Controller
@@ -891,6 +900,7 @@ export default function RequestDashboard() {
         // Date and Time for Display
         setInterval(()=>{
             let date = new Date()
+            setDisT(date.toLocaleTimeString())
             setTime(date.toLocaleTimeString('en-US',{hour12: true, hour : '2-digit', minute : '2-digit'}).split(/[\s:]/))
             setDate(date.toLocaleDateString('en-US', {weekday : 'short', day : '2-digit', month : 'long'}).split(' '))
         },1000)
@@ -901,7 +911,7 @@ export default function RequestDashboard() {
 
     }, [loadingApi,reload]);
 
-
+    // console.log()
     const tableColumn = ["Patient's Name", "Requested Date", "Blood Group", "Status" ]
 
     //Main Return

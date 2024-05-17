@@ -247,31 +247,7 @@ const DonateBlood = () => {
         )
     }
 
-    // OTP Timer
-    const timer= () => {
-
-        setShowTime(!showTime)
-        setChangeText('Resend OTP')
-        setDisability(!disability)
-        const end = new Date(Date.now()  + n*15*1000)
-        const int = setInterval(()=>{
-            const now = new Date()
-            const diff = (end - now) / 1000
-            let min = Math.floor((diff / 60) % 60)
-            let sec = Math.floor(diff % 60)
-            if(sec<10){
-                sec = `0${sec}`
-            }
-            setTime(`0${min} : ${sec}`)
-            if(min == '00' && sec == '00'){
-                setShowTime(prev => !prev)
-                setDisability(prev => !prev)
-                clearInterval(int)
-            }
-        },1000)
-        setN(prev => prev+1)
-
-    }
+   
 
     //APIs
     // Send OTP API
@@ -287,10 +263,7 @@ const DonateBlood = () => {
 
             // timer()
             try{
-                var token = getCookie('csrftoken')
-                const res =  await axios.post('http://192.168.29.55:8000/api/v1/donor/send_otp/', JSON.stringify({email : donorInfo.email}),{
-                    headers : {'X-CSRFToken': token}
-                })
+                const res =  await axios.post('http://192.168.29.55:8000/api/v1/donor/send_otp/', JSON.stringify({email : donorInfo.email}))
                 if('success' in res.data){
                     toast.success(res.data.success, {
                         position : toast.POSITION.TOP_RIGHT
@@ -317,11 +290,9 @@ const DonateBlood = () => {
             firstName : donorInfo.firstName,
             lastName : donorInfo.lastName,
             dob : donorInfo.dob,
-            // email : donorInfo.email,
             phoneNumber : donorInfo.phoneNumber,
             address : donorInfo.address,
             bloodGroup : donorInfo.bloodGroup,
-            // weight : donorInfo.weight,
             lastDonated : donorInfo.lastDonated ? donorInfo.lastDonated : null,
             isThalassemia : donorInfo.isThalassemia,
             gender : donorInfo.gender,

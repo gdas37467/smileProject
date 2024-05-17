@@ -36,10 +36,7 @@ const AdminLogin = () => {
         }else{
             try {
                 setIsLoading(true)
-                var token = getCookie('csrftoken')
-                const res = await axios.post('http://192.168.29.55:8000/api/v1/adminUser/admin_login/', JSON.stringify(data),{
-                    headers : {'X-CSRFToken': token}
-                })
+                const res = await axios.post('http://192.168.29.55:8000/api/v1/adminUser/admin_login/', JSON.stringify(data))
                 console.log(res)
                 if('success' in res.data){
                     const now = new Date().getTime()
@@ -69,21 +66,6 @@ const AdminLogin = () => {
         }
     }
 
-    // // Get CSRF token
-    // const token = async () =>{ 
-        
-    //     try {
-    //         const res = await axios.get('http://192.168.29.55:8000/api/v1/adminUser/get_csrf_token/')
-    //         console.log(res)
-    //         localStorage.setItem('csrfToken',res.data.csrfToken)
-    //     } catch (error) {
-            
-    //     }
-    // }
-
-    // useEffect( ()=>{
-    //     token()
-    // },[])
 
     return (
         <>
