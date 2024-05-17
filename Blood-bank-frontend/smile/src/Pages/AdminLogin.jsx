@@ -8,6 +8,8 @@ import { useNavigate } from 'react-router-dom'
 import LoginIcon from '@mui/icons-material/Login';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import getCookie from '../getToken'
+
 
 const AdminLogin = () => {
     axios.defaults.withCredentials = true
@@ -34,9 +36,7 @@ const AdminLogin = () => {
         }else{
             try {
                 setIsLoading(true)
-                const res = await axios.post('/api/v1/adminUser/admin_login/', JSON.stringify(data),{
-                    headers : {'X-CSRFToken': localStorage.getItem('csrfToken'),}
-                })
+                const res = await axios.post('/api/v1/adminUser/admin_login/', JSON.stringify(data))
                 console.log(res)
                 if('success' in res.data){
                     const now = new Date().getTime()
@@ -56,8 +56,9 @@ const AdminLogin = () => {
                     setIsLoading(false)
                 }
             } catch (error) {
+                console.log(error)
                 Swal.fire({
-                    title : error.response.data.error,
+                    title : "Something went wrong",
                     icon : 'error'
                 })
                 setIsLoading(false)
@@ -65,21 +66,6 @@ const AdminLogin = () => {
         }
     }
 
-    // Get CSRF token
-    const token = async () =>{ 
-        
-        try {
-            const res = await axios.get('/api/v1/adminUser/get_csrf_token/')
-            console.log(res)
-            localStorage.setItem('csrfToken',res.data.csrfToken)
-        } catch (error) {
-            
-        }
-    }
-
-    useEffect( ()=>{
-        token()
-    },[])
 
     return (
         <>

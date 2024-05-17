@@ -7,6 +7,7 @@ import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import {AnimatePresence, motion} from 'framer-motion'
+import getCookie from '../getToken'
 
 
 // Email Regex
@@ -93,9 +94,7 @@ export default function LoginPage(props){
                             })
                             break
                     }
-                    const res = await axios.post(`/api/v1/${url}`, data,{
-                        headers : {'X-CSRFToken': localStorage.getItem('csrfToken'),}
-                    })
+                    const res = await axios.post(`/api/v1/${url}`, data)
                     console.log(res)
                     // setCheck(true)
                     toast.success("OTP Sent Successfully !",{

@@ -127,7 +127,7 @@ const ComplexTable = (props) => {
                 // console.log(params.row.donor_list)
                 return [
                 <GridActionsCellItem
-                    icon={<CheckCircleIcon />}
+                    icon={<Tooltip arrow title="Accept Request"><CheckCircleIcon /></Tooltip>}
                     label="Accept Request"
                     className='con'
                     onClick={() => props.acceptRequest(params.id)}    
@@ -135,7 +135,7 @@ const ComplexTable = (props) => {
                     // showInMenu
                 />,
                 <GridActionsCellItem
-                    icon={<CancelRoundedIcon />}
+                    icon={<Tooltip arrow title="Reject Request"><CancelRoundedIcon /></Tooltip>}
                     label="Reject Request"
                     onClick={() => props.rejectRequest(params.id, params.row.sl)}
                     color="error"

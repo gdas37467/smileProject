@@ -15,7 +15,7 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt,csrf_protect
 from django.core.files.storage import FileSystemStorage
 from django.core.mail import send_mail
-
+from django.db.models import Q
 
 #matchpair view
 
@@ -95,10 +95,17 @@ def request_blood(request):
 
 
         current_date_string= datetime.datetime.now(tz=pytz.timezone('Asia/Kolkata')).date().isoformat()
-        current_date = datetime.datetime.strptime(current_date_string, "%Y-%m-%d").date()
+        current_date_time = datetime.datetime.strptime(current_date_string, "%Y-%m-%d")
+        current_date = current_date_time.date()
+        current_time = current_date_time.time()
+        start_time = datetime.time(7, 0, 0)  
+        end_time = datetime.time(17, 0, 0)
+
+        # if (start_time <= current_time <=end_time ) is not True:
+        #     return JsonResponse({"error" : "You can request blood between 7 AM and 5 PM"}, status=500)
 
         try:
-            recipient = Recipient.objects.filter(email=email,status__in = ['Confirmed' ,'Pending']).order_by("-requestDate").first()
+            recipient = Recipient.objects.filter((Q(email=email) | Q(phoneNumber=phoneNumber)) & Q(status__in = ['Confirmed' ,'Pending'])).order_by("-requestDate").first()
             if recipient is not None:
                 #lastRecieved = datetime.datetime.strptime(recipient.date,"%Y-%m-%d").date()
                 print((current_date.year - recipient.requestDate.year)*365 +( current_date.month-recipient.requestDate.month)*30 + (current_date.day - recipient.requestDate.day))
