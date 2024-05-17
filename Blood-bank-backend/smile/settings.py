@@ -46,7 +46,7 @@ print(SECRET_KEY)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.12','192.168.56.1','127.0.0.1', '192.168.1.15','192.168.29.55','localhost', '91.108.105.42']
+ALLOWED_HOSTS = ['smileorganization.in' , 'www.smileorganization.in', '91.108.105.42']
 
 
 # Application definition
@@ -79,7 +79,9 @@ MIDDLEWARE = [
 ]
 
 
-CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:3000','http://localhost:3000' , 'http://192.168.1.12:3000',"http://192.168.56.1:3000",'http://192.168.1.15:3000', 'http://192.168.1.15:4173','http://192.168.29.55:3000', 'http://91.108.105.42/']
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:3000','http://localhost:3000' , 
+                        'http://192.168.1.12:3000',"http://192.168.56.1:3000",
+                         'https://smileorganization.in/' , 'https://www.smileorganization.in/', 'http://91.108.105.42/']
 
 #CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
@@ -101,18 +103,11 @@ CORS_ALLOWED_ORIGINS = [
     'http://192.168.1.15:3000',
     'http://192.168.1.15:4173',
     'http://192.168.29.55:3000',
-    'http://91.108.105.42'
+    'http://91.108.105.42',
+    'https://smileorganization.in' , 'https://www.smileorganization.in'
 
   ]
-CSRF_TRUSTED_ORIGINS = [
-    'http://127.0.0.1:3000',
-    'http://localhost:3000',
-    'http://192.168.1.12:3000',
-    'http://192.168.56.1:3000',
-    'http://192.168.1.15:3000',
-    'http://192.168.1.15:4173',
-    'http://192.168.29.55:3000',
-]
+
 
 
 
@@ -254,6 +249,6 @@ EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND')
 
 #cron job
 CRONJOBS = [
-    ('0 0 * * *', 'smile.cronjob.updateUnits', '>> ' + os.path.join(BASE_DIR,'log/debug7.log' + ' 2>&1 ')),
+    ('* * * * *', 'smile.cronjob.updateUnits', '>> ' + os.path.join(BASE_DIR,'log/debug7.log' + ' 2>&1 ')),
     # Add more cron jobs as needed
 ]

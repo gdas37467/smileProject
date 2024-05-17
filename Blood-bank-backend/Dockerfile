@@ -1,9 +1,9 @@
-FROM python:3.10-alpine
+FROM python:3.11-slim-bullseye
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1 
+RUN apt-get update && apt-get install -y cron
 
-RUN apt-get install -y cron && touch /var/log/cron.log
 
 WORKDIR /app
 
@@ -11,11 +11,14 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
+
 COPY . .
 EXPOSE 8000
 
 RUN python manage.py migrate
+RUN python manage.py crontab add
 
 
-CMD ["gunicorn", "--config", "gunicorn_config.py", "smile.wsgi:application"]
+
+CMD cron -f && timedatectl set-timezone Asia/Kolkata && gunicorn --config gunicorn_config.py smile.wsgi:application
 
