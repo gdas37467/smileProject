@@ -350,7 +350,7 @@ const Registration = (props) => {
     // API Calls
     const getCount = async () => {
         try{
-            const res = await axios.get('http://192.168.29.55:8000/api/v1/adminUser/get_total_cquantity/');
+            const res = await axios.get('/api/v1/adminUser/get_total_cquantity/');
             console.log(res)
             setDailyCount(res.data.quantity)
         }catch(e){
