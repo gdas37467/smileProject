@@ -38,7 +38,7 @@ key = settings.SECRET_KEY
 #ADMIN API's
 
 #Base URL form image store and get
-base_url = 'http://91.108.105.42'
+base_url = 'smileorganization.in/api/v1/'
 
 
 #Get all matched donors and recipients
@@ -253,7 +253,7 @@ def reject_request(request,recipient_id):
 
 
 
-@csrf_protect
+@csrf_exempt
 def admin_login(request):
     if request.method == "POST":
         body = json.loads(request.body)

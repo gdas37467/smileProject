@@ -129,8 +129,9 @@ export default function LoginPage(props){
                     otp : otpVal
                 })
                 try {
+                    var token = getCookie('csrftoken')
                     const res = await axios.post('/api/v1/donor/verify_otp/',data,{
-                        headers : {'X-CSRFToken': localStorage.getItem('csrfToken'),}
+                        headers : {'X-CSRFToken': token}
                     })
                     console.log(res)
                     if( 'success' in res.data){

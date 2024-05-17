@@ -137,7 +137,7 @@ def user_logout(request):
 
 
 #only for recipient and donor registration
-@csrf_protect
+@csrf_exempt
 def send_otp(request):
     if request.method == "POST":
         body  = json.loads(request.body)
@@ -223,7 +223,7 @@ def verify_otp(request):
 
 
 
-@csrf_protect
+@csrf_exempt
 def donor_send_otp(request):
     if request.method== "POST": 
         body  = json.loads(request.body)

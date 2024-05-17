@@ -71,8 +71,9 @@ function AdminNavbar (){
         console.log(formData.getAll('images'))
         
         try {
+            var token = getCookie('csrftoken')
             const res = await axios.post('/api/v1/adminUser/addPhotos/',formData,{
-                headers : {'X-CSRFToken': localStorage.getItem('csrfToken'),}
+                headers : {'X-CSRFToken': token}
             })
             toast.success('Images added successfully!')
             setOpen(false)
