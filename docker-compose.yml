@@ -3,14 +3,14 @@ version: '2'
 services:
   smile-backend: 
     build : ./Blood-bank-backend
-    image : paulshauvik99/smile-backend:v2
+    image : gdas37467/smile-backend:v2
     container_name: 'smile-backend'
     ports:
       - "8000:8000"
 
   smile-frontend: 
     build : ./Blood-bank-frontend/smile
-    image : paulshauvik99/smile-frontend:v2
+    image : gdas37467/smile-frontend:v2
     container_name: 'smile-frontend'
     ports:
       - "80:80"
