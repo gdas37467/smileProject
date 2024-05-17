@@ -22,13 +22,14 @@ from django.core.mail import send_mail
 import time
 import pytz
 from smtplib import SMTPException
+from django.middleware.csrf import get_token
+
 
 
 
 # Create your views here.
 key = settings.SECRET_KEY
 #print(key)
-
 
 @csrf_protect
 def register(request) :
@@ -140,22 +141,27 @@ def user_logout(request):
 @csrf_exempt
 def send_otp(request):
     if request.method == "POST":
+        
         body  = json.loads(request.body)
         email = body['email'] 
+        get_token(request)
+        #print(get_usage(request=request, fn=ratelimit))
+        #was_limited = getattr(request, 'limited', False)
         if not email:
             return JsonResponse({'status': 'Email is required.'}, status=400)
-  
+
         secret_key = pyotp.random_base32()
         #print(secret_key)
         totp = pyotp.TOTP(secret_key, interval=300)  
         otp = totp.now()
-     
+    
 
         # Store the OTP and its creation time in the session
         print(key)
         request.session['secret_key'] = secret_key
         #request.session['otp_creation_time'] = time.time()
         request.session['email'] = email
+        
         print(email)
         print(otp)
 
@@ -176,6 +182,8 @@ def send_otp(request):
         
         return JsonResponse({"success" : "OTP sent successfully"},status  =200) 
     return JsonResponse({"error" :"Invalid request Method"}, status=409)
+    
+
 
 @csrf_protect
 def verify_otp(request):
@@ -222,12 +230,12 @@ def verify_otp(request):
 
 
 
-
 @csrf_exempt
 def donor_send_otp(request):
     if request.method== "POST": 
         body  = json.loads(request.body)
         email  = body['email'] 
+        get_token(request)
         if not email:
             return JsonResponse({'status': 'Email is required.'}, status=400)
         donor = Donor.objects.filter(email= email).first()

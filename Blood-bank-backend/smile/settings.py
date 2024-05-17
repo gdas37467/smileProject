@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_crontab',
+   
 ]
 
 MIDDLEWARE = [
@@ -252,3 +253,6 @@ CRONJOBS = [
     ('* * * * *', 'smile.cronjob.updateUnits', '>> ' + os.path.join(BASE_DIR,'log/debug7.log' + ' 2>&1 ')),
     # Add more cron jobs as needed
 ]
+
+
+
