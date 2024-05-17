@@ -15,18 +15,9 @@ const RequestBlood = () => {
     
     const navigate = useNavigate()
 
-        // Storing csrftoken
-        async function token(){
-            try {
-                const res1 = await axios.get('/api/v1/adminUser/get_csrf_token/')
-                localStorage.setItem('csrfToken' , res1.data.csrfToken)
-            } catch (error) {
-                toast.error(error)
-            }
-        }
+       
     
     useEffect(()=>{
-        token()
         const now = new Date().getTime()
         if(localStorage.getItem('check') !== null){
             if(JSON.parse(localStorage.getItem('check')).expire > now ) {
@@ -43,7 +34,6 @@ const RequestBlood = () => {
         <>
 
                 <div className="request_outer_div">
-             
                         <div className="request_register">
                             <motion.div className="request_registration_form"
                                 initial={{x : '-100vw'}}
@@ -55,7 +45,6 @@ const RequestBlood = () => {
                             </motion.div>
                             <ToastContainer />
                         </div>
-                   
                 </div>
         </>
     )

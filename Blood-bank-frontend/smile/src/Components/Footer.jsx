@@ -5,11 +5,18 @@ import wave4 from '../assets/wave4.svg'
 import SmileLogo from '../assets/SmileLogo.png'
 import { WhatsappLogo , FacebookLogo, MapPin, Phone, Envelope, Clock} from "@phosphor-icons/react";
 import IconButton from '@mui/material/IconButton';
+import { useNavigate } from 'react-router-dom'
 
 
 
 
 const Footer = () => {
+
+    const navigate = useNavigate()
+    const toDeveloper = () => {
+        navigate('/developer')
+    }
+
     return (
         <>
             <div className="footer_outer">
@@ -20,12 +27,10 @@ const Footer = () => {
                     <div className="footer_details">
                         <div className="part1">
                             <img src={SmileLogo} className='footLogo' alt="logo" />
-                            <div className="devContact"> Contact Developers</div>
+                            <div className="devContact" onClick={toDeveloper}> Contact Developers</div>
                         </div>
-                        <div className="part2">
-                            
+                        <div className="part2">                
                             <div className="container">
-
                                 <IconButton className='ibtn' href='https://m.facebook.com/profile.php/?id=100069591442430'>
                                     <FacebookLogo size={36} color="#191818" className='icons' weight="fill" />
                                 </IconButton>
@@ -48,13 +53,8 @@ const Footer = () => {
                                 <div className="footer_text">
                                     <Clock size={26} className='con_icons' color="#191818" weight="duotone" /> <p>  Working Hours : 9:00 AM - 6:00 PM </p>
                                 </div>
-
-
-
                         </div>
-
                     </div>
-
                 </div>
             </div>
         </>

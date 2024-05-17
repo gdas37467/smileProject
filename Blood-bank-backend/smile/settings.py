@@ -85,7 +85,7 @@ CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:3000','http://localhost:3000' , 'http:
 CORS_ALLOW_CREDENTIALS = True
 SESSION_COOKIE_SAMESITE = 'Lax'
 SESSION_COOKIE_HTTPONLY = True
-SESSION_COOKIE_AGE = 24*60
+SESSION_COOKIE_AGE = 24*60*60
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
@@ -159,7 +159,7 @@ TEMPLATES = [
     },
 ]
 
-MEDIA_URL = '/media/'
+MEDIA_URL = '/api/v1/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 

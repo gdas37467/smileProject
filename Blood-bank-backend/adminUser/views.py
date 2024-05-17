@@ -253,7 +253,7 @@ def reject_request(request,recipient_id):
 
 
 
-@csrf_protect
+@csrf_exempt
 def admin_login(request):
     if request.method == "POST":
         body = json.loads(request.body)
