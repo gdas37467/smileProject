@@ -38,7 +38,7 @@ key = settings.SECRET_KEY
 #ADMIN API's
 
 #Base URL form image store and get
-base_url = 'https://smileoranization.in/api/v1'
+base_url = 'https://smileoranization.in'
 
 
 #Get all matched donors and recipients
@@ -265,7 +265,7 @@ def admin_login(request):
         
         # Authenticate user
         user = authenticate(request, username=username, password=password)
-        # print(user)
+        print(user)
         
         try: 
             if user is not None:
@@ -275,7 +275,7 @@ def admin_login(request):
 
                 is_staff = user.is_superuser
                 #newline update
-
+                print(is_staff)
                 isAdmin = jwt.encode({'isAdmin': is_staff}, key, algorithm='HS256')
                 print(isAdmin)
                 print(request.user)
@@ -287,7 +287,7 @@ def admin_login(request):
             else:
                 return JsonResponse({'error': 'Invalid credentials'},status=403)
         except Exception as e:
-            print(e)
+            print(str(e))
             return JsonResponse({"error" : "Something Went Wrong"},status =500)
     
     return JsonResponse({'error':'Invalid Request'},status = 400)

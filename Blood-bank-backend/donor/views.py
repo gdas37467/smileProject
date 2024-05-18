@@ -18,11 +18,14 @@ import jwt
 
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
-from django.core.mail import send_mail
+#from django.core.mail import send_mail
 import time
 import pytz
 from smtplib import SMTPException
 from django.middleware.csrf import get_token
+import smtplib,ssl
+from django.core.mail import send_mail
+
 
 
 
@@ -176,6 +179,7 @@ def send_otp(request):
                 [email],
                 fail_silently=False,
             )
+
         except SMTPException as e:
             print(e) 
             return JsonResponse({"error" : "error occured while sending sms"}, status=500)
@@ -185,7 +189,7 @@ def send_otp(request):
     
 
 
-@csrf_protect
+@csrf_exempt
 def verify_otp(request):
     if request.method=="POST":
         try:
@@ -207,6 +211,7 @@ def verify_otp(request):
             isDonor = False
             isRecipient = True
             donor = Donor.objects.filter(email=email).first()
+            print(donor)
             if donor is not None:
                 isDonor = True
             print("isdonor " + str(isDonor))
