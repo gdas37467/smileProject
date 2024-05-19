@@ -15,6 +15,7 @@ COPY . .
 EXPOSE 8000
 
 RUN python manage.py makemigrations
+RUN python manage.py makemigrations adminUser
 RUN python manage.py makemigrations donor
 RUN python manage.py makemigrations recipient
 

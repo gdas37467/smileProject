@@ -27,5 +27,5 @@ class Donor(models.Model):
 
     
 class Calender(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, auto_created=True, editable=False)
     quantity = models.IntegerField(default=15,null=True)

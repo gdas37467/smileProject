@@ -471,7 +471,7 @@ def  getLeaderboardImage(request):
 
 
         }
-        
+        print(leaderboard.p2.url)
         
         return JsonResponse({'success' : 'Images loaded successfully', 'data' : data},status=200)
     return JsonResponse({"error" : "Invalid request method"},status = 400)   
