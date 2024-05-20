@@ -406,7 +406,7 @@ def confirm_loan(request, donor_id):
         
     return JsonResponse({"error" : "Invalid request method"},status = 400)
 
-@csrf_protect
+@csrf_exempt
 def addPhotos(request):
     if request.method == 'POST':
         if authorize_admin(request) == False:
