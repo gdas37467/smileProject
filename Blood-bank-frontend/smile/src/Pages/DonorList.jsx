@@ -75,8 +75,8 @@ const DonorList = () => {
         console.log(id)
         try {
             const res = await axios.get(`/api/v1/adminUser/confirm_donor/${id}`)
-            // console.log(res)
-            toast.success(res.data.status)
+            console.log(res)
+            toast.success(res.data.success)
             setReload(!reload)
 
         } catch (error) {

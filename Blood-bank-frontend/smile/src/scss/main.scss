@@ -442,7 +442,7 @@ label+.css-v4u5dn-MuiInputBase-root-MuiInput-root, label + .css-zrqpq1 {
 
 // Developer Contact
 .developer_outer{
-    height: 100vh;
+    height: calc(100vh + 10rem);
     width:100%;
     background-color: $bg;
     position: relative;
@@ -1479,6 +1479,8 @@ label+.css-v4u5dn-MuiInputBase-root-MuiInput-root, label + .css-zrqpq1 {
                     
                 }
                 &:hover{
+                    margin-top: 8rem;
+                    padding-bottom: 12rem;
                     height: 39rem;
                     transition: all 0.6s ease;
                 }
