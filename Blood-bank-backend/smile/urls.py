@@ -24,7 +24,7 @@ urlpatterns = [
     path('api/v1/adminUser/', include("adminUser.urls")),
     path('api/v1/donor/',include("donor.urls")),
     path('api/v1/recipient/',include("recipient.urls"))
-    
-]
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# if settings.DEBUG:
+#     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

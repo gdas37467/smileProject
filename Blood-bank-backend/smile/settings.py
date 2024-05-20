@@ -46,7 +46,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['smileorganization.in' , 'www.smileorganization.in', '91.108.105.42','127.0.0.1']
+ALLOWED_HOSTS = ['smileorganization.in' , 'www.smileorganization.in', '91.108.105.42','127.0.0.1','192.168.29.55']
 
 
 # Application definition
@@ -81,7 +81,7 @@ MIDDLEWARE = [
 
 
 CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:3000','http://localhost:3000' , 
-                        'http://192.168.1.12:3000',"http://192.168.56.1:3000",
+                        'http://192.168.1.12:3000',"http://192.168.56.1:3000",'http://192.168.29.55',
                          'https://smileorganization.in' , 'https://www.smileorganization.in', 'https://91.108.105.42']
 
 #CORS_ALLOW_ALL_ORIGINS = True
@@ -104,6 +104,7 @@ CORS_ALLOWED_ORIGINS = [
     'http://192.168.1.15:3000',
     'http://192.168.1.15:4173',
     'http://192.168.29.55:3000',
+    'http://192.168.29.55',
     'https://91.108.105.42',
     'https://smileorganization.in' , 'https://www.smileorganization.in'
 
@@ -155,9 +156,12 @@ TEMPLATES = [
     },
 ]
 
-MEDIA_URL = 'api/v1/media/'
-#MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_ROOT = 'media'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+MEDIA_URL = '/app/media/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+STATIC_URL =  '/app/static/'
+# MEDIA_ROOT = 'media'
 print(MEDIA_ROOT)
 
 WSGI_APPLICATION = 'smile.wsgi.application'
@@ -229,8 +233,7 @@ AUTHENTICATION_BACKENDS = [
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
-STATIC_ROOT = 'static'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

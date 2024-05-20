@@ -38,7 +38,7 @@ key = settings.SECRET_KEY
 #ADMIN API's
 
 #Base URL form image store and get
-base_url = 'https://smileoranization.in'
+base_url = 'https://smileorganization.in'
 
 
 #Get all matched donors and recipients
@@ -406,7 +406,7 @@ def confirm_loan(request, donor_id):
         
     return JsonResponse({"error" : "Invalid request method"},status = 400)
 
-@csrf_exempt
+@csrf_protect
 def addPhotos(request):
     if request.method == 'POST':
         if authorize_admin(request) == False:
