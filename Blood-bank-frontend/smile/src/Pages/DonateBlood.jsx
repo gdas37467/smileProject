@@ -492,8 +492,22 @@ const DonateBlood = () => {
                 <>
                     <Grid gap={12}>
                         <GridItem placeItems='center' className='authenticate'>
-                            <VStack mt={20}>
-                                <HStack>
+                            <VStack mt={10}>
+                                <Box sx={{color:'#d71414', fontSize : '12px', fontWeight: 200 }}>
+                                    (Please verify your email by checking your inbox or spam folder for the OTP.)
+                                </Box>
+                                <Button size='small' 
+                                    color="black" 
+                                    _hover={{color:'black' , bg: '#daccca', fontWeight:'400' }} 
+                                    bg='#daccca'
+                                    textDecoration='underline'
+                                    fontSize='10px'
+                                    fontWeight='200'
+                                    onClick={handleBack}
+                                >
+                                    Wrong Email? Update Here!
+                                </Button>
+                                <HStack mt={10}>
                                     <Button size='lg'
                                         color="black" bg="#d7141450"
                                         _hover={{ color: '#f0e3e4', bg: '#d71414' }}
@@ -505,9 +519,8 @@ const DonateBlood = () => {
                                         isDisabled={disability}
                                         fontWeight='400'
                                     >
-                                        {changeText}
+                                        Send OTP
                                     </Button>
-                                    {showTime ? <Text fontSize='lg'>Resend in : {time} </Text> : null}
 
                                 </HStack>
                                 <HStack>

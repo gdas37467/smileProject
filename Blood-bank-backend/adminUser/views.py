@@ -38,7 +38,7 @@ key = settings.SECRET_KEY
 #ADMIN API's
 
 #Base URL form image store and get
-base_url = 'https://smileorganization.in'
+base_url = 'http://192.168.29.55'
 
 
 #Get all matched donors and recipients

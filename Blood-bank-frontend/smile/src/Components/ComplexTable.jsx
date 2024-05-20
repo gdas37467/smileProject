@@ -187,7 +187,7 @@ const ComplexTable = (props) => {
         },
         {
             field: 'registrationDate',
-            headerName: "Date",
+            headerName: "Registered Date",
             type : 'date',
             width: 150,
             align: 'center',

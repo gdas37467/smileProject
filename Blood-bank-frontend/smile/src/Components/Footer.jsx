@@ -48,7 +48,7 @@ const Footer = () => {
                                     <Phone size={26} className='con_icons' color="#191818" weight="duotone" /> <p>  +91 9832738882 </p>
                                 </div>
                                 <div className="footer_text">
-                                    <Envelope size={26} className='con_icons' color="#191818" weight="duotone" /> <p>  somesmile@gmail.com </p>
+                                    <Envelope size={26} className='con_icons' color="#191818" weight="duotone" /> <p>  support@smileorganization.in </p>
                                 </div>
                                 <div className="footer_text">
                                     <Clock size={26} className='con_icons' color="#191818" weight="duotone" /> <p>  Working Hours : 9:00 AM - 6:00 PM </p>
