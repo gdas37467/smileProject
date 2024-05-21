@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { NavLink} from 'react-router-dom'
 import Smile from '../assets/SmileLogo.png'
-import { Backdrop, Box, Button, Chip, Divider, Drawer, Fade, IconButton, List, ListItem, ListItemButton, ListItemText, Modal, Toolbar } from '@mui/material';
+import { Backdrop, Box, Button, Chip, Drawer, Fade, IconButton, List, ListItem, ListItemButton, Modal, Toolbar } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import { ToastContainer, toast } from 'react-toastify';
@@ -72,7 +72,7 @@ function AdminNavbar (){
         
         try {
             var token = getCookie('csrftoken')
-            const res = await axios.post('/api/v1/adminUser/addPhotos/',formData,{
+            const res = await axios.post('http://192.168.29.55:8000/api/v1/adminUser/addPhotos/',formData,{
                 headers : {'X-CSRFToken': token}
             })
             toast.success('Images added successfully!')

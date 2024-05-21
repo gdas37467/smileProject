@@ -199,6 +199,7 @@ label+.css-v4u5dn-MuiInputBase-root-MuiInput-root, label + .css-zrqpq1 {
         justify-content: center;
         & img{
             // margin-top: -2.8rem;
+            cursor: pointer;
             height: 8rem;
             // width: auto;
         }
@@ -439,7 +440,13 @@ label+.css-v4u5dn-MuiInputBase-root-MuiInput-root, label + .css-zrqpq1 {
     }
 }
 
+// Error Page
+.errPage {
+    height: calc(100vh + 10rem);
+    width: 100%;
+    background-color : #EAEAEA;
 
+}
 // Developer Contact
 .developer_outer{
     height: calc(100vh + 10rem);
@@ -921,6 +928,7 @@ label+.css-v4u5dn-MuiInputBase-root-MuiInput-root, label + .css-zrqpq1 {
                 gap: 4rem;
                 & .footLogo{
                     // bottom: 7rem;
+                    cursor: pointer;
                     max-height: 12rem;
                     width: auto;
                 }

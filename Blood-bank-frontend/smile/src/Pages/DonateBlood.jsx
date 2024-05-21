@@ -263,7 +263,7 @@ const DonateBlood = () => {
 
             // timer()
             try{
-                const res =  await axios.post('/api/v1/donor/send_otp/', JSON.stringify({email : donorInfo.email}))
+                const res =  await axios.post('http://192.168.29.55:8000/api/v1/donor/send_otp/', JSON.stringify({email : donorInfo.email}))
                 if('success' in res.data){
                     toast.success(res.data.success, {
                         position : toast.POSITION.TOP_RIGHT
@@ -301,7 +301,7 @@ const DonateBlood = () => {
         console.log(JSON.stringify(donorDet))
         try {
             var token = getCookie('csrftoken')
-            const res = await axios.post('/api/v1/donor/register/',JSON.stringify(donorDet),{
+            const res = await axios.post('http://192.168.29.55:8000/api/v1/donor/register/',JSON.stringify(donorDet),{
                 headers : {'X-CSRFToken': token}
             })
             if('success' in res.data){
@@ -412,7 +412,7 @@ const DonateBlood = () => {
                                         <option value='B-'>B Negative (B-)</option>
                                         <option value='O+'>O Positive (O+)</option>
                                         <option value='O-'>O Negative (O-)</option>
-                                        <option value='AB+'>AB Positive (B+)</option>
+                                        <option value='AB+'>AB Positive (AB+)</option>
                                         <option value='AB-'>AB Negative (AB-)</option>
                                     </Select>
                                 </InputGroup>

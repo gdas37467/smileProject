@@ -36,6 +36,8 @@ key = settings.SECRET_KEY
 
 @csrf_protect
 def register(request) :
+    email = request.session.get('email')
+
     if request.method == "POST":
         body = json.loads(request.body)
         firstName = body['firstName']

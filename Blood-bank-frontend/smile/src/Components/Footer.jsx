@@ -1,7 +1,7 @@
 import React from 'react'
 import wave1 from '../assets/wave1.svg'
+import wave2 from '../assets/wave2.svg'
 import wave3 from '../assets/wave3.svg'
-import wave4 from '../assets/wave4.svg'
 import SmileLogo from '../assets/SmileLogo.png'
 import { WhatsappLogo , FacebookLogo, MapPin, Phone, Envelope, Clock} from "@phosphor-icons/react";
 import IconButton from '@mui/material/IconButton';
@@ -16,6 +16,9 @@ const Footer = () => {
     const toDeveloper = () => {
         navigate('/developer')
     }
+    const toHome = () => {
+        navigate('/')
+    }
 
     return (
         <>
@@ -23,10 +26,10 @@ const Footer = () => {
                 <div className="footer_inner">
                     <img className='footBg' src={wave1} alt="" />
                     <img className='footBg' src={wave3} alt="" />
-                    <img className='footBg' src={wave4} alt="" />
+                    <img className='footBg' src={wave2} alt="" />
                     <div className="footer_details">
                         <div className="part1">
-                            <img src={SmileLogo} className='footLogo' alt="logo" />
+                            <img src={SmileLogo} className='footLogo' alt="logo" onClick={toHome} />
                             <div className="devContact" onClick={toDeveloper}> Contact Developers</div>
                         </div>
                         <div className="part2">                

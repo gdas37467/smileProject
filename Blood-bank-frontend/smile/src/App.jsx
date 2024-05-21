@@ -12,6 +12,7 @@ import DonorList from './Pages/DonorList.jsx'
 import RequestList from './Pages/RequestList.jsx'
 import Register from './Pages/Register.jsx'
 import DeveloperContact from './Pages/DeveloperContact.jsx'
+import Error404 from './Pages/Error404.jsx'
 
 
 
@@ -39,6 +40,7 @@ function App() {
               <Route exact path='/donate' element={<DonateBlood />} />           
               <Route exact path='/donate/donordashboard' element={<DonorDashboard />} />       
               <Route exact path='/developer' element={<DeveloperContact />} />
+              <Route path='*' element={<Error404 />} />
             </Routes>               
             <Footer />
           </>

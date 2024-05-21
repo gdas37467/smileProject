@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { NavLink} from 'react-router-dom'
+import { NavLink, useNavigate} from 'react-router-dom'
 import Smile from '../assets/SmileLogo.png'
 import { Box, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemText, Toolbar } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -11,10 +11,17 @@ const drawerWidth = 240;
 
 function Navbar (){
     
+    const navigate = useNavigate()
     const [mobileOpen, setMobileOpen] = useState(false);
 
     const handleDrawerToggle = () => { setMobileOpen((prevState) => !prevState); };
     const container = window !== undefined ? () => window.document.body : undefined;
+    
+    const goTo = () => {
+        navigate('/')
+    }
+    
+    
     const MobNav = (
         <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' , fontSize : {xs : '2rem'}, mt : 8 , }}>
             
@@ -55,7 +62,7 @@ function Navbar (){
                     </IconButton>
                 </Toolbar>
                 <div className="logo">
-                    <img src={Smile} alt="Logo" />
+                    <img src={Smile} alt="Logo" onClick={goTo} />
                 </div>
 
                 <nav className="menu" >

@@ -94,7 +94,7 @@ export default function LoginPage(props){
                             })
                             break
                     }
-                    const res = await axios.post(`/api/v1/${url}`, data)
+                    const res = await axios.post(`http://192.168.29.55:8000/api/v1/${url}`, data)
                     console.log(res)
                     // setCheck(true)
                     toast.success("OTP Sent Successfully !",{
@@ -125,12 +125,10 @@ export default function LoginPage(props){
                 return
             }else{
                 setIsLoading(true)
-                let data = JSON.stringify({
-                    otp : otpVal
-                })
+               console.log(otpVal)
                 try {
                     var token = getCookie('csrftoken')
-                    const res = await axios.post('/api/v1/donor/verify_otp/',data,{
+                    const res = await axios.post('http://192.168.29.55:8000/api/v1/donor/verify_otp/',JSON.stringify({otp : otpVal}),{
                         headers : {'X-CSRFToken': token}
                     })
                     console.log(res)
@@ -173,7 +171,7 @@ export default function LoginPage(props){
                 } catch (error) {
                     console.log(error)
                     Swal.fire({
-                        title : error.response.data.error , 
+                        title : error.response.statusText , 
                         icon  : 'error'
                     })                
                     setIsLoading(false)
