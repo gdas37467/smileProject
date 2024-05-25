@@ -36,7 +36,7 @@ key = settings.SECRET_KEY
 
 @csrf_protect
 def register(request) :
-    email = request.session.get('email')
+    
 
     if request.method == "POST":
         body = json.loads(request.body)
@@ -51,6 +51,7 @@ def register(request) :
         gender = body['gender']
         lastDonated = body['lastDonated']
         isThalassemia = body['isThalassemia']
+        email = request.session.get('email')
     
         isDonor = Donor.objects.filter(email = email).first()
         if isDonor is not None:
@@ -149,7 +150,6 @@ def send_otp(request):
         
         body  = json.loads(request.body)
         email = body['email'] 
-        get_token(request)
         #print(get_usage(request=request, fn=ratelimit))
         #was_limited = getattr(request, 'limited', False)
         if not email:
@@ -242,7 +242,6 @@ def donor_send_otp(request):
     if request.method== "POST": 
         body  = json.loads(request.body)
         email  = body['email'] 
-        get_token(request)
         if not email:
             return JsonResponse({'status': 'Email is required.'}, status=400)
         donor = Donor.objects.filter(email= email).first()
@@ -300,6 +299,7 @@ def donor_send_otp(request):
 def get_donor_records(request):
     if request.method == "GET":
         email = request.session.get('member_id')
+        print(email)
         if email is None:
             return JsonResponse({"error" : "Invalid Session Id"},status =401)
         donor = Donor.objects.filter(email=email).first()
