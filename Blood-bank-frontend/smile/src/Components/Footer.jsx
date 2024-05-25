@@ -37,7 +37,7 @@ const Footer = () => {
                                 <IconButton className='ibtn' href='https://m.facebook.com/profile.php/?id=100069591442430'>
                                     <FacebookLogo size={36} color="#191818" className='icons' weight="fill" />
                                 </IconButton>
-                                <IconButton className='ibtn' href='https://wa.me/7002572852'>
+                                <IconButton className='ibtn' href='https://wa.me/9435071059'>
                                     <WhatsappLogo size={36}  color="#191818" className='icons' weight="fill" />
                                 </IconButton>
                             </div>
@@ -45,16 +45,16 @@ const Footer = () => {
                         <div className="part3">
                             
                                 <div className="footer_text">
-                                    <MapPin size={26} className='con_icons'color="#191818" weight="duotone" /> <p>  Some Lane, Silchar, Cachar, Assam, Pincode - 788 005 </p>
+                                    <MapPin size={26} className='con_icons'color="#191818" weight="duotone" /> <p>  Lane No. -2 , Vivekananda Road, Jagadish Basu lane, Silchar - 788 007</p>
                                 </div>
                                 <div className="footer_text">
-                                    <Phone size={26} className='con_icons' color="#191818" weight="duotone" /> <p>  +91 9832738882 </p>
+                                    <Phone size={26} className='con_icons' color="#191818" weight="duotone" /> <p>  +91 9435071059 </p>
                                 </div>
                                 <div className="footer_text">
                                     <Envelope size={26} className='con_icons' color="#191818" weight="duotone" /> <p>  support@smileorganization.in </p>
                                 </div>
                                 <div className="footer_text">
-                                    <Clock size={26} className='con_icons' color="#191818" weight="duotone" /> <p>  Working Hours : 9:00 AM - 6:00 PM </p>
+                                    <Clock size={26} className='con_icons' color="#191818" weight="duotone" /> <p>  Working Hours : 7:00 AM - 10:00 PM </p>
                                 </div>
                         </div>
                     </div>

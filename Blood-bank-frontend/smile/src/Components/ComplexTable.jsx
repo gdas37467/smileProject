@@ -8,6 +8,7 @@ import SmsIcon from '@mui/icons-material/Sms';
 import FeedbackIcon from '@mui/icons-material/Feedback';
 import DoneIcon from '@mui/icons-material/Done';
 import DeleteIcon from '@mui/icons-material/Delete';
+import CloseIcon from '@mui/icons-material/Close';
 import SwipeRightIcon from '@mui/icons-material/SwipeRight';
 
 const ComplexTable = (props) => {
@@ -218,7 +219,7 @@ const ComplexTable = (props) => {
             align : 'center',
             headerAlign: 'center',
             filterable : true,
-            renderCell : (params) => {return (params.row.thalassemia ?  (<DoneIcon className='con' />) : '')}
+            renderCell : (params) => {return (params.row.thalassemia ?  (<DoneIcon className='con' />) : (<CloseIcon className='loan' />))}
         },
         {
             field: 'isAvailable',
@@ -229,7 +230,7 @@ const ComplexTable = (props) => {
             align : 'center',
             headerAlign: 'center',
             filterable : true,
-            renderCell : (params) => {return (params.row.isAvailable ?  (<DoneIcon className='con' />) : '')}
+            renderCell : (params) => {return (params.row.isAvailable ?  (<DoneIcon className='con' />) : (<CloseIcon className='loan' />))}
         },
         {
             field: 'loan',
@@ -240,7 +241,7 @@ const ComplexTable = (props) => {
             align : 'center',
             headerAlign: 'center',
             filterable : true,
-            renderCell : (params) => {return (params.row.loan ?  (<DoneIcon className='con' />) : '')}
+            renderCell : (params) => {return (params.row.loan ?  (<DoneIcon className='con' />) : (<CloseIcon className='loan' />))}
         },
         {
             field: 'sendsms',

@@ -8,8 +8,11 @@ import Swal from 'sweetalert2'
 import { ToastContainer, toast } from 'react-toastify'
 import {BallTriangle} from 'react-loader-spinner';
 import { Button } from '@mui/material'
+import TableComp from '../Components/Table'
 
 
+
+const tableColumn = ["Donor's Name","Total Donations"]
 
 const DonorList = () => {
     axios.defaults.withCredentials = true
@@ -23,6 +26,8 @@ const DonorList = () => {
     const [loadingPage , setLoadingPage] = useState(true)
     const [loadingApi , setLoadingApi] = useState(false)
     const [reload,setReload] = useState(false)
+    
+
     
     // Page validation
     useEffect(() => {
@@ -235,7 +240,7 @@ const DonorList = () => {
                                         Logout
                                     </Button>
                                 </div>
-                                <h1>Available Donors</h1>
+                                <h1>Donor List</h1>
                                 <ComplexTable
                                     type='donorList'
                                     rows={donorList}
@@ -244,6 +249,13 @@ const DonorList = () => {
                                     sendSMS={sendSMS}
                                     sendReminder={sendReminder}
                                     deleteDonor={deleteDonor}
+                                />
+
+                                <h1>Top Donor List</h1>
+                                <TableComp
+                                    type='donor'
+                                    tableColumn={tableColumn}
+                                    tableContent={donorList}
                                 />
                             </>
                         )

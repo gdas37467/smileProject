@@ -76,7 +76,7 @@ def register(request) :
             totp = pyotp.TOTP(secret_key,interval=300)
             status = totp.verify(otp)
             print(status)
-            email = request.session.get('email')
+            # email = request.session.get('email')
             del request.session['email']
             del request.session['secret_key']
             

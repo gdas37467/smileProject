@@ -254,7 +254,7 @@ export default function RequestDashboard() {
                 setLoadingPage(true)
                 Swal.fire({
                     title : 'You are not authorized to view this Page!',
-                    text :  'Pleaase Register, to Continue!',
+                    text :  'Pleaase Login, to Continue!',
                     icon : 'warning'
                 }).then((res)=>{
                     if(res.isConfirmed || res.dismiss === 'backdrop'){
@@ -285,21 +285,22 @@ export default function RequestDashboard() {
     //Handlers
     //Handles Modal Open and Close
     const handleOpen = () => {
-        if(recDetails.isEligible){
-            if(disT > '00:00:00' && disT < '06:59:59'){
-                Swal.fire({
-                    text : 'You can Register Patient after 7:00 AM',
-                    icon : 'warning'
-                })
-            } else{
-                setOpen(true);
-            }
-        }else{
-            Swal.fire({
-                text : `You have to wait ${recDetails.remainingDays} days before placing another Request.`,
-                icon : 'warning'
-            })
-        }
+        // if(recDetails.isEligible){
+        //     if(disT > '22:00:00' && disT < '06:59:59'){
+        //         Swal.fire({
+        //             text : 'You can Register Patient after 7:00 AM',
+        //             icon : 'warning'
+        //         })
+        //     } else{
+        //         setOpen(true);
+        //     }
+        // }else{
+            //     Swal.fire({
+                //         text : `You have to wait ${recDetails.remainingDays} days before placing another Request.`,
+                //         icon : 'warning'
+                //     })
+                // }
+        setOpen(true);
     }
     const handleClose = () => setOpen(false);
 

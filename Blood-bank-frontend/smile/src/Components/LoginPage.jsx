@@ -103,7 +103,7 @@ export default function LoginPage(props){
                 } catch (err) {
                     console.log(err)
                     setCheck(false)
-                    toast.error("Something Went Wrong",{
+                    toast.error(err.response.data.error,{
                         position : toast.POSITION.TOP_CENTER
                     })                
                 }
@@ -237,7 +237,7 @@ export default function LoginPage(props){
                                 <IconButton
                                     isRound={true}
                                     onClick={e => sendOtp(email)}
-                                    sx={{ ml: 'auto', mr : 10}}
+                                    sx={{ ml: 'auto',}}
                                     className='reg_btn'
                                     color="black" bg="#d7141450" 
                                     _hover={{color:'#f0e3e4' , bg: '#d71414'}} 
