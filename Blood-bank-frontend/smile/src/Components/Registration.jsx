@@ -262,7 +262,7 @@ const Registration = (props) => {
 
         try { 
             var token = getCookie('csrftoken')  
-            const res = await axios.post('http://192.168.29.55:8000/api/v1/adminUser/admin_booking/', formData,{
+            const res = await axios.post('/api/v1/adminUser/admin_booking/', formData,{
                 headers : {'X-CSRFToken': token}
             })
             console.log(res)
@@ -316,7 +316,7 @@ const Registration = (props) => {
 
         try {
             var token = getCookie('csrftoken')
-            const res = await axios.post('http://192.168.29.55:8000/api/v1/adminUser/admin_donor_registration/', JSON.stringify(payload),{
+            const res = await axios.post('/api/v1/adminUser/admin_donor_registration/', JSON.stringify(payload),{
                 headers : {'X-CSRFToken': token}
             })
             console.log(res)
@@ -350,7 +350,7 @@ const Registration = (props) => {
     // API Calls
     const getCount = async () => {
         try{
-            const res = await axios.get('http://192.168.29.55:8000/api/v1/adminUser/get_total_cquantity/');
+            const res = await axios.get('/api/v1/adminUser/get_total_cquantity/');
             console.log(res)
             setDailyCount(res.data.quantity)
         }catch(e){

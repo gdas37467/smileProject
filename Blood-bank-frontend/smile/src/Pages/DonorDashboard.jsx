@@ -107,7 +107,7 @@ const DonorDashboard = () => {
     const getDonorRecords = async () =>{
         setLoadingPage(true)
         try {
-            const res = await axios.get('http://192.168.29.55:8000/api/v1/donor/get_donor_records/')
+            const res = await axios.get('/api/v1/donor/get_donor_records/')
             console.log(res)
             setDonorList(res.data.donorList)
             setDonorDetails(res.data.donorDetails)
@@ -138,7 +138,7 @@ const DonorDashboard = () => {
     // Logout API call
     const logout = () => {
         try{
-            axios.get('http://192.168.29.55:8000/api/v1/donor/logout/').then((res)=>{
+            axios.get('/api/v1/donor/logout/').then((res)=>{
                 setLoadingPage(true)
                 localStorage.removeItem('check')
                 Swal.fire({
