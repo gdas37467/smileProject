@@ -624,20 +624,7 @@ const DonateBlood = () => {
                                         <div className="redirect">
                                             <VStack>
                                                 <HStack>    
-                                                    {/* <IconButton
-                                                        isRound={true}
-                                                        isDisabled={activeStep === 0}
-                                                        onClick={handleBack}
-                                                        sx={{ mr: 1 }}
-                                                        className='reg_btn'
-                                                        color="black" bg="#d7141450" 
-                                                        _hover={{color:'#f0e3e4' , bg: '#d71414'}} 
-                                                        mt={10}
-                                                        fontSize='16px'
-                                                        height='3rem'
-                                                        width='3rem'
-                                                        icon={<ArrowBackIosNewIcon />}
-                                                    /> */}
+                                                    
                                                     <Button 
                                                         onClick={verifyOtp} 
                                                         color="black" bg="#d7141450" 
