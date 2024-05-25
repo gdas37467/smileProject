@@ -191,7 +191,7 @@ def send_otp(request):
     
 
 
-@csrf_exempt
+@csrf_protect
 def verify_otp(request):
     if request.method=="POST":
         try:
