@@ -108,12 +108,10 @@ def register(request) :
                 # OTP matched, do further processing here
                     print(f'status : success')
                     request.session["member_id"] = email
-            
                     del request.session['email']
-                    request.session.set_expiry(45*60)
-                    return JsonResponse({'success': 'OTP verified successfully', "user_type" : type},status=200)
+                 
                 else:
-                    return JsonResponse({'success': 'error', 'message': 'Invalid OTP or OTP has expired.'},status=400)
+                    return JsonResponse({'error': 'Invalid OTP or OTP has expired.'},status=400)
             
 
         except Exception as e:
@@ -267,7 +265,7 @@ def verify_otp(request):
                     request.session.set_expiry(45*60)
                     return JsonResponse({'success': 'OTP verified successfully', "user_type" : type},status=200)
                 else:
-                    return JsonResponse({'success': 'error', 'message': 'Invalid OTP or OTP has expired.'},status=400)
+                    return JsonResponse({'error': 'Invalid OTP or OTP has expired.'},status=400)
         except Exception as e:
             print(e)
             return JsonResponse({"error" : "OTP verification Failed"  },status=400)
