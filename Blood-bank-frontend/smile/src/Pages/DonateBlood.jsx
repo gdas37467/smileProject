@@ -289,7 +289,7 @@ const DonateBlood = () => {
 
             timer()
             try{
-                const res =  await axios.post('http://192.168.29.55:8000/api/v1/donor/send_otp/', JSON.stringify({email : donorInfo.email}))
+                const res =  await axios.post('http://192.168.1.11:8000/api/v1/donor/send_otp/', JSON.stringify({email : donorInfo.email}))
                 if('success' in res.data){
                     toast.success(res.data.success, {
                         position : toast.POSITION.TOP_RIGHT
@@ -327,7 +327,7 @@ const DonateBlood = () => {
         console.log(JSON.stringify(donorDet))
         try {
             var token = getCookie('csrftoken')
-            const res = await axios.post('http://192.168.29.55:8000/api/v1/donor/register/',JSON.stringify(donorDet),{
+            const res = await axios.post('http://192.168.1.11:8000/api/v1/donor/register/',JSON.stringify(donorDet),{
                 headers : {'X-CSRFToken': token}
             })
             if('success' in res.data){
@@ -712,12 +712,12 @@ const DonateBlood = () => {
                                             initial={{ x : '100vw'}}
                                             whileInView={{ x : 0 }}
                                         >
-                                            <VStack>
 
                                                 <LoginPage 
                                                     setIsLogin={e => setIsLogin(!isLogin)}
                                                     type="donorLogin"
-                                                />
+                                                    />
+                                                    <VStack>
                                                 <Text
                                                     fontSize='md'
                                                     onClick={e => setIsLogin(!isLogin)} 

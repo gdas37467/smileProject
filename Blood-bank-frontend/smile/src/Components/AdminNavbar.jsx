@@ -72,7 +72,7 @@ function AdminNavbar (){
         
         try {
             var token = getCookie('csrftoken')
-            const res = await axios.post('http://192.168.29.55:8000/api/v1/adminUser/addPhotos/',formData,{
+            const res = await axios.post('http://192.168.1.11:8000/api/v1/adminUser/addPhotos/',formData,{
                 headers : {'X-CSRFToken': token}
             })
             toast.success('Images added successfully!')
