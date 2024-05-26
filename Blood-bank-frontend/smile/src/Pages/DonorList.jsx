@@ -79,7 +79,7 @@ const DonorList = () => {
         //API for matched donor
         console.log(id)
         try {
-            const res = await axios.get(`/api/v1/adminUser/confirm_donor/${id}`)
+            const res = await axios.get(`http://192.168.29.55/api/v1/adminUser/confirm_donor/${id}`)
             console.log(res)
             toast.success(res.data.success)
             setReload(!reload)
@@ -96,7 +96,7 @@ const DonorList = () => {
         //API for matched donor
         console.log(id)
         try {
-            const res = await axios.get(`/api/v1/adminUser/confirm_loan/${id}` )
+            const res = await axios.get(`http://192.168.29.55/api/v1/adminUser/confirm_loan/${id}` )
             toast.success('Donor Added For Loan Successfully')
             setReload(!reload)
 
@@ -111,7 +111,7 @@ const DonorList = () => {
     const sendSMS = async (id) =>{
         //API for matched donor
         try {
-            const res = await axios.get(`/api/v1/adminUser/send_requirement/${id}`)
+            const res = await axios.get(`http://192.168.29.55/api/v1/adminUser/send_requirement/${id}`)
             toast.success(res.data.success)
             setReload(!reload)
 
@@ -127,7 +127,7 @@ const DonorList = () => {
         //API for matched donor
         console.log(id)
         try {
-            const res = await axios.get(`/api/v1/adminUser/loan_msg/${id}`)
+            const res = await axios.get(`http://192.168.29.55/api/v1/adminUser/loan_msg/${id}`)
             console.log(res)
             toast.success('Reminder Sent Successfully')
             setReload(!reload)
@@ -152,7 +152,7 @@ const DonorList = () => {
         }).then(async (res) => {
             if(res.isConfirmed){
                 try {
-                    const res = await axios.get(`/api/v1/adminUser/remove_donor/${id}`)
+                    const res = await axios.get(`http://192.168.29.55/api/v1/adminUser/remove_donor/${id}`)
                     console.log(res)
                     toast.warning("Donor has been deleted!")
                     setReload(!reload)
@@ -168,7 +168,7 @@ const DonorList = () => {
 
     const getAvailableDonors = async () => {
         setLoadingPage(true)
-        const res = await axios.get('/api/v1/adminUser/get_donor_list/')
+        const res = await axios.get('http://192.168.29.55/api/v1/adminUser/get_donor_list/')
         console.log(res)
         setDonorList(res.data.donor_list)
         setLoadingPage(false)
@@ -176,7 +176,7 @@ const DonorList = () => {
 
     const adminLogout = () => {
         try{
-            axios.get('/api/v1/adminUser/admin_logout/').then((res)=>{
+            axios.get('http://192.168.29.55/api/v1/adminUser/admin_logout/').then((res)=>{
                 setLoadingPage(true)
                 localStorage.removeItem('adminCheck')
                 Swal.fire({

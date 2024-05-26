@@ -94,7 +94,7 @@ export default function LoginPage(props){
                             })
                             break
                     }
-                    const res = await axios.post(`/api/v1/${url}`, data)
+                    const res = await axios.post(`http://192.168.29.55/api/v1/${url}`, data)
                     console.log(res)
                     // setCheck(true)
                     toast.success("OTP Sent Successfully !",{
@@ -128,7 +128,7 @@ export default function LoginPage(props){
                console.log(otpVal)
                 try {
                     var token = getCookie('csrftoken')
-                    const res = await axios.post('/api/v1/donor/verify_otp/',JSON.stringify({otp : otpVal}),{
+                    const res = await axios.post('http://192.168.29.55/api/v1/donor/verify_otp/',JSON.stringify({otp : otpVal}),{
                         headers : {'X-CSRFToken': token}
                     })
                     console.log(res)
@@ -237,7 +237,7 @@ export default function LoginPage(props){
                                 <IconButton
                                     isRound={true}
                                     onClick={e => sendOtp(email)}
-                                    sx={{ ml: 'auto',mr : 24}}
+                                    sx={{ ml: 'auto',mr : {sx : 0 , md : 24}}}
                                     className='reg_btn'
                                     color="black" bg="#d7141450" 
                                     _hover={{color:'#f0e3e4' , bg: '#d71414'}} 
