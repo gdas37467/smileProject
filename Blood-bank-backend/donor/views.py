@@ -28,6 +28,8 @@ from django.core.mail import send_mail
 
 import random
 
+import random
+
 
 
 # Create your views here.
@@ -247,7 +249,7 @@ def verify_otp(request):
             
                     del request.session['email']
                     request.session.set_expiry(45*60)
-                    return JsonResponse({'success': 'OTP verified successfully'},status=200)
+                    return JsonResponse({'success': 'OTP verified successfully', "user_type" : type},status=200)
                 else:
                     return JsonResponse({'success': 'error', 'message': 'Invalid OTP or OTP has expired.'},status=400)
         except Exception as e:
@@ -321,7 +323,6 @@ def donor_send_otp(request):
         
         return JsonResponse({"success" : "OTP sent successfully"},status  =200)
     return JsonResponse({"error" : "Invalid request method"},status = 400)
-
 
 
 #get donor past records

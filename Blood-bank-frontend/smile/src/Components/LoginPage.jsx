@@ -237,7 +237,7 @@ export default function LoginPage(props){
                                 <IconButton
                                     isRound={true}
                                     onClick={e => sendOtp(email)}
-                                    sx={{ ml: 'auto',}}
+                                    sx={{ ml: 'auto',mr : 24}}
                                     className='reg_btn'
                                     color="black" bg="#d7141450" 
                                     _hover={{color:'#f0e3e4' , bg: '#d71414'}} 
@@ -245,6 +245,7 @@ export default function LoginPage(props){
                                     fontSize='16px'
                                     height='3rem'
                                     width='3rem'
+                                    
                                     icon={<ArrowForwardIosIcon />}
                                 />               
                             ) : (

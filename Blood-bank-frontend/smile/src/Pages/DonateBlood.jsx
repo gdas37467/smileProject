@@ -712,12 +712,12 @@ const DonateBlood = () => {
                                             initial={{ x : '100vw'}}
                                             whileInView={{ x : 0 }}
                                         >
-                                            <VStack>
 
                                                 <LoginPage 
                                                     setIsLogin={e => setIsLogin(!isLogin)}
                                                     type="donorLogin"
-                                                />
+                                                    />
+                                                    <VStack>
                                                 <Text
                                                     fontSize='md'
                                                     onClick={e => setIsLogin(!isLogin)} 

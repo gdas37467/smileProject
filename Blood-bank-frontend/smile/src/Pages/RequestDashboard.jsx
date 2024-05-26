@@ -236,7 +236,11 @@ export default function RequestDashboard() {
     const [disT,setDisT] = useState('')
     //Page Validation
     useEffect(()=>{
-
+        const token = localStorage.getItem('check');
+        if(!token || typeof token === 'string')
+            {
+                console.log(token)
+            }
         if(localStorage.getItem('check') !== null){
             const now  =  new Date().getTime()
             if(JSON.parse(localStorage.getItem('check')).expire < now){
@@ -285,22 +289,22 @@ export default function RequestDashboard() {
     //Handlers
     //Handles Modal Open and Close
     const handleOpen = () => {
-        // if(recDetails.isEligible){
-        //     if(disT > '22:00:00' && disT < '06:59:59'){
-        //         Swal.fire({
-        //             text : 'You can Register Patient after 7:00 AM',
-        //             icon : 'warning'
-        //         })
-        //     } else{
-        //         setOpen(true);
-        //     }
-        // }else{
-            //     Swal.fire({
-                //         text : `You have to wait ${recDetails.remainingDays} days before placing another Request.`,
-                //         icon : 'warning'
-                //     })
-                // }
-        setOpen(true);
+        if(recDetails.isEligible){
+            if(disT > '22:00:00' && disT < '06:59:59'){
+                Swal.fire({
+                    text : 'You can Register Patient after 7:00 AM',
+                    icon : 'warning'
+                })
+            } else{
+                setOpen(true);
+            }
+        }else{
+                Swal.fire({
+                        text : `You have to wait ${recDetails.remainingDays} days before placing another Request.`,
+                        icon : 'warning'
+                    })
+                }
+       
     }
     const handleClose = () => setOpen(false);
 

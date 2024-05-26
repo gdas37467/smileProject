@@ -79,7 +79,11 @@ const DonorList = () => {
         //API for matched donor
         console.log(id)
         try {
+<<<<<<< HEAD
             const res = await axios.get(`/api/v1/adminUser/confirm_donor/${id}`)
+=======
+            const res = await axios.get(`http://192.168.1.11:8000/api/v1/adminUser/confirm_donor/${id}`)
+>>>>>>> spaul
             console.log(res)
             toast.success(res.data.success)
             setReload(!reload)
@@ -96,7 +100,11 @@ const DonorList = () => {
         //API for matched donor
         console.log(id)
         try {
+<<<<<<< HEAD
             const res = await axios.get(`/api/v1/adminUser/confirm_loan/${id}` )
+=======
+            const res = await axios.get(`http://192.168.1.11:8000/api/v1/adminUser/confirm_loan/${id}` )
+>>>>>>> spaul
             toast.success('Donor Added For Loan Successfully')
             setReload(!reload)
 
@@ -111,7 +119,11 @@ const DonorList = () => {
     const sendSMS = async (id) =>{
         //API for matched donor
         try {
+<<<<<<< HEAD
             const res = await axios.get(`/api/v1/adminUser/send_requirement/${id}`)
+=======
+            const res = await axios.get(`http://192.168.1.11:8000/api/v1/adminUser/send_requirement/${id}`)
+>>>>>>> spaul
             toast.success(res.data.success)
             setReload(!reload)
 
@@ -127,7 +139,11 @@ const DonorList = () => {
         //API for matched donor
         console.log(id)
         try {
+<<<<<<< HEAD
             const res = await axios.get(`/api/v1/adminUser/loan_msg/${id}`)
+=======
+            const res = await axios.get(`http://192.168.1.11:8000/api/v1/adminUser/loan_msg/${id}`)
+>>>>>>> spaul
             console.log(res)
             toast.success('Reminder Sent Successfully')
             setReload(!reload)
@@ -152,7 +168,11 @@ const DonorList = () => {
         }).then(async (res) => {
             if(res.isConfirmed){
                 try {
+<<<<<<< HEAD
                     const res = await axios.get(`/api/v1/adminUser/remove_donor/${id}`)
+=======
+                    const res = await axios.get(`http://192.168.1.11:8000/api/v1/adminUser/remove_donor/${id}`)
+>>>>>>> spaul
                     console.log(res)
                     toast.warning("Donor has been deleted!")
                     setReload(!reload)
@@ -168,7 +188,11 @@ const DonorList = () => {
 
     const getAvailableDonors = async () => {
         setLoadingPage(true)
+<<<<<<< HEAD
         const res = await axios.get('/api/v1/adminUser/get_donor_list/')
+=======
+        const res = await axios.get('http://192.168.1.11:8000/api/v1/adminUser/get_donor_list/')
+>>>>>>> spaul
         console.log(res)
         setDonorList(res.data.donor_list)
         setLoadingPage(false)
@@ -176,7 +200,11 @@ const DonorList = () => {
 
     const adminLogout = () => {
         try{
+<<<<<<< HEAD
             axios.get('/api/v1/adminUser/admin_logout/').then((res)=>{
+=======
+            axios.get('http://192.168.1.11:8000/api/v1/adminUser/admin_logout/').then((res)=>{
+>>>>>>> spaul
                 setLoadingPage(true)
                 localStorage.removeItem('adminCheck')
                 Swal.fire({
