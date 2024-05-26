@@ -236,7 +236,11 @@ export default function RequestDashboard() {
     const [disT,setDisT] = useState('')
     //Page Validation
     useEffect(()=>{
-
+        const token = localStorage.getItem('check');
+        if(!token || typeof token === 'string')
+            {
+                console.log(token)
+            }
         if(localStorage.getItem('check') !== null){
             const now  =  new Date().getTime()
             if(JSON.parse(localStorage.getItem('check')).expire < now){
