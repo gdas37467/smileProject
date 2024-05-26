@@ -63,11 +63,7 @@ const Register = () => {
     //Admin Logout
     const adminLogout = () => {
         try{
-<<<<<<< HEAD
             axios.get('/api/v1/adminUser/admin_logout/').then((res)=>{
-=======
-            axios.get('http://192.168.1.11:8000/api/v1/adminUser/admin_logout/').then((res)=>{
->>>>>>> spaul
                 localStorage.removeItem('adminCheck')
                 Swal.fire({
                     title : 'Logout Successful',

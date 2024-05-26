@@ -51,7 +51,7 @@ def register(request) :
         bloodGroup = body['bloodGroup']
         phoneNumber = body['phoneNumber']
         #email = body['email']
-        otp = body['otp']
+        otp_submitted = body['otp']
         address = body['address']
         gender = body['gender']
         lastDonated = body['lastDonated']
@@ -77,16 +77,16 @@ def register(request) :
         
         try:
             
-            secret_key = request.session.get('secret_key')
-            print(secret_key)
-            totp = pyotp.TOTP(secret_key,interval=300)
-            status = totp.verify(otp)
-            print(status)
-            # email = request.session.get('email')
-            del request.session['email']
-            del request.session['secret_key']
+            # secret_key = request.session.get('secret_key')
+            # print(secret_key)
+            # totp = pyotp.TOTP(secret_key,interval=300)
+            # status = totp.verify(otp)
+            # print(f'sttus - >  {status}')
             
-            request.session['member_id'] = email
+            otp_data = request.session.get('otp')
+            
+            # email = request.session.get('email')
+            
 
             isDonor = True
             isRecipient = False
@@ -96,8 +96,24 @@ def register(request) :
 
             type = jwt.encode({'isDonor': isDonor,"isRecipient" : isRecipient}, key, algorithm='HS256')
             
-            if status == False:
-                return JsonResponse({"error" : "Incorrect OTP"  },status=400)
+            if otp_data:
+                otp_generated = otp_data.get('otp')
+                timestamp = otp_data.get('timestamp')
+                current_time = time.time()
+                print(f"current time - > {current_time}")
+                print(f"opt -> {otp_submitted}")
+                # Check if OTP is within the 5-minute validity period
+                if otp_generated == otp_submitted and current_time - timestamp <= 300:
+                    # OTP matched and is still valid, do further processing here
+                # OTP matched, do further processing here
+                    print(f'status : success')
+                    request.session["member_id"] = email
+            
+                    del request.session['email']
+                    request.session.set_expiry(45*60)
+                    return JsonResponse({'success': 'OTP verified successfully', "user_type" : type},status=200)
+                else:
+                    return JsonResponse({'success': 'error', 'message': 'Invalid OTP or OTP has expired.'},status=400)
             
 
         except Exception as e:
