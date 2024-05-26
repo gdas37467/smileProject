@@ -353,7 +353,7 @@ def get_donor_records(request):
             JsonResponse({"error" : "Something Went Wrong"},status=401)
 
         try :
-            donorList = Donor.objects.order_by("-totalDonation").all()
+            donorList = Donor.objects.order_by("-totalDonation")[:10]
             donor_list_data = []
             if donorList:
                 donor_list_data = [{'id': donor.id, 
