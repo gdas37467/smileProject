@@ -108,6 +108,7 @@ def register(request) :
                 # OTP matched, do further processing here
                     print(f'status : success')
                     request.session["member_id"] = email
+                    #ok
                     del request.session['email']
                  
                 else:
