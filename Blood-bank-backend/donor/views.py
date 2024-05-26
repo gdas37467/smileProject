@@ -26,13 +26,16 @@ from django.middleware.csrf import get_token
 import smtplib,ssl
 from django.core.mail import send_mail
 
-
+import random
 
 
 
 # Create your views here.
 key = settings.SECRET_KEY
 #print(key)
+
+def generate_otp():
+    return str(random.randint(100000, 999999))
 
 @csrf_protect
 def register(request) :
@@ -150,20 +153,23 @@ def send_otp(request):
         
         body  = json.loads(request.body)
         email = body['email'] 
+        get_token(request)
         #print(get_usage(request=request, fn=ratelimit))
         #was_limited = getattr(request, 'limited', False)
         if not email:
             return JsonResponse({'status': 'Email is required.'}, status=400)
 
-        secret_key = pyotp.random_base32()
-        #print(secret_key)
-        totp = pyotp.TOTP(secret_key, interval=300)  
-        otp = totp.now()
+        # secret_key = pyotp.random_base32()
+        # #print(secret_key)
+        # totp = pyotp.TOTP(secret_key, interval=300)  
+        # otp = totp.now()
     
-
+        otp = generate_otp()
         # Store the OTP and its creation time in the session
-        print(key)
-        request.session['secret_key'] = secret_key
+        request.session['otp'] = {
+                    'otp': otp,
+                    'timestamp': time.time()  # Add the timestamp when OTP is generated
+                }
         #request.session['otp_creation_time'] = time.time()
         request.session['email'] = email
         
@@ -196,20 +202,21 @@ def verify_otp(request):
     if request.method=="POST":
         try:
             body = json.loads(request.body)
-            otp = body['otp']
-            secret_key = request.session.get('secret_key')
-            print(secret_key)
-            totp = pyotp.TOTP(secret_key,interval=300)
-            status = totp.verify(otp)
-            print(status)
+            otp_submitted = body['otp']
+            # secret_key = request.session.get('secret_key')
+            # print(secret_key)
+            # totp = pyotp.TOTP(secret_key,interval=300)
+            # status = totp.verify(otp)
+            # print(f'sttus - >  {status}')
             email = request.session.get('email')
-            del request.session['email']
-            del request.session['secret_key']
+            otp_data = request.session.get('otp')
             
+            
+
             # request.session['member_id'] = email
 
-            request.session["member_id"] = email
-
+            
+            
             isDonor = False
             isRecipient = True
             donor = Donor.objects.filter(email=email).first()
@@ -220,12 +227,29 @@ def verify_otp(request):
             print("isrecipient" + str(isRecipient))
             type = jwt.encode({'isDonor': isDonor,"isRecipient" : isRecipient}, key, algorithm='HS256')
 
-            request.session.set_expiry(45*60)
             
-            if status == False:
-                return JsonResponse({"error" : "Incorrect OTP"  },status=400)
             
-            return JsonResponse({"success" : "OTP verification success " ,"user_type" : type},status=200)
+
+            
+
+            if otp_data:
+                otp_generated = otp_data.get('otp')
+                timestamp = otp_data.get('timestamp')
+                current_time = time.time()
+                print(f"current time - > {current_time}")
+                print(f"opt -> {otp_submitted}")
+                # Check if OTP is within the 5-minute validity period
+                if otp_generated == otp_submitted and current_time - timestamp <= 300:
+                    # OTP matched and is still valid, do further processing here
+                # OTP matched, do further processing here
+                    print(f'status : success')
+                    request.session["member_id"] = email
+            
+                    del request.session['email']
+                    request.session.set_expiry(45*60)
+                    return JsonResponse({'success': 'OTP verified successfully'},status=200)
+                else:
+                    return JsonResponse({'success': 'error', 'message': 'Invalid OTP or OTP has expired.'},status=400)
         except Exception as e:
             print(e)
             return JsonResponse({"error" : "OTP verification Failed"  },status=400)
@@ -242,19 +266,26 @@ def donor_send_otp(request):
     if request.method== "POST": 
         body  = json.loads(request.body)
         email  = body['email'] 
+        get_token(request)
         if not email:
             return JsonResponse({'status': 'Email is required.'}, status=400)
         donor = Donor.objects.filter(email= email).first()
         if donor is None:
             return JsonResponse({"error" : "Donor Not Registered"},status = 401)
-        secret_key = pyotp.random_base32()
-        print(secret_key)
-        totp = pyotp.TOTP(secret_key, interval=300)  
-        otp = totp.now()
+        # secret_key = pyotp.random_base32()
+        # print(secret_key)
+        # totp = pyotp.TOTP(secret_key, interval=300)  
+        # otp = totp.now()
+        otp = generate_otp()
+        # Store the OTP and its creation time in the session
+        request.session['otp'] = {
+                    'otp': otp,
+                    'timestamp': time.time()  # Add the timestamp when OTP is generated
+                }
      
 
         # Store the OTP and its creation time in the session
-        request.session['secret_key'] = secret_key
+        #request.session['secret_key'] = secret_key
         #request.session['otp_creation_time'] = time.time()
         request.session['email'] = email
         

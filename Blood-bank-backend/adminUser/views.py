@@ -21,7 +21,7 @@ from django.core.files.storage import FileSystemStorage
 
 
 from smtplib import SMTPException
-import random
+
 from django.conf import settings
 import uuid
 import jwt
@@ -48,8 +48,7 @@ def authorize_admin(request):
     user  = User.objects.filter(username = username).first()
     if user == None or user.is_superuser == False:
         return False
-def generate_otp():
-    return str(random.randint(100000, 999999))
+
 
 
 #completed
