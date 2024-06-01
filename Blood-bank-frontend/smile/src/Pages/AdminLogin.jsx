@@ -42,7 +42,7 @@ const AdminLogin = () => {
                     const now = new Date().getTime()
                     let adminCheck ={
                         isAdmin: res.data.is_Admin,
-                        expire : now + 45*60000
+                        expire : now + 24*60*60*1000
                     }
                     localStorage.setItem('adminCheck', JSON.stringify(adminCheck))
                     Swal.fire({
