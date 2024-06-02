@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import { Backdrop, Box, Button, Fade, IconButton, Modal, Typography } from '@mui/material'
 import { ToastContainer, toast } from 'react-toastify'
-import {BallTriangle, LineWave} from 'react-loader-spinner';
+import {BallTriangle,FallingLines, LineWave} from 'react-loader-spinner';
 import CloseIcon from '@mui/icons-material/Close';
 
 
@@ -261,17 +261,18 @@ const RequestList = () => {
                     {
                         loadingPage ? (
                             <>
-                               
-                                    <BallTriangle
-                                        height={100}
-                                        width={100}
-                                        radius={5}
-                                        color="#EAEAEA"
-                                        ariaLabel="ball-triangle-loading"
-                                        wrapperClass=""
-                                        visible={true}
-                                    />
-                              
+                                <Box height='100%' width='100%' display='flex' justifyContent='center' alignItems='center' >
+                                        <FallingLines
+                                            height={100}
+                                            width={100}
+                                            radius={5}
+                                            color="#EAEAEA"
+                                            ariaLabel="ball-triangle-loading"
+                                            wrapperClass=""
+                                            visible={true}
+                                        />
+                                
+                                </Box>
                             </>
                         ) : (
                             <>
@@ -335,22 +336,25 @@ const RequestList = () => {
                             {
                                 modalLoad ? (
                                     <>
-                                        <LineWave
-                                            visible={true}
-                                            height="100"
-                                            width="100"
-                                            color="#191818"
-                                            ariaLabel="line-wave-loading"
-                                            wrapperStyle={{
-                                                justifyContent: "center",
-                                                alignItems: "center",
-                                                height: "100%"
-                                            }}
-                                            wrapperClass=""
-                                            firstLineColor=""
-                                            middleLineColor=""
-                                            lastLineColor=""
-                                        />
+                                        <Box height='100%' width='100%' display='flex' justifyContent='center' alignItems='center' >
+
+                                            <FallingLines
+                                                visible={true}
+                                                height="100"
+                                                width="100"
+                                                color="#191818"
+                                                ariaLabel="line-wave-loading"
+                                                wrapperStyle={{
+                                                    justifyContent: "center",
+                                                    alignItems: "center",
+                                                    height: "100%"
+                                                }}
+                                                wrapperClass=""
+                                                firstLineColor=""
+                                                middleLineColor=""
+                                                lastLineColor=""
+                                            />
+                                        </Box>
                                      </>
                                 ) : (
                                     <>

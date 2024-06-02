@@ -6,8 +6,8 @@ import ComplexTable from '../Components/ComplexTable'
 import AdminNavbar from '../Components/AdminNavbar'
 import Swal from 'sweetalert2'
 import { ToastContainer, toast } from 'react-toastify'
-import {BallTriangle} from 'react-loader-spinner';
-import { Button } from '@mui/material'
+import {BallTriangle , FallingLines} from 'react-loader-spinner';
+import { Box, Button } from '@mui/material'
 import TableComp from '../Components/Table'
 
 
@@ -168,9 +168,19 @@ const DonorList = () => {
 
     const getAvailableDonors = async () => {
         setLoadingPage(true)
-        const res = await axios.get('/api/v1/adminUser/get_donor_list/')
-        console.log(res)
-        setDonorList(res.data.donor_list)
+        try {
+            const res = await axios.get('/api/v1/adminUser/get_donor_list/')
+            console.log(res)
+            setDonorList(res.data.donor_list)
+            
+        } catch (error) {
+            Swal.fire({
+                title : error.response.data.status,
+                icon : 'error'
+            })
+        }
+
+
         setLoadingPage(false)
     }
 
@@ -210,16 +220,19 @@ const DonorList = () => {
                     {
                         loadingPage ? (
                             <>
-                                <BallTriangle
-                                    height={100}
-                                    width={100}
-                                    radius={5}
-                                    color="#EAEAEA"
-                                    ariaLabel="ball-triangle-loading"
-                                    wrapperStyle={{}}
-                                    wrapperClass=""
-                                    visible={true}
-                                />
+                                <Box height='100%' width='100%' display='flex' justifyContent='center' alignItems='center' >
+
+                                    <FallingLines
+                                        height={100}
+                                        width={100}
+                                        radius={5}
+                                        color="#EAEAEA"
+                                        ariaLabel="ball-triangle-loading"
+                                        wrapperStyle={{}}
+                                        wrapperClass=""
+                                        visible={true}
+                                    />
+                                </Box>
                             </>
                         ) : (
                             <>
