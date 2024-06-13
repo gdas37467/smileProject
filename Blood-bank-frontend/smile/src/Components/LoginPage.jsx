@@ -136,7 +136,7 @@ export default function LoginPage(props){
                         const now = new Date().getTime()
                         let check = {
                             user : res.data.user_type,
-                            expire : now + 24*60*60000
+                            expire : now + 44*60*1000
                         }
                         localStorage.setItem('check',JSON.stringify(check))
                         Swal.fire({
@@ -237,7 +237,7 @@ export default function LoginPage(props){
                                 <IconButton
                                     isRound={true}
                                     onClick={e => sendOtp(email)}
-                                    sx={{ ml: 'auto',mr : {sx : 0 , md : 24}}}
+                                    sx={{ ml: 'auto',mr :{ xs : 0, md : 24}}}
                                     className='reg_btn'
                                     color="black" bg="#d7141450" 
                                     _hover={{color:'#f0e3e4' , bg: '#d71414'}} 

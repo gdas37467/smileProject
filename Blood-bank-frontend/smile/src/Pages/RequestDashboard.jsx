@@ -38,7 +38,7 @@ import DynamicFormIcon from '@mui/icons-material/DynamicForm';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import {BallTriangle} from 'react-loader-spinner';
+import {BallTriangle, FallingLines} from 'react-loader-spinner';
 import getCookie from '../getToken';
 
 
@@ -1047,20 +1047,23 @@ export default function RequestDashboard() {
                                     </> 
                                 ) : (
                                     <>
-                                        <BallTriangle
-                                            height={100}
-                                            width={100}
-                                            radius={5}
-                                            color="#EAEAEA"
-                                            ariaLabel="ball-triangle-loading"
-                                            wrapperStyle={{
-                                                justifyContent: "center",
-                                                alignItems: "center",
-                                                height: "100%"
-                                            }}
-                                            wrapperClass=""
-                                            visible={true}
-                                        />
+                                        <Box height='100%' width='100%' display='flex' justifyContent='center' alignItems='center' >
+
+                                            <FallingLines
+                                                height="100"
+                                                width="100"
+                                                // radius={5}
+                                                color="#EAEAEA"
+                                                ariaLabel="falling-circles-loading"
+                                                wrapperStyle={{
+                                                    justifyContent: "center",
+                                                    alignItems: "center",
+                                                    height: "100%"
+                                                }}
+                                                // wrapperClass=""
+                                                visible={true}
+                                            />
+                                        </Box>
                                     </>
                                 )
                             }

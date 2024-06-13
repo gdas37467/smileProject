@@ -14,10 +14,11 @@ import { Box, Chip, Paper } from '@mui/material';
 const tableStyle = {
     mt:5,
     mr: 4,
-    overflow : 'hidden',
+    overflowY : 'scroll',
     backgroundColor: '#daccca',
     p : 2 ,
-    maxWidth : 360
+    maxWidth : 360,
+    maxHeight : 200
 }
 const tableStyle2 = {
     mt:5,
@@ -39,7 +40,7 @@ const TableComp = (props) => {
 
                     <Box component={Paper} sx={tableStyle} >
                         <TableContainer sx={{}}>
-                            <Table stickyHeader sx={{ maxWidth: 450, maxHeight : 300 , }} aria-label="simple table">
+                            <Table stickyHeader sx={{ maxWidth: 450, maxHeight : 200 , overflowY : 'scroll' }} aria-label="simple table">
                                 <TableHead >
                                     <TableRow>
                                         {props.tableColumn.map((column)=>{

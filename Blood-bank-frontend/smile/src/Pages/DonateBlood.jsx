@@ -334,7 +334,7 @@ const DonateBlood = () => {
                 const now = new Date().getTime()
                         let check = {
                             user : res.data.user_type,
-                            expire : now + 20*60000
+                            expire : now + 44*60*1000
                         }
                         localStorage.setItem('check',JSON.stringify(check))
                         Swal.fire({

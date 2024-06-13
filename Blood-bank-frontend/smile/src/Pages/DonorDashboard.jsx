@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Button,Typography, Avatar, Card, CardContent, Paper, Divider} from '@mui/material';
+import { Button,Typography, Avatar, Card, CardContent, Paper, Divider, Box} from '@mui/material';
 import TableComp from '../Components/Table'
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
-import { ChakraProvider, Grid, GridItem, Skeleton, } from '@chakra-ui/react';
-import {BallTriangle} from 'react-loader-spinner';
+import {BallTriangle, FallingLines} from 'react-loader-spinner';
 
 
 // Avatar Color
@@ -259,20 +258,23 @@ const DonorDashboard = () => {
                                     </>  
                                     ) : (
                                         <>
-                                            <BallTriangle
-                                                height={100}
-                                                width={100}
-                                                radius={5}
-                                                color="#EAEAEA"
-                                                ariaLabel="ball-triangle-loading"
-                                                wrapperStyle={{
-                                                    justifyContent: "center",
-                                                    alignItems: "center",
-                                                    height: "100%"
-                                                }}
-                                                wrapperClass=""
-                                                visible={true}
-                                            />
+                                            <Box height='100%' width='100%' display='flex' justifyContent='center' alignItems='center' >
+
+                                                <FallingLines
+                                                    height={100}
+                                                    width={100}
+                                                    radius={5}
+                                                    color="#EAEAEA"
+                                                    ariaLabel="ball-triangle-loading"
+                                                    wrapperStyle={{
+                                                        justifyContent: "center",
+                                                        alignItems: "center",
+                                                        height: "100%"
+                                                    }}
+                                                    wrapperClass=""
+                                                    visible={true}
+                                                />
+                                            </Box>
                                         </>
                                     )   
                                 }
