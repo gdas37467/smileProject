@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 
 
 const style = {
-    height : '95vh',
+    height : {lg : '95vh', xs : '80vh'},
     width : '100%',
     display : 'flex',
     flexDirection : 'column',
@@ -14,15 +14,15 @@ const style = {
     gap : '1rem',
     paddingTop : '8rem',
     '& img' : {
-        height : '50rem',
+        height : {lg : '50rem', xs : '30rem'},
         width : 'auto',
     },
     '& h3' : {
-        fontSize : '1.8rem',
+        fontSize : {lg : '1.8rem', xs : '1.5rem'},
         fontWeight : 500,
     },
     '& h5' : {
-        fontSize : '1.5rem',
+        fontSize : {lg : '1.5rem', xs : '1rem'},
         fontWeight : 300,
         cursor : 'pointer',
         textDecoration : 'underline',

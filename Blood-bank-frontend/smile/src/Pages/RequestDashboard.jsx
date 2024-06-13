@@ -1,9 +1,7 @@
 import React, { useState , useEffect, useRef} from 'react'
 import { Typography , Stack, Button, Modal, Backdrop, Fade, Stepper, Step, StepLabel, IconButton} from '@mui/material';
-import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import LoadingButton from '@mui/lab/LoadingButton';
-import CreateIcon from '@mui/icons-material/Create';
 import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
 import { styled } from '@mui/material/styles';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
@@ -235,12 +233,7 @@ export default function RequestDashboard() {
     // Registration Disabled
     const [disT,setDisT] = useState('')
     //Page Validation
-    useEffect(()=>{
-        const token = localStorage.getItem('check');
-        if(!token || typeof token === 'string')
-            {
-                console.log(token)
-            }
+    useEffect(()=>{        
         if(localStorage.getItem('check') !== null){
             const now  =  new Date().getTime()
             if(JSON.parse(localStorage.getItem('check')).expire < now){
@@ -823,7 +816,7 @@ export default function RequestDashboard() {
 
         try {
             var token = getCookie('csrftoken')
-            const res = await axios.post('http://192.168.29.55/api/v1/recipient/request_blood/',formData,{
+            const res = await axios.post('http://192.168.29.55:8000/api/v1/recipient/request_blood/',formData,{
                 headers : {'X-CSRFToken': token}
             });
             console.log(res)
@@ -867,7 +860,7 @@ export default function RequestDashboard() {
     const loadAPI = async () =>{
         setLoadingPage(true)
         try {
-            const res = await axios.get('http://192.168.29.55/api/v1/recipient/get_recipient_records/')
+            const res = await axios.get('http://192.168.29.55:8000/api/v1/recipient/get_recipient_records/')
             console.log(res)       
             let pendingReq = res.data.pastRecord.filter(el => el.status === 'Pending')
             let pastRecord = res.data.pastRecord.filter(el => el.status !== 'Pending')
@@ -886,7 +879,7 @@ export default function RequestDashboard() {
     //Logout API
     const logout = () => {
         try{
-            axios.get('http://192.168.29.55/api/v1/donor/logout/').then((res)=>{
+            axios.get('http://192.168.29.55:8000/api/v1/donor/logout/').then((res)=>{
                 setLoadingPage(true)
                 localStorage.removeItem('check')
                 Swal.fire({
