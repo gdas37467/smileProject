@@ -291,14 +291,14 @@ const DonateBlood = () => {
                         position : toast.POSITION.TOP_RIGHT
                     })
                 }else{
-                    toast.error(res.data.error , {
+                    toast.error(res.data.error || 'Something Went Wrong!' , {
                         position : toast.POSITION.TOP_RIGHT
                     })
                 }
                 console.log(res)
                 
             }catch(err){
-                toast.error(err.response.data.error,{
+                toast.error(err.response.data.error || 'Something Went Wrong',{
                     position : toast.POSITION.TOP_RIGHT
                 })
             }
@@ -343,13 +343,13 @@ const DonateBlood = () => {
                         })
             }else{
                 Swal.fire({
-                    text : res.data.error,
+                    text : res.data.error || 'Something went wrong!',
                     icon : 'error'
                 })
             }
         } catch (err) {
             Swal.fire({
-                text : err.response.data.error,
+                text : err.response.data.error || 'Something went wrong!',
                 icon : 'error'
             })
         }

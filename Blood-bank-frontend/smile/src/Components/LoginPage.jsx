@@ -98,13 +98,13 @@ export default function LoginPage(props){
                     console.log(res)
                     // setCheck(true)
                     toast.success("OTP Sent Successfully !",{
-                        position : toast.POSITION.TOP_CENTER
+                        position : toast.POSITION.TOP_RIGHT
                     })
                 } catch (err) {
                     console.log(err)
                     setCheck(false)
-                    toast.error(err.response.data.error,{
-                        position : toast.POSITION.TOP_CENTER
+                    toast.error(err.response.data.error || 'Something Went Wrong',{
+                        position : toast.POSITION.TOP_RIGHT
                     })                
                 }
 
@@ -125,7 +125,6 @@ export default function LoginPage(props){
                 return
             }else{
                 setIsLoading(true)
-               console.log(otpVal)
                 try {
                     var token = getCookie('csrftoken')
                     const res = await axios.post('/api/v1/donor/verify_otp/',JSON.stringify({otp : otpVal}),{
@@ -171,7 +170,7 @@ export default function LoginPage(props){
                 } catch (error) {
                     console.log(error)
                     Swal.fire({
-                        title : error.response.statusText , 
+                        title : error.response.data.error || 'Something went wrong!' , 
                         icon  : 'error'
                     })                
                     setIsLoading(false)
@@ -190,14 +189,7 @@ export default function LoginPage(props){
                 setEmail(email)
             }
         }
-        // Handle Next
-        const handleNext = () =>{
-            console.log('check')
-            setCheck(true)
-        }
-        const login = () => {
-            console.log('logging in')
-        }
+      
 
 
 
@@ -291,7 +283,6 @@ export default function LoginPage(props){
                                                         </PinInput>
                                                     </HStack>
                                                     <Button 
-                                                        // onClick={handleNext} 
                                                         color="black" bg="#d7141450" 
                                                         _hover={{color:'#f0e3e4' , bg: '#d71414'}} 
                                                         className='reg_btn'

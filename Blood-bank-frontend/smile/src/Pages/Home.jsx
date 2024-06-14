@@ -3,8 +3,8 @@ import HomePage from '../assets/NewHome.svg'
 import { motion } from 'framer-motion'
 import axios from 'axios'
 import { Rings } from 'react-loader-spinner';
-import { Box, Button } from '@mui/material';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import { Box, Button, Typography } from '@mui/material';
+import WaterDropIcon from '@mui/icons-material/WaterDrop';
 import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
 import { useNavigate } from 'react-router-dom';
 
@@ -43,9 +43,23 @@ const sentence = {
 }
 
 const styleBox = {
-    display : 'flex',
-    gap : {lg : '5rem', xs: '1rem'},
-    alignSelf : 'center',
+    box1 : {
+        // display : 'flex',
+        // gap : {lg : '5rem', xs: '1rem'},
+        alignSelf : 'flex-end',
+        padding: {lg : '0 10rem 0 15rem', xs: '0 2.1rem'},
+    },
+    box2 : {
+        margin : '4rem 1rem',
+        backgroundColor : '#EAEAEA',
+        padding : '2rem 3rem',
+        display : 'flex',
+        flexDirection : 'column',
+        alignItems : 'center',
+        gap : {lg : '2rem', xs : '1rem'},
+        boxShadow: '0 0 50px rgba(0,0,0,0.5)',
+
+    }
     
 }
 
@@ -63,7 +77,7 @@ const Home = () => {
             const res = await axios.get('/api/v1/adminUser/getLeaderboardImages/')
             setImages(res.data.data)
         }catch(e){
-            console.log(e.data.status)
+            console.log('Something went wrong')
         }
         setLoadPage(false)
     }
@@ -100,14 +114,14 @@ const Home = () => {
                             <div className="landing">
                                 <div  className="left">
                                     <motion.h5 variants={sentence} initial='initial' animate='animate'>
-                                        Donate Your Blood to Us, Save More Life Together
+                                        Give the Gift of Life by Donating Blood
                                     </motion.h5>
 
                                     <motion.p variants={sentence} initial='initial' animate='animateP'>
-                                        Join us in our mission to save lives and build a healthier, more connected community. Together, we can make a difference.
+                                        Join our incredible community of over <b>2,000</b> active donors who are making a difference every day. Your donation can save lives—become a hero today!
                                     </motion.p>
-                                    <Box sx={styleBox}>
-                                        <Button variant='contained' startIcon={<PersonAddIcon sx={{height : {xs : '1rem', lg : '1.8rem'}}} />}
+                                    <Box sx={styleBox.box1}>
+                                        {/* <Button variant='contained' startIcon={<PersonAddIcon sx={{height : {xs : '1rem', lg : '1.8rem'}}} />}
                                             sx={{
                                                     backgroundColor : '#d71414',
                                                     borderRadius : '1rem',
@@ -123,11 +137,11 @@ const Home = () => {
                                                 onClick={() => navigate('/request')}
                                         >
                                             Register Now
-                                        </Button>
-                                        <Button variant='contained' endIcon={<VolunteerActivismIcon sx={{height : {xs : '1rem', lg : '1.8rem'}}} />}
+                                        </Button> */}
+                                        <Button variant='contained' endIcon={<VolunteerActivismIcon sx={{height : {xs : '1rem', lg : '1.8rem'} , width : 'auto' }} />}
                                             sx={{
                                                     backgroundColor : '#d71414',
-                                                    borderRadius : '1rem',
+                                                    borderRadius : {lg : '1rem', xs : '0.5rem'},
                                                     color : '#f0e3e4',
                                                     fontWeight : 'bold',
                                                     fontSize : {lg : '1rem', xs : '0.6rem'},
@@ -135,18 +149,45 @@ const Home = () => {
                                                         backgroundColor : '#d71414',
                                                         color : '#f0e3e4',
                                                     },
-                                                    height : { lg : '4rem',xs : '1.5rem'}
+                                                    height : { lg : '4rem',xs : '1.5rem'},
 
                                                 }}
                                                 onClick={() => navigate('/donate')}
                                         >
-                                            Join Us
+                                            Join Us Today
                                         </Button>
                                     </Box>
                                     
                                 </div>
                                 <img src={HomePage} alt="HomePage" />
                             </div>
+
+                            <Box sx={styleBox.box2}>
+                                        <Typography variant='h4' sx={{display : 'flex', alignItems : 'center', fontSize : {lg : '1.9rem' , xs : '0.9rem'} , color : '#191818'}} >
+                                            If you need blood or know someone who does, don't hesitate to contact us. We're here to offer assistance and support.
+                                        </Typography>
+                                        <Button variant='contained' startIcon={<WaterDropIcon sx={{height : {xs : '1rem', lg : '1.8rem'}, width : 'auto'  }} />}
+                                            sx={{
+                                                    backgroundColor : '#d71414',
+                                                    borderRadius : {lg : '1rem', xs : '0.5rem'},
+                                                    color : '#f0e3e4',
+                                                    fontWeight : 'bold',
+                                                    fontSize : {lg : '1rem', xs : '0.6rem'},
+                                                    "&:hover" : {
+                                                        backgroundColor : '#d71414',
+                                                        color : '#f0e3e4',
+                                                    },
+                                                    height : { lg : '4rem',xs : '1.5rem'},
+                                                    width : '15rem'
+
+                                                }}
+                                                onClick={() => navigate('/request')}
+                                        >
+                                            Request Blood
+                                        </Button> 
+                            </Box>
+
+
                             {/* ------------ About Section ------------- */}
                             <div className="about">
                                 <div className="about_content">

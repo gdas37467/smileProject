@@ -56,9 +56,8 @@ const AdminLogin = () => {
                     setIsLoading(false)
                 }
             } catch (error) {
-                console.log(error)
                 Swal.fire({
-                    title : "Something went wrong",
+                    title : error.response.data.error || "Something went wrong!",
                     icon : 'error'
                 })
                 setIsLoading(false)
