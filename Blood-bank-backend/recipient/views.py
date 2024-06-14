@@ -102,8 +102,8 @@ def request_blood(request):
         start_time = datetime.time(7, 0, 0)  
         end_time = datetime.time(17, 0, 0)
 
-        # if (start_time <= current_time <=end_time ) is not True:
-        #     return JsonResponse({"error" : "You can request blood between 7 AM and 5 PM"}, status=500)
+        if (start_time <= current_time <=end_time ) is not True:
+            return JsonResponse({"error" : "You can request blood between 7 AM and 5 PM"}, status=500)
 
         try:
             recipient = Recipient.objects.filter((Q(email=email) | Q(phoneNumber=phoneNumber)) & Q(status__in = ['Confirmed' ,'Pending'])).order_by("-requestDate").first()

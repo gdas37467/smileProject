@@ -283,7 +283,7 @@ export default function RequestDashboard() {
     //Handles Modal Open and Close
     const handleOpen = () => {
         if(recDetails.isEligible){
-            if(disT > '22:00:00' && disT < '06:59:59'){
+            if(disT > '00:01:00' && disT < '06:59:59'){
                 Swal.fire({
                     text : 'You can Register Patient after 7:00 AM',
                     icon : 'warning'
