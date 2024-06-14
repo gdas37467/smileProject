@@ -358,9 +358,10 @@ label+.css-v4u5dn-MuiInputBase-root-MuiInput-root, label + .css-zrqpq1 {
                     width: 30rem;
                     box-shadow: 0 0 50px rgba(0,0,0,0.5);
                     background-color: #fff7f7;
+                    aspect-ratio: 16/9;
                     // border: 2px solid #d22228;
                     & img{
-                        object-fit: contain;
+                        object-fit: cover;
                         box-shadow: 0 0 7rem rgba(0,0,0,0.5);
                         height: 100%;
                         width: 100%;
