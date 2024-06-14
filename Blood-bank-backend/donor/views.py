@@ -342,7 +342,7 @@ def donor_send_otp(request):
 
 #get donor past records
 
-@csrf_protect
+@csrf_exempt
 def get_donor_records(request):
     if request.method == "GET":
         email = request.session.get('member_id')

@@ -721,3 +721,22 @@ def get_total_quantity(request):
     if request.method=="GET":
         calenderObj = Calender.objects.first()
         return JsonResponse({'quantity' : calenderObj.quantity},status=200)
+
+@csrf_exempt
+def get_top_donors(request):
+    if request.method == "GET":
+        try:
+            donorList = Donor.objects.order_by("-totalDonation")[:10]
+            donor_list_data = []
+            if donorList:
+                donor_list_data = [{'id': donor.id, 
+                                    'firstName': donor.firstName,
+                                    'lastName': donor.lastName,
+                                    
+                                    'totalDonation' : donor.totalDonation,
+                                    } for donor in donorList]
+                print(donor_list_data)
+        except Exception as e:
+            JsonResponse({"error" : "Error while fetching data"},status=500)
+        return JsonResponse({"status" : "Data fetched","donorList" : donor_list_data },status=200)
+    return JsonResponse({"error" : "Invalid Request Method"},status = 400)

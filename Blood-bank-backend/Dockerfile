@@ -22,6 +22,7 @@ RUN python manage.py makemigrations recipient
 RUN python manage.py migrate
 
 RUN python manage.py crontab add
+RUN python manage.py crontab add
  
 
 #CMD cron -f & python manage.py runserver 0.0.0.0:8000

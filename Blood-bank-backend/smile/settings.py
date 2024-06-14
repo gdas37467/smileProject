@@ -255,7 +255,7 @@ EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND')
 
 #cron job
 CRONJOBS = [
-    ('* * * * *', 'smile.cronjob.updateUnits', '>> ' + os.path.join(BASE_DIR,'log/debug7.log' + ' 2>&1 ')),
+    ('*/2 * * * *', 'smile.cronjob.updateUnits', '>> ' + os.path.join(BASE_DIR,'log/debug7.log' + ' 2>&1 ')),
     # Add more cron jobs as needed
 ]
 
