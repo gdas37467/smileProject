@@ -219,6 +219,10 @@ def confirmRecipientDonation(request,recipient_id):
         recipient_id = uuid.UUID(recipient_id) 
         try:
             recipient = Recipient.objects.filter(id = recipient_id).first()
+            if recipient.status == "Rejected":
+                dayQuantity = Calender.objects.first()
+                dayQuantity.quantity-=1
+                dayQuantity.save()
             recipient.status = "Confirmed"
             recipient.save()
             return JsonResponse({"status" : "Request approved successfully"},status=200)
