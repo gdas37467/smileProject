@@ -75,11 +75,13 @@ function AdminNavbar (){
             const res = await axios.post('/api/v1/adminUser/addPhotos/',formData,{
                 headers : {'X-CSRFToken': token}
             })
+            console.log(res)
             toast.success('Images added successfully!')
             setOpen(false)
             setSelectedImgs([])
         } catch (error) {
-            toast.error('Something went wrong!')
+            console.log(error)
+            toast.error( error.response.data.error || 'Something went wrong!')
         }
 
     }

@@ -86,7 +86,7 @@ const DonorList = () => {
 
         } catch (error) {
             Swal.fire({
-                text : error.response.data.error,
+                text : error.response.data.error || 'Something went wrong!',
                 icon : 'error',
             })
         }
@@ -102,7 +102,7 @@ const DonorList = () => {
 
         } catch (error) {
             Swal.fire({
-                text : 'Something went Wrong',
+                text : error.response.data.error || 'Something went Wrong',
                 icon : 'error',
             })
         }
@@ -117,7 +117,7 @@ const DonorList = () => {
 
         } catch (error) {
             Swal.fire({
-                text : 'Message Not Sent',
+                text : error.response.data.error || 'Message Not Sent',
                 icon : 'error',
             })
         }
@@ -134,7 +134,7 @@ const DonorList = () => {
 
         } catch (error) {
             Swal.fire({
-                text : 'Reminder Not Sent',
+                text : error.response.data.error || 'Reminder Not Sent',
                 icon : 'error',
             })
         }
@@ -157,8 +157,7 @@ const DonorList = () => {
                     toast.warning("Donor has been deleted!")
                     setReload(!reload)
                 } catch (error) {
-                    console.log(error)
-                    toast.error(error.response.data.error || error.response.statusText)
+                    toast.error(error.response.data.error || 'Something went wrong!')
                 }
             }
         })
@@ -175,7 +174,7 @@ const DonorList = () => {
             
         } catch (error) {
             Swal.fire({
-                title : error.response.data.status,
+                title : error.response.data.error || 'Something went wrong!',
                 icon : 'error'
             })
         }
@@ -200,7 +199,7 @@ const DonorList = () => {
             })
         }catch(err){
             Swal.fire({
-                title : 'Something Went Wrong',
+                title : err.response.data.error || 'Something Went Wrong!',
                 icon : 'error'
             })
         }
