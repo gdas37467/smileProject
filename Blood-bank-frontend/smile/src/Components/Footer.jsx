@@ -45,7 +45,7 @@ const Footer = () => {
                         <div className="part3">
                             
                                 <div className="footer_text">
-                                    <MapPin size={26} className='con_icons'color="#191818" weight="duotone" /> <p>  Lane No. -2 , Vivekananda Road, Jagadish Basu lane, Silchar - 788 007</p>
+                                    <MapPin size={26} className='con_icons'color="#191818" weight="duotone" /> <p>  Lane No. : 2 , Vivekananda Road, Jagadish Basu lane, Silchar - 788 007</p>
                                 </div>
                                 <div className="footer_text">
                                     <Phone size={26} className='con_icons' color="#191818" weight="duotone" /> <p>  +91 9435071059 </p>

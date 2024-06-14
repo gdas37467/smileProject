@@ -37,7 +37,6 @@ const AdminLogin = () => {
             try {
                 setIsLoading(true)
                 const res = await axios.post('http://192.168.29.55:8000/api/v1/adminUser/admin_login/', JSON.stringify(data))
-                console.log(res)
                 if('success' in res.data){
                     const now = new Date().getTime()
                     let adminCheck ={
@@ -56,9 +55,8 @@ const AdminLogin = () => {
                     setIsLoading(false)
                 }
             } catch (error) {
-                console.log(error)
                 Swal.fire({
-                    title : "Something went wrong",
+                    title : error.response.data.error || "Something went wrong!",
                     icon : 'error'
                 })
                 setIsLoading(false)

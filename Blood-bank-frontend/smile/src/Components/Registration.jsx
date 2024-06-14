@@ -289,7 +289,7 @@ const Registration = (props) => {
             })
             setReload(!reload)
         } catch (error) {
-            toast.error(error.response.data.error || error.response.statusText)
+            toast.error(error.response.data.error || 'Something went wrong!')
             setReload(!reload)
         }
     }
@@ -342,7 +342,7 @@ const Registration = (props) => {
                 address : false,
             })
         } catch (error) {
-            toast.error(error.response.statusText || error.response.data.error)
+            toast.error(error.response.data.error || 'Something went wrong!')
         }
     }
 

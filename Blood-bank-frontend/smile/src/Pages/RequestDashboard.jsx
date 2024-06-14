@@ -841,7 +841,7 @@ export default function RequestDashboard() {
             }else{
 
                 Swal.fire({
-                    text : error.response.data.error,
+                    text : error.response.data.error || 'Something went wrong!',
                     icon : 'warning'
                 }).then((res)=>{
                     setLoadingBtn(false)
@@ -870,7 +870,7 @@ export default function RequestDashboard() {
 
         } catch (error) {
             console.log(error)
-            toast.error(error.resoponse.data.error || error.response.statusText, {
+            toast.error(error.resoponse.data.error || 'Something Went Wrong!', {
                 position : toast.POSITION.TOP_RIGHT
             })
         }
@@ -893,7 +893,7 @@ export default function RequestDashboard() {
             })
         }catch(err){
             Swal.fire({
-                title : 'Something Went Wrong',
+                title : err.response.data.error || 'Something Went Wrong!',
                 icon : 'error'
             })
         }

@@ -112,7 +112,7 @@ const DonorDashboard = () => {
             setDonorDetails(res.data.donorDetails)
         } catch (error) {
             Swal.fire({
-                text : error.response.data.error,
+                text : error.response.data.error || 'Something went wrong!',
                 icon : 'error'
             })
         }
@@ -151,7 +151,7 @@ const DonorDashboard = () => {
             })
         }catch(err){
             Swal.fire({
-                title : 'Something Went Wrong',
+                title : err.response.data.error || 'Something Went Wrong!',
                 icon : 'error'
             })
         }

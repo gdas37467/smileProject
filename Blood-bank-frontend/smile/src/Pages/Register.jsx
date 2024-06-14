@@ -76,7 +76,7 @@ const Register = () => {
             })
         }catch(err){
             Swal.fire({
-                title : 'Something Went Wrong',
+                title : err.response.data.error || 'Something Went Wrong!',
                 icon : 'error'
             })
         }

@@ -130,7 +130,7 @@ const RequestList = () => {
                     })
                 } catch (error) {
                     Swal.fire({
-                        text : error.response.data.error,
+                        text : error.response.data.error || 'Something went wrong!',
                         icon : 'error'
                     })
                 }
@@ -150,7 +150,7 @@ const RequestList = () => {
             console.log(res)
             toast.success( res.data.status)
         } catch (error) {
-            toast.error(error.response.data.status)
+            toast.error(error.response.data.error || 'Something went wrong!')
         }
         setReload(!reload)
     }
@@ -174,12 +174,10 @@ const RequestList = () => {
                 if(res.isConfirmed){
                     try {
                         const res = await axios.get(`http://192.168.29.55:8000/api/v1/adminUser/confirm_recipient_donation/${id}`)
-                        console.log(res)
                         toast.success("Request Accepted Successfully!")
                         setReload(!reload)
                     } catch (error) {
-                        console.log(error)
-                        toast.error(error.response.data.error || error.response.statusText)
+                        toast.error(error.response.data.error || 'Something went wrong!')
                     }
                 }
             })
@@ -198,7 +196,7 @@ const RequestList = () => {
             setNonPendingList(nonPendingReq)
         }catch (error){
             Swal.fire({
-                title : error.response.data.status,
+                title : error.response.data.error || 'Something went wrong!',
                 icon : 'error'
             })
         }
@@ -223,7 +221,7 @@ const RequestList = () => {
             setModalData(data.data.firstDonation)
             setModalLoad(false)
         }catch(e) {
-            toast.error(e.response.data.status)
+            toast.error(e.response.data.error || 'Something went wrong!')
             setModalLoad(false)
         }
     }
@@ -246,7 +244,7 @@ const RequestList = () => {
             })
         }catch(err){
             Swal.fire({
-                title : 'Something Went Wrong',
+                title : err.response.data.error || 'Something Went Wrong!',
                 icon : 'error'
             })
         }
