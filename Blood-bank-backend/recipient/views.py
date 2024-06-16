@@ -95,8 +95,8 @@ def request_blood(request):
             return JsonResponse({"error":"Currently no slot available for booking!"},status=500)
 
 
-        current_date_string= datetime.datetime.now(tz=pytz.timezone('Asia/Kolkata')).date().isoformat()
-        current_date_time = datetime.datetime.strptime(current_date_string, "%Y-%m-%d")
+        current_date_time= datetime.datetime.now(tz=pytz.timezone('Asia/Kolkata'))
+        #current_date_time = datetime.datetime.strptime(current_date_string, "%Y-%m-%d")
         current_date = current_date_time.date()
         current_time = current_date_time.time()
         start_time = datetime.time(7, 0, 0)  
