@@ -23,6 +23,7 @@ const DonorList = () => {
     // const [reqRows, setReqRows] = useState([]);
     // const [apiDonorData , setApiDonorData]  = useState({})
     const [donorList , setDonorList] = useState([]);
+    const [topDonorList , setTopDonorList] = useState([]);
     const [loadingPage , setLoadingPage] = useState(true)
     const [loadingApi , setLoadingApi] = useState(false)
     const [reload,setReload] = useState(false)
@@ -169,8 +170,10 @@ const DonorList = () => {
         setLoadingPage(true)
         try {
             const res = await axios.get('/api/v1/adminUser/get_donor_list/')
+            const res1 = await axios.get('/api/v1/adminUser/get_top_donors/')
             console.log(res)
             setDonorList(res.data.donor_list)
+            setTopDonorList(res1.data.donor_list)
             
         } catch (error) {
             Swal.fire({
@@ -263,11 +266,11 @@ const DonorList = () => {
                                     deleteDonor={deleteDonor}
                                 />
 
-                                <h1>Top Donor List</h1>
+                                <h1>Top 10 Donors</h1>
                                 <TableComp
                                     type='donor'
                                     tableColumn={tableColumn}
-                                    tableContent={donorList}
+                                    tableContent={topDonorList}
                                 />
                             </>
                         )

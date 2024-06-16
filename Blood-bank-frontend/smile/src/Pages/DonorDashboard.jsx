@@ -246,7 +246,7 @@ const DonorDashboard = () => {
                                             </div>
                                             <div className="requests">
                                                 <Typography variant="h3" sx={{fontWeight : 'bold' , color : '#f0e3e4', fontSize : '4rem'}}>
-                                                    Top Donors
+                                                    Top 10 Donors
                                                 </Typography>
                                                 <TableComp
                                                     type='donor'

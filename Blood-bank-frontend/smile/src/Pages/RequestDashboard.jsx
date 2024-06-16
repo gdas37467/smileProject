@@ -283,7 +283,7 @@ export default function RequestDashboard() {
     //Handles Modal Open and Close
     const handleOpen = () => {
         if(recDetails.isEligible){
-            if(disT > '00:01:00' && disT < '06:59:59'){
+            if(disT > '00:00:00' && disT < '06:59:59'){
                 Swal.fire({
                     text : 'You can Register Patient after 7:00 AM',
                     icon : 'warning'
@@ -315,7 +315,7 @@ export default function RequestDashboard() {
             
             case 1:
                 
-                if(patientDetails.address.length <= 10 || patientDetails.phoneNumber.length !== 10 ){
+                if(patientDetails.address.length < 10 || patientDetails.phoneNumber.length !== 10 ){
                     toast.error("Please enter your details correctly before continuing.")
                     return
                 }
@@ -834,7 +834,7 @@ export default function RequestDashboard() {
             console.log(error)
             if(error.response.status == 500){
                 Swal.fire({
-                    text : 'Please Fill up the Form Correctly',
+                    text : error.response.data.error || 'Please Fill up the Form Correctly',
                     icon : 'warning',
                 })
                 setLoadingBtn(false)
@@ -870,8 +870,9 @@ export default function RequestDashboard() {
 
         } catch (error) {
             console.log(error)
-            toast.error(error.resoponse.data.error || 'Something Went Wrong!', {
-                position : toast.POSITION.TOP_RIGHT
+            Swal.fire({
+                title : error.response.data.error || 'Something Went Wrong!',
+                icon : 'warning',
             })
         }
         setLoadingPage(false)

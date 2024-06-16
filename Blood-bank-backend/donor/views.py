@@ -252,17 +252,23 @@ def verify_otp(request):
             if otp_data:
                 otp_generated = otp_data.get('otp')
                 timestamp = otp_data.get('timestamp')
+                print(timestamp)
                 current_time = time.time()
                 print(f"current time - > {current_time}")
                 print(f"opt -> {otp_submitted}")
+                print(current_time - timestamp)
+                print(current_time - timestamp <= 300*1000) 
                 # Check if OTP is within the 5-minute validity period
-                if otp_generated == otp_submitted and current_time - timestamp <= 300:
+                if otp_generated == otp_submitted and current_time - timestamp <= 300*1000:
                     # OTP matched and is still valid, do further processing here
                 # OTP matched, do further processing here
                     print(f'status : success')
-                    request.session["member_id"] = email
+                    request.session['member_id'] = email
+                    print(request.session['otp'])
             
                     del request.session['email']
+                    del request.session['otp']
+                    #print(request.session['otp'])
                     request.session.set_expiry(45*60)
                     return JsonResponse({'success': 'OTP verified successfully', "user_type" : type},status=200)
                 else:
