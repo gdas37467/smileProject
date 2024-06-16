@@ -74,7 +74,7 @@ const Home = () => {
     const loadImgs = async() =>{
         setLoadPage(true)
         try{
-            const res = await axios.get('/api/v1/adminUser/getLeaderboardImages/')
+            const res = await axios.get('http://192.168.1.19:8000/api/v1/adminUser/getLeaderboardImages/')
             setImages(res.data.data)
         }catch(e){
             console.log('Something went wrong')
