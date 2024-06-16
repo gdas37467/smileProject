@@ -95,20 +95,24 @@ def request_blood(request):
             return JsonResponse({"error":"Currently no slot available for booking!"},status=500)
 
 
-        current_date_string= datetime.datetime.now(tz=pytz.timezone('Asia/Kolkata')).date().isoformat()
-        current_date_time = datetime.datetime.strptime(current_date_string, "%Y-%m-%d")
+        current_date_time= datetime.datetime.now(tz=pytz.timezone('Asia/Kolkata'))
+        #current_date_time = datetime.datetime.strptime(current_date_string, "%Y-%m-%d")
         current_date = current_date_time.date()
         current_time = current_date_time.time()
-        start_time = datetime.time(7, 0, 0)  
-        end_time = datetime.time(17, 0, 0)
-
+        start_time = datetime.time(6, 59, 59)  
+        end_time = datetime.time(23, 59, 59)
+        print(104)
+        print(current_date)
+        print(current_time)
         if (start_time <= current_time <=end_time ) is not True:
-            return JsonResponse({"error" : "You can request blood between 7 AM and 5 PM"}, status=500)
+            print(107)
+            return JsonResponse({"error" : "You can request blood between 7 AM and 12 AM"}, status=500)
 
         try:
             recipient = Recipient.objects.filter((Q(email=email) | Q(phoneNumber=phoneNumber)) & Q(status__in = ['Confirmed' ,'Pending'])).order_by("-requestDate").first()
             if recipient is not None:
                 #lastRecieved = datetime.datetime.strptime(recipient.date,"%Y-%m-%d").date()
+                print(113)              
                 print((current_date.year - recipient.requestDate.year)*365 +( current_date.month-recipient.requestDate.month)*30 + (current_date.day - recipient.requestDate.day))
                 if (current_date.year - recipient.requestDate.year)*365 +( current_date.month-recipient.requestDate.month)*30 + (current_date.day - recipient.requestDate.day) <15:
                     return JsonResponse({"error" : "Cannot place request withing 15 days of last recieved"},status = 400)
@@ -122,8 +126,10 @@ def request_blood(request):
         if firstDonCheck :
             firstDonation = FirstDonationDetails().save()
             if hasCancer == True or isThalassemia == True or (bloodGroup in ['A-', 'B-','AB-','O-']):
+                print(127)
                 pass
             else :
+                print(129)
                 return JsonResponse({"error" : "First Donation Validation Error"},status=500)
         else:
             firstDonation = FirstDonationDetails(
@@ -186,6 +192,7 @@ def request_blood(request):
           
         except Exception as e:
             print(e)
+            print(193)
             return JsonResponse({'error': 'error while saving form'},status=500)
         
 

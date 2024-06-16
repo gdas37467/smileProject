@@ -81,16 +81,17 @@ MIDDLEWARE = [
 
 
 CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:3000','http://localhost:3000' , 
-                        'http://192.168.1.19:3000',"http://192.168.29.55:3000",'http://192.168.29.55','http://192.168.1.11',
+                        'http://192.168.1.12:3000',"http://192.168.29.55:3000",'http://192.168.29.55','http://192.168.1.19',
                          'https://smileorganization.in' , 'https://www.smileorganization.in', 'https://91.108.105.42']
 
 #CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 SESSION_COOKIE_SAMESITE = 'Lax'
+SESSION_SAVE_EVERY_REQUEST = True
 SESSION_COOKIE_HTTPONLY = True
-SESSION_COOKIE_AGE = 24*60*60
+SESSION_COOKIE_AGE = 45*60
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
-SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+# SESSION_ENGINE = 'django.contrib.sessions.models.Session'
 
 CSRF_COOKIE_AGE = 86400 
 
@@ -105,7 +106,7 @@ CORS_ALLOWED_ORIGINS = [
     'http://192.168.1.15:4173',
     'http://192.168.29.55:3000',
     'http://192.168.29.55',
-    'http://192.168.1.11',
+    'http://192.168.1.19',
     'https://91.108.105.42',
     'https://smileorganization.in' , 'https://www.smileorganization.in'
 
