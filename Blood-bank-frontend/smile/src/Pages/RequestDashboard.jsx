@@ -202,7 +202,7 @@ export default function RequestDashboard() {
         bloodBankName : '',
         donorName : '',
         donationDate : '',
-        donationReceipt : '',
+        donationReceipt : null,
     })
 
     //Patient Details Validation
@@ -480,7 +480,7 @@ export default function RequestDashboard() {
         if(name === 'donationReceipt'){
             setPatientDetails(prevState => ({
                 ...prevState,
-                [name] : e.target.files[0]
+                [name] : e.target.files[0] || null
             }))
         }else{
             setPatientDetails(prevState => ({
@@ -725,7 +725,7 @@ export default function RequestDashboard() {
                         </GridItem>
 
                         <GridItem>
-                            <FormControl display='none' isRequired>
+                            <FormControl display='none'>
                                 <FormLabel fontSize={12} htmlFor='donationReceipt'>Donation Receipt</FormLabel>
                                 <InputGroup >
                                     <InputLeftAddon height={35}>
@@ -781,7 +781,7 @@ export default function RequestDashboard() {
                 return
             }
         }else{
-            if(patientDetails.donBlood === '' || patientDetails.bloodBankName < 3 || patientDetails.donationReceipt === undefined || patientDetails.donationReceipt === '' || (patientDetails.donorName < 3 && patientDetails.donorName !== '') || patientDetails.donationDate === '' ){
+            if(patientDetails.donBlood === '' || patientDetails.bloodBankName < 3 || (patientDetails.donorName < 3 && patientDetails.donorName !== '') || patientDetails.donationDate === '' ){
                 toast.error("Please enter your details correctly before continuing.")
                 return
             }
@@ -805,11 +805,12 @@ export default function RequestDashboard() {
             bloodBankName : patDet.bloodBankName,
             donorName : patDet.donorName,
             donationDate : patDet.donationDate,
-            donationReceipt : patDet.donationReceipt,
+            donationReceipt : patDet.donationReceipt ,
             firstDonCheck : controlStep,
             gender : patDet.gender,
         }
 
+        console.log(data)
         for(const key in data){
             formData.append(key, data[key]);
         }

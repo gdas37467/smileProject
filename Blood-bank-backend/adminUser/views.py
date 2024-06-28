@@ -178,13 +178,18 @@ def get_recipient_list(request):
                 for recipient in recipientList:
                     firstDonation={}
                     if recipient.firstDonation:
+                        if not recipient.firstDonation.donationReceipt:
+                            donationtionReceipt =  "No Image Found"
+                            
+                        else : 
+                            donationtionReceipt = base_url + recipient.firstDonation.donationReceipt.url
                         firstDonation = {
-                                            'donBlood' : recipient.firstDonation.donBlood,
-                                            'bloodBankName':recipient.firstDonation.bloodBankName,
-                                            'donorName':recipient.firstDonation.donorName,
-                                            'donationDate':recipient.firstDonation.donationDate,
-                                            'donationReceipt': base_url + recipient.firstDonation.donationReceipt.url
-                                        }
+                                                'donBlood' : recipient.firstDonation.donBlood,
+                                                'bloodBankName':recipient.firstDonation.bloodBankName,
+                                                'donorName':recipient.firstDonation.donorName,
+                                                'donationDate':recipient.firstDonation.donationDate,
+                                                'donationReceipt': donationtionReceipt
+                                            }
                     recipient_list_data.append({'id': recipient.id,  
                                                 'sl' : sl,
                                         'firstName': recipient.firstName,
@@ -489,12 +494,17 @@ def getFirstDon(request, recipient_id):
             recipient = Recipient.objects.filter(id = recipient_id).first()
             if recipient:
                 if  not recipient.firstDonCheck:
+                    if not recipient.firstDonation.donationReceipt:
+                        donationReceipt = "No Image Found"
+                    else:
+                        donationReceipt=base_url + recipient.firstDonation.donationReceipt.url
+
                     return JsonResponse({'firstDonation' : {
                                             'donBlood' : recipient.firstDonation.donBlood,
                                             'bloodBankName':recipient.firstDonation.bloodBankName,
                                             'donorName':recipient.firstDonation.donorName,
                                             'donationDate':recipient.firstDonation.donationDate,
-                                            'donationReceipt': base_url + recipient.firstDonation.donationReceipt.url
+                                            'donationReceipt': donationReceipt
                                         }}, status= 200)
 
                 else:

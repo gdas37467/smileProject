@@ -374,7 +374,15 @@ const RequestList = () => {
                                             <Typography variant='h4' sx={modalTypStyle} >
                                                 <b> Donor's Name : </b> {modalData.donorName !== '' ? modalData.donorName : '-'}
                                             </Typography>
-                                            <img src={modalData.donationReceipt} height='200px' width='auto' alt="Receipt" />
+                                            {
+                                                modalData.donationReceipt == 'No Image Found' ? (
+                                                    <Typography variant='h4' sx={modalTypStyle} >
+                                                        <b> {modalData.donationReceipt} </b> 
+                                                    </Typography>
+                                                ) : (
+                                                    <img src={modalData.donationReceipt} height='200px' width='auto' alt="Receipt" />
+                                                )
+                                            }
                                         </div>
                                     </>
                                 )

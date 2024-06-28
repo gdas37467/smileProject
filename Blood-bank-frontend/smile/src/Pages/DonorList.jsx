@@ -173,7 +173,7 @@ const DonorList = () => {
             const res1 = await axios.get('/api/v1/adminUser/get_top_donors/')
             console.log(res)
             setDonorList(res.data.donor_list)
-            setTopDonorList(res1.data.donor_list)
+            setTopDonorList(res1.data.donorList)
             
         } catch (error) {
             Swal.fire({
