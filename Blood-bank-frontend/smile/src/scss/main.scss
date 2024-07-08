@@ -354,14 +354,13 @@ label+.css-v4u5dn-MuiInputBase-root-MuiInput-root, label + .css-zrqpq1 {
                 // left: 10rem;    
                 & .imgs{
                     position: absolute;
-                    height: 32rem;
-                    width: 30rem;
+                    height: 36rem;
+                    width: 27rem;
                     box-shadow: 0 0 50px rgba(0,0,0,0.5);
                     background-color: #fff7f7;
-                    aspect-ratio: 16/9;
-                    // border: 2px solid #d22228;
+
                     & img{
-                        object-fit: cover;
+                        object-fit: contain;
                         box-shadow: 0 0 7rem rgba(0,0,0,0.5);
                         height: 100%;
                         width: 100%;
@@ -1322,8 +1321,8 @@ label+.css-v4u5dn-MuiInputBase-root-MuiInput-root, label + .css-zrqpq1 {
                     height: 50rem;
                     & .imgs{
                         position: absolute;
-                        height: 15rem;
-                        width: 13rem;
+                        height: 16rem;
+                        width: 12rem;
                         box-shadow: 0 0 50px rgba(0,0,0,0.5);
                         background-color: #fff7f7;
                         & img{

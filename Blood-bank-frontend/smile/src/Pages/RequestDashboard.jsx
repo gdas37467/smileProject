@@ -737,7 +737,7 @@ export default function RequestDashboard() {
                             <div className="receipt_input" onClick={clickReceipt}>
                                 
                                     <CloudArrowUp size={50} color="#ec3c3c" weight="duotone" />
-                                    Upload Your Receipt
+                                    Upload Your Receipt (Optional)
                                 <p> (Only .jpg, .jpeg and .png images are supported. And size less than 200KB ) </p>
                             </div>
                         </GridItem>
