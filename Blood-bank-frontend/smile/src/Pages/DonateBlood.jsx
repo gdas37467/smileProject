@@ -145,7 +145,7 @@ const DonateBlood = () => {
                 break 
             
             case 2 : 
-                if(!emailRegex.test(donorInfo.email) || isInValid.phoneNumber || donorInfo.address.length < 10 ){
+                if(!emailRegex.test(donorInfo.email) || isInValid.phoneNumber || donorInfo.address.length < 3 ){
                     toast.error("Please Enter the details correctly before continuing.")
                     return 
                 }
@@ -223,7 +223,7 @@ const DonateBlood = () => {
                 break
                 
             case 'address' : 
-                if(value.trim().length < 10){
+                if(value.trim().length < 3){
                     setIsInValid(prevState => ({
                         ...prevState,
                         [name] : true
@@ -295,7 +295,6 @@ const DonateBlood = () => {
                         position : toast.POSITION.TOP_RIGHT
                     })
                 }
-                console.log(res)
                 
             }catch(err){
                 toast.error(err.response.data.error || 'Something Went Wrong',{
@@ -306,7 +305,7 @@ const DonateBlood = () => {
 
     }
 
-    //VErify OTP API
+    //Verify OTP API
     const verifyOtp = async () =>{
         const donorDet = {
             firstName : donorInfo.firstName,
@@ -320,7 +319,6 @@ const DonateBlood = () => {
             gender : donorInfo.gender,
             otp : otpVal
         }
-        console.log(JSON.stringify(donorDet))
         try {
             var token = getCookie('csrftoken')
             const res = await axios.post('/api/v1/donor/register/',JSON.stringify(donorDet),{
@@ -502,7 +500,7 @@ const DonateBlood = () => {
                                     </InputLeftAddon>
                                     <Textarea variant='outline' backgroundColor='red.50' errorBorderColor='red.400' focusBorderColor={isInValid.address ? 'red.400' : 'green.300'} isInvalid={isInValid.address} fontSize={14} resize='none' name="address" value={donorInfo.address} onChange={e => setDetails(e)} />
                                 </InputGroup>
-                                {isInValid.address ? <FormHelperText color="red" fontWeight={500}> Address is too Short, Minimum 10 Characters is required  </FormHelperText> : null}
+                                {isInValid.address ? <FormHelperText color="red" fontWeight={500}> Address is too Short, Minimum 3 Characters is required  </FormHelperText> : null}
                             </FormControl>
                         </GridItem>
 
@@ -600,7 +598,7 @@ const DonateBlood = () => {
 
                                                     <Box flexShrink='0' display={{base : 'none' , lg : 'block'}}>
                                                         <StepTitle>{step.title}</StepTitle>
-                                                        {/* <StepDescription>{step.description}</StepDescription> */}
+                                                   
                                                     </Box>
 
                                                 <StepSeparator />

@@ -117,8 +117,7 @@ const TableComp = (props) => {
                                                             )
                                                         }
                                             </TableCell>
-                                            {/* <TableCell sx={{fontSize : '14px'}} align="left">{row.donor_name}</TableCell>
-                                            <TableCell sx={{fontSize : '14px'}} align="left">{row.donor_phoneNumber}</TableCell> */}
+                                           
                                         </TableRow>
                                     ))}
                                 </TableBody>

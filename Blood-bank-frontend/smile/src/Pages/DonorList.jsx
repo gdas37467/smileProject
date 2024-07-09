@@ -78,10 +78,8 @@ const DonorList = () => {
     //Send Donor For Donation
     const sentForDonation = async (id) =>{
         //API for matched donor
-        console.log(id)
         try {
             const res = await axios.get(`/api/v1/adminUser/confirm_donor/${id}`)
-            console.log(res)
             toast.success(res.data.success)
             setReload(!reload)
 
@@ -95,7 +93,6 @@ const DonorList = () => {
     //Add Loan to Donor
     const addLoan = async (id) =>{
         //API for matched donor
-        console.log(id)
         try {
             const res = await axios.get(`/api/v1/adminUser/confirm_loan/${id}` )
             toast.success('Donor Added For Loan Successfully')
@@ -126,10 +123,8 @@ const DonorList = () => {
     //Send Loan Reminder to Donor
     const sendReminder = async (id) =>{
         //API for matched donor
-        console.log(id)
         try {
             const res = await axios.get(`/api/v1/adminUser/loan_msg/${id}`)
-            console.log(res)
             toast.success('Reminder Sent Successfully')
             setReload(!reload)
 
@@ -154,7 +149,6 @@ const DonorList = () => {
             if(res.isConfirmed){
                 try {
                     const res = await axios.get(`/api/v1/adminUser/remove_donor/${id}`)
-                    console.log(res)
                     toast.warning("Donor has been deleted!")
                     setReload(!reload)
                 } catch (error) {
@@ -171,7 +165,6 @@ const DonorList = () => {
         try {
             const res = await axios.get('/api/v1/adminUser/get_donor_list/')
             const res1 = await axios.get('/api/v1/adminUser/get_top_donors/')
-            console.log(res)
             setDonorList(res.data.donor_list)
             setTopDonorList(res1.data.donorList)
             

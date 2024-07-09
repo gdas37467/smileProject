@@ -7,6 +7,7 @@ import { Box, Button, Typography } from '@mui/material';
 import WaterDropIcon from '@mui/icons-material/WaterDrop';
 import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
 import { useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
 
 
 const imgDiv = {
@@ -44,8 +45,6 @@ const sentence = {
 
 const styleBox = {
     box1 : {
-        // display : 'flex',
-        // gap : {lg : '5rem', xs: '1rem'},
         alignSelf : 'flex-end',
         padding: {lg : '0 10rem 0 15rem', xs: '0 2.1rem'},
     },
@@ -77,7 +76,7 @@ const Home = () => {
             const res = await axios.get('/api/v1/adminUser/getLeaderboardImages/')
             setImages(res.data.data)
         }catch(e){
-            console.log('Something went wrong')
+            toast.error("Error getting leaderboard images!")
         }
         setLoadPage(false)
     }
@@ -121,23 +120,7 @@ const Home = () => {
                                         Join our incredible community of over <b>2,000</b> active donors who are making a difference every day. Your donation can save lives—become a hero today!
                                     </motion.p>
                                     <Box sx={styleBox.box1}>
-                                        {/* <Button variant='contained' startIcon={<PersonAddIcon sx={{height : {xs : '1rem', lg : '1.8rem'}}} />}
-                                            sx={{
-                                                    backgroundColor : '#d71414',
-                                                    borderRadius : '1rem',
-                                                    color : '#f0e3e4',
-                                                    fontWeight : 'bold',
-                                                    fontSize : {lg : '1rem', xs : '0.6rem'},
-                                                    "&:hover" : {
-                                                        backgroundColor : '#d71414',
-                                                        color : '#f0e3e4',
-                                                    },
-                                                    height : { lg : '4rem',xs : '1.5rem'}
-                                                }}
-                                                onClick={() => navigate('/request')}
-                                        >
-                                            Register Now
-                                        </Button> */}
+                                       
                                         <Button variant='contained' endIcon={<VolunteerActivismIcon sx={{height : {xs : '1rem', lg : '1.8rem'} , width : 'auto' }} />}
                                             sx={{
                                                     backgroundColor : '#d71414',
@@ -265,7 +248,7 @@ const Home = () => {
                         </>
                     )
                 }
-
+                <ToastContainer />
             </div>
         </>
 

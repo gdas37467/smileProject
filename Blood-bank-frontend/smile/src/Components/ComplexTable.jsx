@@ -116,7 +116,6 @@ const ComplexTable = (props) => {
                             disabled={params.row.firstDonCheck}
                             onClick={() => props.viewPrevDonation(params.id)}> View Receipt </Button>)
             }
-            // valueFormatter: ({ value }) => new Date(value).toISOString().split('T')[0]
         },
         {
             field: 'actions',
@@ -125,7 +124,6 @@ const ComplexTable = (props) => {
             width: 80,
             cellClassName: 'actions',
             getActions: (params, ind) => {
-                // console.log(params.row.donor_list)
                 return [
                 <GridActionsCellItem
                     icon={<Tooltip arrow title="Accept Request"><CheckCircleIcon /></Tooltip>}
@@ -133,14 +131,12 @@ const ComplexTable = (props) => {
                     className='con'
                     onClick={() => props.acceptRequest(params.id)}    
                     color="success"
-                    // showInMenu
                 />,
                 <GridActionsCellItem
                     icon={<Tooltip arrow title="Reject Request"><CancelRoundedIcon /></Tooltip>}
                     label="Reject Request"
                     onClick={() => props.rejectRequest(params.id, params.row.sl)}
                     color="error"
-                    // showInMenu
                 />,
                 ];
             },
@@ -149,13 +145,11 @@ const ComplexTable = (props) => {
     //Donor Columns
     const donorListCols = [
         { field: 'id', filterable: false },
-        // { field: 'matched_id', },
         { field: 'sl', headerName: "SL. No." , 
         width:80, 
         sortable : false, align : 'center',
             headerAlign : 'center' , 
             type : 'number'
-            // filterable : false,
         },
         { field: 'name', headerName: "Name" , 
             type : 'string',
@@ -257,7 +251,6 @@ const ComplexTable = (props) => {
                     className='sms'
                     onClick={() => props.sendSMS(params.id)}    
                     disabled={!(params.row.isAvailable && !params.row.loan)}
-                    // showInMenu
                 />,
                 <GridActionsCellItem
                     icon={<Tooltip title="Send Reminder For Loan"><FeedbackIcon /></Tooltip>}
@@ -265,8 +258,7 @@ const ComplexTable = (props) => {
                     className='rem'
                     disabled={!(params.row.isAvailable && params.row.loan)}
                     onClick={() => props.sendReminder(params.id)} 
-                    // color="success"
-                    // showInMenu
+                   
                 />,
                 ];
             },
@@ -343,7 +335,6 @@ const ComplexTable = (props) => {
             width: 190,
             sortable : false,   
             align : 'center',
-            // headerAlign: 'center',
             valueOptions : [ 'O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-']         
         },
         {
@@ -391,12 +382,9 @@ const ComplexTable = (props) => {
             }
         },
         {
-            // field: 'date',
             headerName: 'Previous Details',
-            // type: 'singleselect',
             width: 140,
             align : 'center',
-            // headerAlign: 'center',
             filterable: false,
             sortable : false,   
             renderCell : (params) =>{
@@ -416,7 +404,6 @@ const ComplexTable = (props) => {
                         disabled={params.row.firstDonCheck}
                         variant='contained' onClick={() => props.viewPrevDonation(params.id)}> View Receipt </Button>)
             }
-            // valueFormatter: ({ value }) => new Date(value).toISOString().split('T')[0]
         },
         {
             field: 'actions',
@@ -454,10 +441,7 @@ const ComplexTable = (props) => {
     },[props.type])
     
 
-    // const changeSelectionModel = (id) =>{
-    //     setRowSelectionModel(id)
-    //     props.setChanges(id)
-    // }
+  
 
     return (
         <>
@@ -484,9 +468,7 @@ const ComplexTable = (props) => {
                             paginationModel: { page: 0, pageSize: 5 },
                         },
                     }}
-                    // rowSelectionModel={rowSelectionModel}
                     pageSizeOptions={[5, 10]}
-                    // onRowSelectionModelChange={itm => changeSelectionModel(itm) }
                     disableColumnMenu
                     slots={{
                         toolbar : GridToolbarFilterButton,

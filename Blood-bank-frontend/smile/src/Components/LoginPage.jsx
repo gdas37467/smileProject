@@ -18,14 +18,7 @@ export default function LoginPage(props){
 
     const navigate = useNavigate()
 
-        //Show Timer
-        const [showTime, setShowTime] = useState(false)
-        //Change OTP Button text
-        const [changeText , setChangeText] = useState('Send OTP')
-        //Disable OTP Button
-        const [disability , setDisability] = useState(false)
-        //Timer Countdown
-        const [time , setTime] = useState('')
+    
         //Recepient Email
         const [email , setEmail] = useState('')
         //Error Msg for Phone Number
@@ -53,18 +46,14 @@ export default function LoginPage(props){
     
         // SEND OTP and Next Page
         const sendOtp = async(email) =>{
-            // return
 
             if(!emailRegex.test(email)){
-                console.log("Validation")
                 setErrorMsg(prev => ({
                     isErr : true,
                     msg : "Invalid Email! Please Enter a valid Email."
                 }))
                 return
             }else{
-                // setShowTime(!showTime)
-                // timer()
                 setCheck(true)
 
                 setErrorMsg({
@@ -75,7 +64,6 @@ export default function LoginPage(props){
                 let data =  JSON.stringify({
                     email : email
                 })
-                // console.log(data)
                 let url = ''
                 try {
                     switch(props.type){
@@ -95,13 +83,10 @@ export default function LoginPage(props){
                             break
                     }
                     const res = await axios.post(`/api/v1/${url}`, data)
-                    console.log(res)
-                    // setCheck(true)
                     toast.success("OTP Sent Successfully !",{
                         position : toast.POSITION.TOP_RIGHT
                     })
                 } catch (err) {
-                    console.log(err)
                     setCheck(false)
                     toast.error(err.response.data.error || 'Something Went Wrong',{
                         position : toast.POSITION.TOP_RIGHT
@@ -109,7 +94,6 @@ export default function LoginPage(props){
                 }
 
                 
-                // console.log(res)
     
             }
         }
@@ -130,7 +114,6 @@ export default function LoginPage(props){
                     const res = await axios.post('/api/v1/donor/verify_otp/',JSON.stringify({otp : otpVal}),{
                         headers : {'X-CSRFToken': token}
                     })
-                    console.log(res)
                     if( 'success' in res.data){
                         const now = new Date().getTime()
                         let check = {
@@ -168,7 +151,6 @@ export default function LoginPage(props){
                         })
                     }
                 } catch (error) {
-                    console.log(error)
                     Swal.fire({
                         title : error.response.data.error || 'Something went wrong!' , 
                         icon  : 'error'
@@ -180,7 +162,6 @@ export default function LoginPage(props){
         }
         //Real Time Number check
         const emailCheck =(email) =>{
-            // console.log(emailRegex.test(email))
             if(!emailRegex.test(email)){
                 setIsEmailValid(true)
                 setEmail(email)
@@ -261,7 +242,6 @@ export default function LoginPage(props){
                                                                 fontSize='10px'
                                                                 fontWeight='200'
                                                                 onClick={() => setCheck(false)}
-                                                                // isDisabled={disability}
                                                         >
                                                             Wrong Email? Update Here!
                                                         </Button>

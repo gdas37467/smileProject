@@ -65,8 +65,7 @@ const style = {
     borderBottom: '2px solid rgb(214,205,205)',
     boxShadow: 24,
     p: 4,
-    // scrollY : 'show'
-    // zIndex : 3,
+   
 
 };
 
@@ -315,7 +314,7 @@ export default function RequestDashboard() {
             
             case 1:
                 
-                if(patientDetails.address.length < 10 || patientDetails.phoneNumber.length !== 10 ){
+                if(patientDetails.address.length < 3 || patientDetails.phoneNumber.length !== 10 ){
                     toast.error("Please enter your details correctly before continuing.")
                     return
                 }
@@ -333,14 +332,12 @@ export default function RequestDashboard() {
         }
  
         setActiveStep((prevActiveStep) => prevActiveStep + 1)
-        console.log(activeStep)
     }
     const handleBack = () => {setActiveStep((prevActiveStep) => prevActiveStep - 1)}
 
     //Control Stepper with condition of first donation
     const controlStepper = () =>{
         setControlStep(prev => !prev)
-        console.log(controlStep)
         if(!controlStep){
             steps.splice(3,1)
         }else{
@@ -398,7 +395,7 @@ export default function RequestDashboard() {
                 break
 
             case 'address':
-                if(value.trim().length < 10){
+                if(value.trim().length < 3){
                     setPatInValid(pS => ({
                         ...pS,
                         [name] : true
@@ -456,7 +453,6 @@ export default function RequestDashboard() {
             case 'donationReceipt':
                 if(value !== ''){
                     if(!fileTypes.includes(e.target.files[0].name.split('.')[1]) || e.target.files[0].size > 200000 ){
-                        console.log("Check")
                         toast.warning('Receipt must be in jpg/jpeg/png format and size should be less than 200KB')
                         setPatInValid(pS => ({
                             ...pS,
@@ -586,7 +582,7 @@ export default function RequestDashboard() {
                                         </InputLeftAddon>
                                         <Textarea variant='outline' backgroundColor='red.50' fontSize={14} resize='none' name="address" value={patientDetails.address} onChange={e =>  setDetails(e)} isInvalid={patInValid.address} focusBorderColor={patInValid.address ? 'red.400' : 'green.300'} />
                                     </InputGroup>
-                                    {patInValid.address ? <FormHelperText color="red" fontWeight={500}> Min 10 Characters are needed  </FormHelperText> : null}
+                                    {patInValid.address ? <FormHelperText color="red" fontWeight={500}> Min 3 Characters are needed  </FormHelperText> : null}
 
                                 </FormControl>
                         </GridItem>
@@ -768,10 +764,9 @@ export default function RequestDashboard() {
     }
 
 
-    //function to submit Patient Request
+    //Function to submit Patient Request
     const placeRequest = async (patDet) =>{ 
 
-        // console.log(patientDetails)
         if(controlStep){
             if(patientDetails.bloodGroup === '' || patientDetails.hospitalName < 3 ){
                 toast.error("Please enter the details correctly before submitting.")
@@ -788,7 +783,6 @@ export default function RequestDashboard() {
         }
 
         const formData = new FormData();
-        //Complete the Function
         setLoadingBtn(true)
         const data = {
             firstName : patDet.firstName,
@@ -810,7 +804,6 @@ export default function RequestDashboard() {
             gender : patDet.gender,
         }
 
-        console.log(data)
         for(const key in data){
             formData.append(key, data[key]);
         }
@@ -820,7 +813,6 @@ export default function RequestDashboard() {
             const res = await axios.post('/api/v1/recipient/request_blood/',formData,{
                 headers : {'X-CSRFToken': token}
             });
-            console.log(res)
             Swal.fire({
                 text : res.data.success,
                 icon : 'success'
@@ -832,7 +824,6 @@ export default function RequestDashboard() {
                 }
             })
         } catch (error) {
-            console.log(error)
             if(error.response.status == 500){
                 Swal.fire({
                     text : error.response.data.error || 'Please Fill up the Form Correctly',
@@ -848,7 +839,6 @@ export default function RequestDashboard() {
                     setLoadingBtn(false)
                     if(res.isConfirmed || res.dismiss === 'backdrop'){
                         setReloadApi(!reload)
-                        // handleClose()
                     }
                 })
             }
@@ -862,7 +852,6 @@ export default function RequestDashboard() {
         setLoadingPage(true)
         try {
             const res = await axios.get('/api/v1/recipient/get_recipient_records/')
-            console.log(res)       
             let pendingReq = res.data.pastRecord.filter(el => el.status === 'Pending')
             let pastRecord = res.data.pastRecord.filter(el => el.status !== 'Pending')
             setPendingRecords(pendingReq)
@@ -870,7 +859,6 @@ export default function RequestDashboard() {
             setRecDetails(res.data.recipientData)
 
         } catch (error) {
-            console.log(error)
             Swal.fire({
                 title : error.response.data.error || 'Something Went Wrong!',
                 icon : 'warning',
@@ -918,7 +906,6 @@ export default function RequestDashboard() {
 
     }, [loadingApi,reload]);
 
-    // console.log()
     const tableColumn = ["Patient's Name", "Requested Date", "Blood Group", "Status" ]
 
     //Main Return
@@ -1047,7 +1034,6 @@ export default function RequestDashboard() {
                                             <FallingLines
                                                 height="100"
                                                 width="100"
-                                                // radius={5}
                                                 color="#EAEAEA"
                                                 ariaLabel="falling-circles-loading"
                                                 wrapperStyle={{
@@ -1055,7 +1041,6 @@ export default function RequestDashboard() {
                                                     alignItems: "center",
                                                     height: "100%"
                                                 }}
-                                                // wrapperClass=""
                                                 visible={true}
                                             />
                                         </Box>
@@ -1103,7 +1088,6 @@ export default function RequestDashboard() {
                                                 <React.Fragment>
                                                     <Box sx={{ display: 'flex', flexDirection: 'row', pl : 5 , pb : 2 , position : 'absolute', bottom : 15, left : 0, width : {lg : '60%', xs : '65%'} , justifyContent : 'space-between', }}>
                                                         <IconButton
-                                                            // color="inherit"
                                                             disabled={activeStep === 0}
                                                             onClick={handleBack}
                                                             sx={{ 
@@ -1125,8 +1109,8 @@ export default function RequestDashboard() {
                                                         <LoadingButton 
                                                             onClick={e => placeRequest(patientDetails)} 
                                                             loading={loadingBtn}
-                                                            sx={{color:"#F4D9D5" , 
-                                                                background:"#d7141480",
+                                                            sx={{color:"#fff" , 
+                                                                background:"#d71414",
                                                                 fontWeight : 'bold',
                                                                 fontSize : {lg : '16px', xs : '12px'},
                                                                 height:'35px',
@@ -1146,7 +1130,6 @@ export default function RequestDashboard() {
                                                 <React.Fragment>
                                                     <Box sx={{ display: 'flex', flexDirection: 'row', p : 5  , width : '100%' , justifyContent : 'space-between' , position : 'absolute', bottom : 15, left : 0}}>
                                                         <IconButton
-                                                            // color="inherit"
                                                             disabled={activeStep === 0}
                                                             onClick={handleBack}
                                                             sx={{ 

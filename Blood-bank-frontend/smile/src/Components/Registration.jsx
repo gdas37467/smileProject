@@ -11,10 +11,6 @@ import getCookie from '../getToken';
 
 //Style for Modal
 const style = {
-    // position: 'relative',
-    // top: '50%',
-    // left: '50%',
-    // transform: 'translate(-50%, -50%)',
     width: {lg : '75rem' , xs : '40rem'},
     minHeight : '35rem',
     maxHeight : '68rem',
@@ -246,10 +242,8 @@ const Registration = (props) => {
 
     // Add Recipient
     const addRecipient =async () => {
-        console.log('Adding Recipient')
 
         if(isRecipientValid.firstName || isRecipientValid.lastName || isRecipientValid.phoneNumber || isRecipientValid.address || recipientInfo.dob === '' || recipientInfo.bloodGroup === '' || recipientInfo.gender === ''){
-            console.log('Check')
             toast.error('Please Enter the Recipient Details Correctly')
             return
         }
@@ -265,7 +259,6 @@ const Registration = (props) => {
             const res = await axios.post('/api/v1/adminUser/admin_booking/', formData,{
                 headers : {'X-CSRFToken': token}
             })
-            console.log(res)
             Swal.fire({
                 text : res.data.success,
                 icon : 'success'
@@ -296,7 +289,6 @@ const Registration = (props) => {
 
     // Add Donors
     const addDonor = async () => {
-        console.log('Adding Donors')
         if(isDonorValid.firstName || isDonorValid.lastName || isDonorValid.phoneNumber || isDonorValid.address || donorInfo.bloodGroup === '' || donorInfo.dob === '' || donorInfo.gender === ''){
             toast.error('Please Fill the Donor Details Correctly')
             return
@@ -319,7 +311,6 @@ const Registration = (props) => {
             const res = await axios.post('/api/v1/adminUser/admin_donor_registration/', JSON.stringify(payload),{
                 headers : {'X-CSRFToken': token}
             })
-            console.log(res)
             Swal.fire({
                 text : res.data.success,
                 icon : 'success'
@@ -351,10 +342,9 @@ const Registration = (props) => {
     const getCount = async () => {
         try{
             const res = await axios.get('/api/v1/adminUser/get_total_cquantity/');
-            console.log(res)
             setDailyCount(res.data.quantity)
         }catch(e){
-            console.log(e)
+            toast.error(e.response.data.error || 'Something went wrong')
         }
     }
 

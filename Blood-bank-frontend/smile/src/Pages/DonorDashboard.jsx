@@ -107,7 +107,6 @@ const DonorDashboard = () => {
         setLoadingPage(true)
         try {
             const res = await axios.get('/api/v1/donor/get_donor_records/')
-            console.log(res)
             setDonorList(res.data.donorList)
             setDonorDetails(res.data.donorDetails)
         } catch (error) {

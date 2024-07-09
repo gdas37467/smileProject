@@ -110,7 +110,6 @@ const RequestList = () => {
     //Reject Recipient Request
     const rejectRequest = async (id, sl) => {
         //Reject API
-        console.log(id)
         Swal.fire({
             title: "Are you sure?",
             icon: "warning",
@@ -123,7 +122,6 @@ const RequestList = () => {
             if(res.isConfirmed){
                 try {
                     const res = await axios.get(`/api/v1/adminUser/reject_request/${id}`)
-                    console.log(res)
                     Swal.fire({
                         text : "The Request Has Been Rejected",
                         icon : 'warning'
@@ -144,10 +142,8 @@ const RequestList = () => {
     
     // Accept Recipient Request
     const acceptRequest = async (id) =>{
-        console.log(id)
         try {
             const res = await axios.get(`/api/v1/adminUser/confirm_recipient_donation/${id}`)
-            console.log(res)
             toast.success( res.data.status)
         } catch (error) {
             toast.error(error.response.data.error || 'Something went wrong!')
@@ -157,7 +153,6 @@ const RequestList = () => {
 
     // Update Request
     const updateRequest = async (id, status) => {
-        console.log(status)
         if(status !== 'Rejected'){
             toast.error('Not Applicable')
             return
@@ -174,7 +169,6 @@ const RequestList = () => {
                 if(res.isConfirmed){
                     try {
                         const res = await axios.get(`/api/v1/adminUser/confirm_recipient_donation/${id}`)
-                        console.log(res)
                         toast.success("Request Accepted Successfully!")
                         setReload(!reload)
                     } catch (error) {
@@ -190,7 +184,6 @@ const RequestList = () => {
         setLoadingPage(true)
         try{
             const res = await axios.get('/api/v1/adminUser/get_recipient_list/')
-            console.log(res)
             let pendingReq = res.data.list.filter((el)=> { return el.status === 'Pending'})
             let nonPendingReq = res.data.list.filter((el)=> { return el.status !== 'Pending'})
             setReqRows(pendingReq)
@@ -215,10 +208,8 @@ const RequestList = () => {
     const viewPrevDonation = async (id) => {
         setOpen(true)
         setModalLoad(true)
-        console.log(id)
         try{
             const data = await axios.get(`/api/v1/adminUser/getFirstDon/${id}`)
-            console.log(data.data.firstDonation)
             setModalData(data.data.firstDonation)
             setModalLoad(false)
         }catch(e) {
@@ -298,9 +289,7 @@ const RequestList = () => {
                                     rows={reqRows}
                                     viewPrevDonation={viewPrevDonation}
                                     acceptRequest={acceptRequest}
-                                    // setChanges={changeSelectionModel}
                                     rejectRequest={rejectRequest}
-                                    // donorData={apiDonorData}
                                 />
                                     
                                 <h1>All Requests</h1>

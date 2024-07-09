@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { ChakraProvider, Heading, Button, FormControl, FormLabel, Input, Icon, InputGroup, InputLeftAddon, HStack, VStack, InputRightElement} from '@chakra-ui/react'
 import { User , Password, Eye, EyeSlash, SignIn} from '@phosphor-icons/react'
 import axios from 'axios'
-// import { toast } from 'react-toastify'
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom'
 import LoginIcon from '@mui/icons-material/Login';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import getCookie from '../getToken'
 
 
 const AdminLogin = () => {
@@ -27,7 +25,6 @@ const AdminLogin = () => {
 
     //Admin Login API
     const submitDetails = async (data) => {
-        // code
         if(data.username === '' || data.password === ''){
             Swal.fire({
                 title : 'Please enter your username/password',
@@ -37,7 +34,6 @@ const AdminLogin = () => {
             try {
                 setIsLoading(true)
                 const res = await axios.post('/api/v1/adminUser/admin_login/', JSON.stringify(data))
-                console.log(res)
                 if('success' in res.data){
                     const now = new Date().getTime()
                     let adminCheck ={
@@ -116,7 +112,6 @@ const AdminLogin = () => {
                                                     <Button
                                                         bgColor='#d71414'
                                                         _hover={{bg:'#d71414'}}
-                                                        // width='4.5rem'
                                                     >
 
                                                     {
@@ -139,7 +134,6 @@ const AdminLogin = () => {
                                                     fontSize='16px'
                                                     type='submit'
                                                     onClick={() => submitDetails(adminInfo)}
-                                                    // isDisabled={disability}
                                             >
                                                 LogIn
                                             </Button>
