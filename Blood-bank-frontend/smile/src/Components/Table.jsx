@@ -10,7 +10,6 @@ import { Box, Chip, Paper } from '@mui/material';
 
 
 // Style for table
-
 const tableStyle = {
     mt:5,
     mr: 4,
@@ -31,7 +30,7 @@ const tableStyle2 = {
 
 
 
-const TableComp = (props) => {
+export default function TableComp(props){
 
     return (
         <>
@@ -39,7 +38,7 @@ const TableComp = (props) => {
                 props.type === 'donor' ? (
 
                     <Box component={Paper} sx={tableStyle} >
-                        <TableContainer sx={{}}>
+                        <TableContainer>
                             <Table stickyHeader sx={{ maxWidth: 450, maxHeight : 200 , overflowY : 'scroll' }} aria-label="simple table">
                                 <TableHead >
                                     <TableRow>
@@ -117,7 +116,7 @@ const TableComp = (props) => {
                                                             )
                                                         }
                                             </TableCell>
-                                           
+                                        
                                         </TableRow>
                                     ))}
                                 </TableBody>
@@ -130,5 +129,3 @@ const TableComp = (props) => {
         </>
     )
 }
-
-export default TableComp

@@ -9,7 +9,7 @@ import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
 import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 
-
+// Animation for Images
 const imgDiv = {
     hidden : {
         opacity : 0
@@ -23,6 +23,7 @@ const imgDiv = {
     }
 }
 
+// Animation for Texts
 const sentence = {
     initial : {
         x : '-100vw'
@@ -43,6 +44,7 @@ const sentence = {
     },
 }
 
+// Box Style
 const styleBox = {
     box1 : {
         alignSelf : 'flex-end',
@@ -57,19 +59,19 @@ const styleBox = {
         alignItems : 'center',
         gap : {lg : '2rem', xs : '1rem'},
         boxShadow: '0 0 50px rgba(0,0,0,0.5)',
-
     }
-    
 }
 
 
-const Home = () => {
+export default function Home(){
     axios.defaults.withCredentials = true; 
     
     const navigate = useNavigate();
+    // State Variables
     const [images,setImages] = useState({})
     const [loadPage,setLoadPage] = useState(true)
 
+    // API call for images
     const loadImgs = async() =>{
         setLoadPage(true)
         try{
@@ -254,5 +256,3 @@ const Home = () => {
 
     )
 }
-
-export default Home

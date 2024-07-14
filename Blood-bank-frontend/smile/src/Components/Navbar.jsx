@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { NavLink, useNavigate} from 'react-router-dom'
 import Smile from '../assets/SmileLogo.png'
-import { Box, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemText, Toolbar } from '@mui/material';
+import { Box, Drawer, IconButton, List, ListItem, ListItemButton, Toolbar } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 
 
@@ -9,19 +9,21 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 const drawerWidth = 240;
 
-function Navbar (){
+export default function Navbar (){
     
     const navigate = useNavigate()
     const [mobileOpen, setMobileOpen] = useState(false);
 
+    // For Mobile Drawers
     const handleDrawerToggle = () => { setMobileOpen((prevState) => !prevState); };
     const container = window !== undefined ? () => window.document.body : undefined;
     
+    // Send to Home page
     const goTo = () => {
         navigate('/')
     }
     
-    
+    // Mobile Navigation Drawer
     const MobNav = (
         <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' , fontSize : {xs : '2rem'}, mt : 8 , }}>
             
@@ -89,5 +91,3 @@ function Navbar (){
         </>
     )
 }
-
-export default Navbar

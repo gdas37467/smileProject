@@ -46,7 +46,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['smileorganization.in' , 'www.smileorganization.in', '91.108.105.42']
+ALLOWED_HOSTS = ['smileorganization.in' , 'www.smileorganization.in', '91.108.105.42', '192.168.1.19']
 
 
 # Application definition
@@ -80,7 +80,7 @@ MIDDLEWARE = [
 ]
 
 
-CSRF_TRUSTED_ORIGINS = ['https://smileorganization.in' , 'https://www.smileorganization.in', 'https://91.108.105.42']
+CSRF_TRUSTED_ORIGINS = ['https://smileorganization.in' , 'https://www.smileorganization.in', 'https://91.108.105.42','http://192.168.1.19']
 
 #CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
@@ -97,7 +97,8 @@ CSRF_COOKIE_AGE = 86400
 CORS_ALLOWED_ORIGINS = [
     'https://91.108.105.42',
     'https://smileorganization.in',
-    'https://www.smileorganization.in'
+    'https://www.smileorganization.in',
+    'http://192.168.1.19'
 ]
 
 

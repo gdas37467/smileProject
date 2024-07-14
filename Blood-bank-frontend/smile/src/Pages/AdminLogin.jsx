@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { ChakraProvider, Heading, Button, FormControl, FormLabel, Input, Icon, InputGroup, InputLeftAddon, HStack, VStack, InputRightElement} from '@chakra-ui/react'
-import { User , Password, Eye, EyeSlash, SignIn} from '@phosphor-icons/react'
+import { User , Password} from '@phosphor-icons/react'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom'
@@ -9,7 +9,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 
-const AdminLogin = () => {
+export default function AdminLogin(){
     axios.defaults.withCredentials = true
     const navigate = useNavigate()
 
@@ -19,7 +19,6 @@ const AdminLogin = () => {
         password : '',
     })
 
-    const [isAdminInvalid, setIsAdminInvalid] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
 
@@ -78,9 +77,7 @@ const AdminLogin = () => {
                                                 </InputLeftAddon>
                                                 <Input variant='outline'
                                                         backgroundColor='red.50'
-                                                        isInvalid={isAdminInvalid}
                                                         focusBorderColor='green.300'
-                                                        errorBorderColor='red.400'
                                                         height={30} 
                                                         fontSize={14}  
                                                         type="text" 
@@ -98,9 +95,7 @@ const AdminLogin = () => {
                                                 </InputLeftAddon>
                                                 <Input variant='outline'
                                                         backgroundColor='red.50'
-                                                        isInvalid={isAdminInvalid}
                                                         focusBorderColor='green.300'
-                                                        errorBorderColor='red.400'
                                                         height={30} 
                                                         fontSize={14}  
                                                         type={showPassword ? 'text' : 'password'} 
@@ -138,7 +133,7 @@ const AdminLogin = () => {
                                                 LogIn
                                             </Button>
                                         </HStack>
-                                    </VStack>                            
+                                </VStack>                            
                             </ChakraProvider>
                         </div>
                     </div>
@@ -146,5 +141,3 @@ const AdminLogin = () => {
         </>
     )
 }
-
-export default AdminLogin

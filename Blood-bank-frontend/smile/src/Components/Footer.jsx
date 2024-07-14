@@ -8,11 +8,11 @@ import IconButton from '@mui/material/IconButton';
 import { useNavigate } from 'react-router-dom'
 
 
-
-
-const Footer = () => {
+export default function Footer() {
 
     const navigate = useNavigate()
+    
+    // Route to Developers Details and Home page
     const toDeveloper = () => {
         navigate('/developer')
     }
@@ -41,6 +41,9 @@ const Footer = () => {
                                     <WhatsappLogo size={36}  color="#191818" className='icons' weight="fill" />
                                 </IconButton>
                             </div>
+                            <div className="copyrightText">
+                                <b>&copy; 2024 SMILE NGO. All rights reserved.</b>
+                            </div>
                         </div>
                         <div className="part3">
                             
@@ -63,5 +66,3 @@ const Footer = () => {
         </>
     )
 }
-
-export default Footer

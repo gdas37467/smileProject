@@ -1,41 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import {motion} from 'framer-motion'
-import {
-    Box,
-    Step,
-    StepIcon,
-    StepIndicator,
-    StepNumber,
-    StepSeparator,
-    StepStatus,
-    StepTitle,
-    Stepper,
-    useSteps,
-    Button,
-    FormControl,
-    FormLabel,
-    Input,
-    Grid,
-    GridItem,
-    Icon,
-    InputGroup,
-    InputLeftAddon,
-    Checkbox,
-    Select,
-    Textarea,
-    PinInput,
-    PinInputField,
-    HStack,
-    VStack,
-    Text,
-    Heading,
-    FormHelperText,
-    RadioGroup,
-    Stack,
-    Radio
-} from '@chakra-ui/react'
-import { ChakraProvider, IconButton  } from '@chakra-ui/react'
-import { IdentificationBadge, Envelope, Phone ,Calendar, Password, Eye, EyeSlash, HouseLine, Drop, Gauge, CalendarCheck      } from '@phosphor-icons/react'
+import {  ChakraProvider, IconButton, Box, Step, StepIcon, StepIndicator, StepNumber, StepSeparator, StepStatus, StepTitle, Stepper, useSteps, Button, FormControl, FormLabel, Input, Grid, GridItem, Icon,  InputGroup, InputLeftAddon, Checkbox, Select, Textarea, PinInput, PinInputField, HStack,  VStack, Text, Heading, FormHelperText, RadioGroup, Stack, Radio } from '@chakra-ui/react'
+import { IdentificationBadge, Envelope, Phone ,Calendar, HouseLine, Drop, CalendarCheck } from '@phosphor-icons/react'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios'
@@ -48,8 +14,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import getCookie from '../getToken'
 
 
-
-
+// Register Donor Steps
 const steps = [
     { title: 'Personal Details' , description: 'First' },
     { title: 'Anatomical Features', description: 'Second' },
@@ -57,16 +22,15 @@ const steps = [
 ]
 
 
-
+// Email Regex
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 //Main Page 
-const DonateBlood = () => {
+export default function DonateBlood() {
     axios.defaults.withCredentials=true
 
     const navigate = useNavigate()
 
-    
-
+    // Forward to Donor Dashboard if Donor is true
     useEffect(()=>{
         if(localStorage.getItem('check')!== null){
             const now = new Date().getTime()
@@ -80,16 +44,12 @@ const DonateBlood = () => {
         }
     },[])
 
-
-    
-
-
     //Active Stepper State 
     const { activeStep , setActiveStep } = useSteps({
         index : 0,
         count : steps.length
     })
-// OTP Value
+    // OTP Value
     const [otpVal , setOtpVal] = useState('')
         
     // State Handlers
@@ -117,7 +77,7 @@ const DonateBlood = () => {
     const [changeText , setChangeText] = useState('Send OTP')
     //Disable OTP Button
     const [disability , setDisability] = useState(false)
-    
+    // Timer and Donor Validity and Login Validity State Variables
     const [n ,setN ] = useState(1)
     const [isLogin , setIsLogin] = useState(false)
     const [isInValid , setIsInValid] = useState({
@@ -157,9 +117,7 @@ const DonateBlood = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
     };
     
-    const handleBack = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep - 1);
-    };
+    const handleBack = () =>  setActiveStep((prevActiveStep) => prevActiveStep - 1);
 
     // Handle State Change of Donor Details
     const setDetails = (e) =>{
@@ -269,8 +227,6 @@ const DonateBlood = () => {
 
     }
 
-   
-
     //APIs
     // Send OTP API
     const sendOtp = async () =>{
@@ -281,8 +237,6 @@ const DonateBlood = () => {
                 icon : 'error'
             })
         }else{
-            
-
             timer()
             try{
                 const res =  await axios.post('/api/v1/donor/send_otp/', JSON.stringify({email : donorInfo.email}))
@@ -572,139 +526,132 @@ const DonateBlood = () => {
 
     return (
         <>
-
-
             <div className="donate_outer_div">
                 <div className="donate_inner_div">
                     {
                         !isLogin ? (
                             <ChakraProvider>
-                            <div className="donate_register">
-                                <motion.div className="donate_registration_form"
-                                    initial={{ x : '-100vw'}}
-                                    animate={{ x : 0 }}
-                                >
-                                    <Heading as='h3' mb={10} textAlign='center' > Donor Registration </Heading>
-                                    <Stepper size='lg' index={activeStep} colorScheme='red' >
-                                        {steps.map((step, index) => (
-                                            <Step key={index} onClick={()=> setActiveStep(index)}>
-                                                <StepIndicator>
-                                                    <StepStatus
-                                                        complete={<StepIcon />}
-                                                        incomplete={<StepNumber />}
-                                                        active={<StepNumber />}
-                                                    />
-                                                </StepIndicator>
-
+                                <div className="donate_register">
+                                    <motion.div className="donate_registration_form"
+                                        initial={{ x : '-100vw'}}
+                                        animate={{ x : 0 }}
+                                    >
+                                        <Heading as='h3' mb={10} textAlign='center' > Donor Registration </Heading>
+                                        <Stepper size='lg' index={activeStep} colorScheme='red' >
+                                            {steps.map((step, index) => (
+                                                <Step key={index}>
+                                                    <StepIndicator>
+                                                        <StepStatus
+                                                            complete={<StepIcon />}
+                                                            incomplete={<StepNumber />}
+                                                            active={<StepNumber />}
+                                                        />
+                                                    </StepIndicator>
                                                     <Box flexShrink='0' display={{base : 'none' , lg : 'block'}}>
                                                         <StepTitle>{step.title}</StepTitle>
-                                                   
                                                     </Box>
-
-                                                <StepSeparator />
-                                            </Step> 
-                                        ))}
-                                    </Stepper>
-                                            
-                                    <div className="reg">
-                                                <form>
-                                                    {formDetails(activeStep)}
-                                                </form>
-                                    </div>
-
-
-                                    {activeStep === steps.length  ? (
-
-                                        <div className="redirect">
-                                            <VStack>
-                                                <HStack>    
-                                                    
-                                                    <Button 
-                                                        onClick={verifyOtp} 
-                                                        color="black" bg="#d7141450" 
-                                                        _hover={{color:'#f0e3e4' , bg: '#d71414'}} 
-                                                        className='reg_btn'
-                                                        mt={10}
-                                                        height='30px'
-                                                        width='120px'
-                                                        fontSize='16px'
-                                                        fontWeight='400'
-                                                        isDisabled={otpVal.length !== 6}
-                                                    >
-                                                        Verify OTP
-                                                    </Button>   
-                                                    
-                                                </HStack>
-                                            </VStack>
+                                                    <StepSeparator />
+                                                </Step> 
+                                            ))}
+                                        </Stepper>
+                                                
+                                        <div className="reg">
+                                                    <form>
+                                                        {formDetails(activeStep)}
+                                                    </form>
                                         </div>
-                                    ) : (
 
-                                        <>  
-                                            
-                                            <div className="submit">
 
-                                                    <HStack justifyContent='space-between'>
+                                        {activeStep === steps.length  ? (
 
-                                                        <IconButton
-                                                            isRound={true}
-                                                            isDisabled={activeStep === 0}
-                                                            onClick={handleBack}
-                                                            sx={{ mr: 1 }}
-                                                            className='reg_btn'
+                                            <div className="redirect">
+                                                <VStack>
+                                                    <HStack>    
+                                                        
+                                                        <Button 
+                                                            onClick={verifyOtp} 
                                                             color="black" bg="#d7141450" 
                                                             _hover={{color:'#f0e3e4' , bg: '#d71414'}} 
-                                                            mt={20}
-                                                            height={{lg : '3rem', base : '2.5rem'}}
-                                                            width={{lg : '3rem', base : '2.5rem'}}
-                                                            icon={<ArrowBackIosNewIcon />}
+                                                            className='reg_btn'
+                                                            mt={10}
+                                                            height='30px'
+                                                            width='120px'
                                                             fontSize='16px'
-                                                        />
+                                                            fontWeight='400'
+                                                            isDisabled={otpVal.length !== 6}
+                                                        >
+                                                            Verify OTP
+                                                        </Button>   
                                                         
-                                                        <IconButton onClick={handleNext} 
-                                                            isRound={true}
-                                                            color="black" bg="#d7141450" 
-                                                            _hover={{color:'#f0e3e4' , bg: '#d71414'}}  className='reg_btn'
-                                                            mt={20}
-                                                            height={{lg : '3rem', base : '2.5rem'}}
-                                                            width={{lg : '3rem', base : '2.5rem'}}
-                                                            fontSize='16px'
-                                                            icon={<ArrowForwardIosIcon />}
-                                                        />
-                                                            
-                                                    
                                                     </HStack>
-                                                <VStack>
-
-                                                    <Text
-                                                        fontSize='md'
-                                                        onClick={e => setIsLogin(!isLogin)} 
-                                                        alignSelf = 'center'
-                                                        mt={10}
-                                                        sx={{
-                                                            cursor: 'pointer',
-                                                            textDecoration: 'underline',
-                                                        }}
-                                                    >
-                                                        Already Have an Account? LogIn Here
-                                                    </Text>
                                                 </VStack>
                                             </div>
-                                        </>
-                                    )}       
+                                        ) : (
 
-                                    
-                                </motion.div>
-                            </div>
-                                    <ToastContainer />
+                                            <>  
+                                                
+                                                <div className="submit">
+
+                                                        <HStack justifyContent='space-between'>
+
+                                                            <IconButton
+                                                                isRound={true}
+                                                                isDisabled={activeStep === 0}
+                                                                onClick={handleBack}
+                                                                sx={{ mr: 1 }}
+                                                                className='reg_btn'
+                                                                color="black" bg="#d7141450" 
+                                                                _hover={{color:'#f0e3e4' , bg: '#d71414'}} 
+                                                                mt={20}
+                                                                height={{lg : '3rem', base : '2.5rem'}}
+                                                                width={{lg : '3rem', base : '2.5rem'}}
+                                                                icon={<ArrowBackIosNewIcon />}
+                                                                fontSize='16px'
+                                                            />
+                                                            
+                                                            <IconButton onClick={handleNext} 
+                                                                isRound={true}
+                                                                color="black" bg="#d7141450" 
+                                                                _hover={{color:'#f0e3e4' , bg: '#d71414'}}  className='reg_btn'
+                                                                mt={20}
+                                                                height={{lg : '3rem', base : '2.5rem'}}
+                                                                width={{lg : '3rem', base : '2.5rem'}}
+                                                                fontSize='16px'
+                                                                icon={<ArrowForwardIosIcon />}
+                                                            />
+                                                                
+                                                        
+                                                        </HStack>
+                                                    <VStack>
+
+                                                        <Text
+                                                            fontSize='md'
+                                                            onClick={e => setIsLogin(!isLogin)} 
+                                                            alignSelf = 'center'
+                                                            mt={10}
+                                                            sx={{
+                                                                cursor: 'pointer',
+                                                                textDecoration: 'underline',
+                                                            }}
+                                                        >
+                                                            Already Have an Account? LogIn Here
+                                                        </Text>
+                                                    </VStack>
+                                                </div>
+                                            </>
+                                        )}       
+
+                                        
+                                    </motion.div>
+                                </div>
                             </ChakraProvider>
                         ) : (
                             <>
-
                                 <ChakraProvider>
                                     <div className="donate_login">
                                         <motion.div className="donate_login_form"
                                             initial={{ x : '100vw'}}
-                                            whileInView={{ x : 0 }}
+                                            animate={{ x : 0 }}
                                         >
 
                                                 <LoginPage 
@@ -728,20 +675,13 @@ const DonateBlood = () => {
                                             </VStack>
                                         </motion.div>
                                     </div>
-                                    <ToastContainer />
-
                                 </ChakraProvider>
                             </>
                         )
                     }
-
+                    <ToastContainer />
                 </div>
             </div>
-
-
-
         </>
     )
 }
-
-export default DonateBlood
