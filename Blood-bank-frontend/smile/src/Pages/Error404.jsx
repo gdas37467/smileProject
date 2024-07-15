@@ -5,14 +5,14 @@ import { useNavigate } from 'react-router-dom'
 
 
 const style = {
-    height : {lg : '95vh', xs : '80vh'},
+    height : {lg : '95vh', xs : '60vh'},
     width : '100%',
     display : 'flex',
     flexDirection : 'column',
     justifyContent : 'center',
     alignItems : 'center',
     gap : '1rem',
-    paddingTop : '8rem',
+    paddingTop : {lg : '8rem', xs : '20rem'},
     '& img' : {
         height : {lg : '50rem', xs : '30rem'},
         width : 'auto',
@@ -27,12 +27,11 @@ const style = {
         cursor : 'pointer',
         textDecoration : 'underline',
         color : '#C0463B'
-
     },  
-
+    
 }
 
-const Error404 = () => {
+export default function Error404(){
 
     const navigate = useNavigate()
     const goHome = () => {
@@ -51,5 +50,3 @@ const Error404 = () => {
         </>
     )
 }
-
-export default Error404

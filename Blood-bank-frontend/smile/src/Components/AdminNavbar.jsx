@@ -32,15 +32,14 @@ const style = {
 
 const drawerWidth = 240;
 
-function AdminNavbar (){
+export default function AdminNavbar (){
 
      // Modal State Variables
     const [open,setOpen] = useState(false)
     const handleClose = () => setOpen(false);
     const addTopDonor = () => setOpen(true);
     const [selectedImgs , setSelectedImgs] = useState([])
-    // Register Recipient/Donor state
-    const [register,setRegister] = useState(false)
+    
     const inpRef = useRef(null)
 
     const topDonorImages = (e) => {
@@ -54,7 +53,6 @@ function AdminNavbar (){
 
 
     const handleDelete = (ind) => {
-        console.log("deleted")
         var updatedArr= selectedImgs.filter((e,i) => {return i !== ind})
         setSelectedImgs(updatedArr)
     }
@@ -68,19 +66,16 @@ function AdminNavbar (){
 
         const formData = new FormData();
         selectedImgs.forEach(files => formData.append('images' , files));
-        console.log(formData.getAll('images'))
         
         try {
             var token = getCookie('csrftoken')
             const res = await axios.post('http://192.168.1.19:8000/api/v1/adminUser/addPhotos/',formData,{
                 headers : {'X-CSRFToken': token}
             })
-            console.log(res)
-            toast.success('Images added successfully!')
+            toast.success(res.data.success || 'Images added successfully!')
             setOpen(false)
             setSelectedImgs([])
         } catch (error) {
-            console.log(error)
             toast.error( error.response.data.error || 'Something went wrong!')
         }
 
@@ -111,7 +106,6 @@ function AdminNavbar (){
                 <ListItem >
                     <ListItemButton sx={{ textAlign: 'left' }} >
                         <NavLink className="nav-link " to='/admindashboard/register'> Register Donor/Recipient</NavLink> 
-                        {/* <button className="nav-link " onClick={e => setRegister(true)} to='#'> </button>  */}
                     </ListItemButton>
                 </ListItem>
                 
@@ -136,7 +130,6 @@ function AdminNavbar (){
                 </Toolbar>
                 <div className="logo">
                     <img src={Smile} alt="Logo" />
-                    {/* <h4>Admin Dashboard</h4> */}
                 </div>
 
                 <nav className="menu" >
@@ -144,7 +137,6 @@ function AdminNavbar (){
                     <NavLink className="nav-link " to='/admindashboard/donorlist'> Donor List </NavLink> 
                     <button className='nav-link' to='#' onClick={addTopDonor}> Add Top Donors  </button>
                     <NavLink className="nav-link " to='/admindashboard/register'> Register Donor/Recipient </NavLink> 
-                    {/* <button className='nav-link' to='#' onClick={e => setRegister(true)} >   </button> */}
                 </nav>
                 <Drawer
                     container={container}
@@ -152,7 +144,7 @@ function AdminNavbar (){
                     open={mobileOpen}
                     onClose={handleDrawerToggle}
                     ModalProps={{
-                        keepMounted: true, // Better open performance on mobile.
+                        keepMounted: true,
                     }}
                     sx={{
                         display: { xs: 'block', sm: 'none' },
@@ -231,18 +223,8 @@ function AdminNavbar (){
                     </Fade>
                 </Modal>
             </div>
-                {
-                    register && (
-                        <Registration 
-                            setRegister={e=> setRegister(false)}
-                            
-                        />
-                    )
-                }
-                <ToastContainer />
+            <ToastContainer />
 
         </>
     )
 }
-
-export default AdminNavbar

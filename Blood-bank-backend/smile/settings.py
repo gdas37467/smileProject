@@ -46,7 +46,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['smileorganization.in' , 'www.smileorganization.in', '91.108.105.42','127.0.0.1','192.168.29.55','192.168.1.19']
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(',')
 
 
 # Application definition
@@ -80,9 +80,7 @@ MIDDLEWARE = [
 ]
 
 
-CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:3000','http://localhost:3000' , 
-                        'http://192.168.1.12:3000',"http://192.168.29.55:3000",'http://192.168.29.55','http://192.168.1.19',
-                         'https://smileorganization.in' , 'https://www.smileorganization.in', 'https://91.108.105.42']
+CSRF_TRUSTED_ORIGINS = os.environ.get('CORS_ALLOWED_AND_CSRF_TRUSTED_ORIGINS').split(',')
 
 #CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
@@ -96,21 +94,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 CSRF_COOKIE_AGE = 86400 
 
 # custom added
-CORS_ALLOWED_ORIGINS = [
-   
-    'http://127.0.0.1:3000',
-    'http://localhost:3000',
-    'http://192.168.1.12:3000',
-    'http://192.168.56.1:3000',
-    'http://192.168.1.19:3000',
-    'http://192.168.1.15:4173',
-    'http://192.168.29.55:3000',
-    'http://192.168.29.55',
-    'http://192.168.1.19',
-    'https://91.108.105.42',
-    'https://smileorganization.in' , 'https://www.smileorganization.in'
-
-  ]
+CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_AND_CSRF_TRUSTED_ORIGINS').split(',')
 
 
 
@@ -183,13 +167,12 @@ WSGI_APPLICATION = 'smile.wsgi.application'
 
 DATABASES = {
         'default': {
-            
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'defaultdb',
-        'USER': os.environ.get('NA'),
-        'PASSWORD': os.environ.get('PASSWORD'),
-        'HOST': os.environ.get('HOST'),
-        'PORT': '20379'
+            'ENGINE': os.environ.get('DB_ENGINE'),
+            'NAME': os.environ.get('DB_NAME'),
+            'USER': os.environ.get('DB_USER'),
+            'PASSWORD': os.environ.get('DB_PASSWORD'),
+            'HOST': os.environ.get('DB_HOST'),
+            'PORT': os.environ.get('DB_PORT')
         }
         
 }
@@ -256,7 +239,7 @@ EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND')
 
 #cron job
 CRONJOBS = [
-    ('17 19 * * *', 'smile.cronjob.updateUnits', '>> ' + os.path.join(BASE_DIR,'log/debug7.log' + ' 2>&1 ')),
+    ('31 18 * * *', 'smile.cronjob.updateUnits', '>> ' + os.path.join(BASE_DIR,'log/debug7.log' + ' 2>&1 ')),
     # Add more cron jobs as needed
 ]
 

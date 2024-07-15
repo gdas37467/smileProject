@@ -10,21 +10,8 @@ import VaccinesIcon from '@mui/icons-material/Vaccines';
 import PropTypes from 'prop-types';
 import DoneIcon from '@mui/icons-material/Done';
 import { ChakraProvider, FormHelperText, RadioGroup } from '@chakra-ui/react';
-import {
-    FormControl,
-    FormLabel,
-    Input,
-    Grid,
-    GridItem,
-    Icon,
-    InputGroup,
-    InputLeftAddon,
-    Checkbox,
-    Select,
-    Textarea,
-    Radio
-} from '@chakra-ui/react'
-import { IdentificationBadge, Envelope, Phone ,Calendar, HouseLine, Drop, CalendarCheck , Bed , FirstAid , Receipt, UserCircle, CloudArrowUp, UserCirclePlus} from '@phosphor-icons/react'
+import { FormControl, FormLabel, Input, Grid, GridItem, Icon, InputGroup, InputLeftAddon, Checkbox, Select, Textarea, Radio } from '@chakra-ui/react'
+import { IdentificationBadge, Phone ,Calendar, HouseLine, Drop, CalendarCheck , Bed , FirstAid , Receipt, UserCircle, CloudArrowUp,} from '@phosphor-icons/react'
 import TableComp from '../Components/Table';
 import axios from 'axios';
 import { ToastContainer , toast } from 'react-toastify';
@@ -36,17 +23,14 @@ import DynamicFormIcon from '@mui/icons-material/DynamicForm';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import {BallTriangle, FallingLines} from 'react-loader-spinner';
+import {FallingLines} from 'react-loader-spinner';
 import getCookie from '../getToken';
 
 
 
 
-// Email Regex
-const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 //Accepted File Types
 const fileTypes = ['jpg', 'png', 'jpeg']
-
 
 // Steps for Requesting Blood
 const steps = ["Patient Details", "Patient Contact Details", "Patient Requirement", "Requisition Form"]
@@ -65,8 +49,7 @@ const style = {
     borderBottom: '2px solid rgb(214,205,205)',
     boxShadow: 24,
     p: 4,
-    // scrollY : 'show'
-    // zIndex : 3,
+   
 
 };
 
@@ -202,7 +185,7 @@ export default function RequestDashboard() {
         bloodBankName : '',
         donorName : '',
         donationDate : '',
-        donationReceipt : '',
+        donationReceipt : null,
     })
 
     //Patient Details Validation
@@ -275,9 +258,43 @@ export default function RequestDashboard() {
         }
     },[])
 
+    //Page Loading API
+    const loadAPI = async () =>{
+        setLoadingPage(true)
+        try {
+            const res = await axios.get('http://192.168.1.19:8000/api/v1/recipient/get_recipient_records/')
+            console.log(res)       
+            let pendingReq = res.data.pastRecord.filter(el => el.status === 'Pending')
+            let pastRecord = res.data.pastRecord.filter(el => el.status !== 'Pending')
+            setPendingRecords(pendingReq)
+            setPastRecords(pastRecord)
+            setRecDetails(res.data.recipientData)
 
+        } catch (error) {
+            console.log(error)
+            Swal.fire({
+                title : error.response.data.error || 'Something Went Wrong!',
+                icon : 'warning',
+            })
+        }
+        setLoadingPage(false)
+    }
 
+    //Page Loading API 
+    useEffect(() => {
+        // Date and Time for Display
+        setInterval(()=>{
+            let date = new Date()
+            setDisT(date.toLocaleTimeString())
+            setTime(date.toLocaleTimeString('en-US',{hour12: true, hour : '2-digit', minute : '2-digit'}).split(/[\s:]/))
+            setDate(date.toLocaleDateString('en-US', {weekday : 'short', day : '2-digit', month : 'long'}).split(' '))
+        },1000)
 
+        if(loadingApi){
+            loadAPI()
+        }
+
+    }, [loadingApi,reload]);
 
     //Handlers
     //Handles Modal Open and Close
@@ -297,9 +314,9 @@ export default function RequestDashboard() {
                         text : `You have to wait ${recDetails.remainingDays} days before placing another Request.`,
                         icon : 'warning'
                     })
-                }
-       
+                }       
     }
+    
     const handleClose = () => setOpen(false);
 
     // Stepper Controller
@@ -316,7 +333,7 @@ export default function RequestDashboard() {
             
             case 1:
                 
-                if(patientDetails.address.length < 10 || patientDetails.phoneNumber.length !== 10 ){
+                if(patientDetails.address.length < 3 || patientDetails.phoneNumber.length !== 10 ){
                     toast.error("Please enter your details correctly before continuing.")
                     return
                 }
@@ -334,14 +351,12 @@ export default function RequestDashboard() {
         }
  
         setActiveStep((prevActiveStep) => prevActiveStep + 1)
-        console.log(activeStep)
     }
     const handleBack = () => {setActiveStep((prevActiveStep) => prevActiveStep - 1)}
 
     //Control Stepper with condition of first donation
     const controlStepper = () =>{
         setControlStep(prev => !prev)
-        console.log(controlStep)
         if(!controlStep){
             steps.splice(3,1)
         }else{
@@ -399,7 +414,7 @@ export default function RequestDashboard() {
                 break
 
             case 'address':
-                if(value.trim().length < 10){
+                if(value.trim().length < 3){
                     setPatInValid(pS => ({
                         ...pS,
                         [name] : true
@@ -457,7 +472,6 @@ export default function RequestDashboard() {
             case 'donationReceipt':
                 if(value !== ''){
                     if(!fileTypes.includes(e.target.files[0].name.split('.')[1]) || e.target.files[0].size > 200000 ){
-                        console.log("Check")
                         toast.warning('Receipt must be in jpg/jpeg/png format and size should be less than 200KB')
                         setPatInValid(pS => ({
                             ...pS,
@@ -481,7 +495,7 @@ export default function RequestDashboard() {
         if(name === 'donationReceipt'){
             setPatientDetails(prevState => ({
                 ...prevState,
-                [name] : e.target.files[0]
+                [name] : e.target.files[0] || null
             }))
         }else{
             setPatientDetails(prevState => ({
@@ -494,7 +508,7 @@ export default function RequestDashboard() {
     
 
     //Function to select a receipt
-    const clickReceipt = (e) =>{ inpRef.current.click() }
+    const clickReceipt = () =>{ inpRef.current.click() }
 
     //Modal Content
     const formDetails = (activeStep) =>{
@@ -587,7 +601,7 @@ export default function RequestDashboard() {
                                         </InputLeftAddon>
                                         <Textarea variant='outline' backgroundColor='red.50' fontSize={14} resize='none' name="address" value={patientDetails.address} onChange={e =>  setDetails(e)} isInvalid={patInValid.address} focusBorderColor={patInValid.address ? 'red.400' : 'green.300'} />
                                     </InputGroup>
-                                    {patInValid.address ? <FormHelperText color="red" fontWeight={500}> Min 10 Characters are needed  </FormHelperText> : null}
+                                    {patInValid.address ? <FormHelperText color="red" fontWeight={500}> Min 3 Characters are needed  </FormHelperText> : null}
 
                                 </FormControl>
                         </GridItem>
@@ -726,7 +740,7 @@ export default function RequestDashboard() {
                         </GridItem>
 
                         <GridItem>
-                            <FormControl display='none' isRequired>
+                            <FormControl display='none'>
                                 <FormLabel fontSize={12} htmlFor='donationReceipt'>Donation Receipt</FormLabel>
                                 <InputGroup >
                                     <InputLeftAddon height={35}>
@@ -738,7 +752,7 @@ export default function RequestDashboard() {
                             <div className="receipt_input" onClick={clickReceipt}>
                                 
                                     <CloudArrowUp size={50} color="#ec3c3c" weight="duotone" />
-                                    Upload Your Receipt
+                                    Upload Your Receipt (Optional)
                                 <p> (Only .jpg, .jpeg and .png images are supported. And size less than 200KB ) </p>
                             </div>
                         </GridItem>
@@ -767,12 +781,9 @@ export default function RequestDashboard() {
     
     
     }
-
-
-    //function to submit Patient Request
+    //Function to submit Patient Request
     const placeRequest = async (patDet) =>{ 
 
-        // console.log(patientDetails)
         if(controlStep){
             if(patientDetails.bloodGroup === '' || patientDetails.hospitalName < 3 ){
                 toast.error("Please enter the details correctly before submitting.")
@@ -782,14 +793,13 @@ export default function RequestDashboard() {
                 return
             }
         }else{
-            if(patientDetails.donBlood === '' || patientDetails.bloodBankName < 3 || patientDetails.donationReceipt === undefined || patientDetails.donationReceipt === '' || (patientDetails.donorName < 3 && patientDetails.donorName !== '') || patientDetails.donationDate === '' ){
+            if(patientDetails.donBlood === '' || patientDetails.bloodBankName < 3 || (patientDetails.donorName < 3 && patientDetails.donorName !== '') || patientDetails.donationDate === '' ){
                 toast.error("Please enter your details correctly before continuing.")
                 return
             }
         }
 
         const formData = new FormData();
-        //Complete the Function
         setLoadingBtn(true)
         const data = {
             firstName : patDet.firstName,
@@ -806,7 +816,7 @@ export default function RequestDashboard() {
             bloodBankName : patDet.bloodBankName,
             donorName : patDet.donorName,
             donationDate : patDet.donationDate,
-            donationReceipt : patDet.donationReceipt,
+            donationReceipt : patDet.donationReceipt ,
             firstDonCheck : controlStep,
             gender : patDet.gender,
         }
@@ -820,7 +830,6 @@ export default function RequestDashboard() {
             const res = await axios.post('http://192.168.1.19:8000/api/v1/recipient/request_blood/',formData,{
                 headers : {'X-CSRFToken': token}
             });
-            console.log(res)
             Swal.fire({
                 text : res.data.success,
                 icon : 'success'
@@ -832,7 +841,6 @@ export default function RequestDashboard() {
                 }
             })
         } catch (error) {
-            console.log(error)
             if(error.response.status == 500){
                 Swal.fire({
                     text : error.response.data.error || 'Please Fill up the Form Correctly',
@@ -848,7 +856,6 @@ export default function RequestDashboard() {
                     setLoadingBtn(false)
                     if(res.isConfirmed || res.dismiss === 'backdrop'){
                         setReloadApi(!reload)
-                        // handleClose()
                     }
                 })
             }
@@ -857,27 +864,7 @@ export default function RequestDashboard() {
 
 
     }
-    //Page Loading API
-    const loadAPI = async () =>{
-        setLoadingPage(true)
-        try {
-            const res = await axios.get('http://192.168.1.19:8000/api/v1/recipient/get_recipient_records/')
-            console.log(res)       
-            let pendingReq = res.data.pastRecord.filter(el => el.status === 'Pending')
-            let pastRecord = res.data.pastRecord.filter(el => el.status !== 'Pending')
-            setPendingRecords(pendingReq)
-            setPastRecords(pastRecord)
-            setRecDetails(res.data.recipientData)
-
-        } catch (error) {
-            console.log(error)
-            Swal.fire({
-                title : error.response.data.error || 'Something Went Wrong!',
-                icon : 'warning',
-            })
-        }
-        setLoadingPage(false)
-    }
+ 
     //Logout API
     const logout = () => {
         try{
@@ -901,24 +888,6 @@ export default function RequestDashboard() {
         }
     }
 
-
-    //Page Loading API 
-    useEffect(() => {
-        // Date and Time for Display
-        setInterval(()=>{
-            let date = new Date()
-            setDisT(date.toLocaleTimeString())
-            setTime(date.toLocaleTimeString('en-US',{hour12: true, hour : '2-digit', minute : '2-digit'}).split(/[\s:]/))
-            setDate(date.toLocaleDateString('en-US', {weekday : 'short', day : '2-digit', month : 'long'}).split(' '))
-        },1000)
-
-        if(loadingApi){
-            loadAPI()
-        }
-
-    }, [loadingApi,reload]);
-
-    // console.log()
     const tableColumn = ["Patient's Name", "Requested Date", "Blood Group", "Status" ]
 
     //Main Return
@@ -928,6 +897,8 @@ export default function RequestDashboard() {
                     
                         <div className="req_dashboard_content">
                             <div className="actual_content">
+
+                            {/* Request Dashboard */}
                             {
                                 !loadingPage ? (
                                     <>
@@ -1047,7 +1018,6 @@ export default function RequestDashboard() {
                                             <FallingLines
                                                 height="100"
                                                 width="100"
-                                                // radius={5}
                                                 color="#EAEAEA"
                                                 ariaLabel="falling-circles-loading"
                                                 wrapperStyle={{
@@ -1055,7 +1025,6 @@ export default function RequestDashboard() {
                                                     alignItems: "center",
                                                     height: "100%"
                                                 }}
-                                                // wrapperClass=""
                                                 visible={true}
                                             />
                                         </Box>
@@ -1064,7 +1033,7 @@ export default function RequestDashboard() {
                             }
 
 
-                                {/* Function to Open A Modal For Registering a Patient in need of Blood Units */}
+                                {/* Modal For Registering a Patient in need of Blood Units */}
                                 <div className="modal_div">
                                     <Modal
                                         aria-labelledby="transition-modal-title"
@@ -1103,7 +1072,6 @@ export default function RequestDashboard() {
                                                 <React.Fragment>
                                                     <Box sx={{ display: 'flex', flexDirection: 'row', pl : 5 , pb : 2 , position : 'absolute', bottom : 15, left : 0, width : {lg : '60%', xs : '65%'} , justifyContent : 'space-between', }}>
                                                         <IconButton
-                                                            // color="inherit"
                                                             disabled={activeStep === 0}
                                                             onClick={handleBack}
                                                             sx={{ 
@@ -1125,8 +1093,8 @@ export default function RequestDashboard() {
                                                         <LoadingButton 
                                                             onClick={e => placeRequest(patientDetails)} 
                                                             loading={loadingBtn}
-                                                            sx={{color:"#F4D9D5" , 
-                                                                background:"#d7141480",
+                                                            sx={{color:"#fff" , 
+                                                                background:"#d71414",
                                                                 fontWeight : 'bold',
                                                                 fontSize : {lg : '16px', xs : '12px'},
                                                                 height:'35px',
@@ -1146,7 +1114,6 @@ export default function RequestDashboard() {
                                                 <React.Fragment>
                                                     <Box sx={{ display: 'flex', flexDirection: 'row', p : 5  , width : '100%' , justifyContent : 'space-between' , position : 'absolute', bottom : 15, left : 0}}>
                                                         <IconButton
-                                                            // color="inherit"
                                                             disabled={activeStep === 0}
                                                             onClick={handleBack}
                                                             sx={{ 

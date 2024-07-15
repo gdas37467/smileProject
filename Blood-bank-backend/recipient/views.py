@@ -132,22 +132,32 @@ def request_blood(request):
                 print(129)
                 return JsonResponse({"error" : "First Donation Validation Error"},status=500)
         else:
-            firstDonation = FirstDonationDetails(
+            if image_file is None:
+                firstDonation = FirstDonationDetails(
                 donBlood = donBlood,
                 bloodBankName = bloodBankName,
                 donorName = donorName,
                 donationDate = datetime.datetime.strptime(donationDate,date_format).date(),
-                donationReceipt = image_file
-            )
-            firstDonation.save()
-            fs = FileSystemStorage()
+                donationReceipt = None
+                )
+                firstDonation.save()
+            else:
+                firstDonation = FirstDonationDetails(
+                    donBlood = donBlood,
+                    bloodBankName = bloodBankName,
+                    donorName = donorName,
+                    donationDate = datetime.datetime.strptime(donationDate,date_format).date(),
+                    donationReceipt = image_file
+                    )
+                firstDonation.save()
+                fs = FileSystemStorage()
 
-            # save the image on MEDIA_ROOT folder
-            file_name = fs.save(image_file.name, image_file)
+                # save the image on MEDIA_ROOT folder
+                file_name = fs.save(image_file.name, image_file)
 
-            # get file url with respect to `MEDIA_URL`
-            file_url = fs.url(file_name)
-            print(file_url)
+                # get file url with respect to `MEDIA_URL`
+                file_url = fs.url(file_name)
+                print(file_url)
 
         
         

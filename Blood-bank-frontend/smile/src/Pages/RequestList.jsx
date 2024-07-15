@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import { Backdrop, Box, Button, Fade, IconButton, Modal, Typography } from '@mui/material'
 import { ToastContainer, toast } from 'react-toastify'
-import {BallTriangle,FallingLines, LineWave} from 'react-loader-spinner';
+import {FallingLines} from 'react-loader-spinner';
 import CloseIcon from '@mui/icons-material/Close';
 
 
@@ -25,6 +25,7 @@ const style = {
     borderBottom: '2px solid rgb(214,205,205)',
     boxShadow: 24,
     p: 4,
+    overflowY : 'scroll',
     '@media only screen and (max-width : 767px)' : {
         width: '36rem',
         height : '50rem',
@@ -44,7 +45,7 @@ const modalTypStyle = {
 
 
 
-const RequestList = () => {
+export default function RequestList() {
     axios.defaults.withCredentials = true
 
     const navigate = useNavigate()
@@ -59,6 +60,7 @@ const RequestList = () => {
     const [open,setOpen] = useState(false)
     // Modal Data
     const [modalData , setModalData] = useState();
+    // Loading Page and Reload States
     const [loadingPage , setLoadingPage] = useState(true)
     const [loadingApi , setLoadingApi] = useState(false)
     const [reload,setReload] = useState(false)
@@ -107,10 +109,35 @@ const RequestList = () => {
 
     },[])
 
+   //API Data Call
+   const getTableData = async () =>{
+    setLoadingPage(true)
+    try{
+        const res = await axios.get('http://192.168.1.19:8000/api/v1/adminUser/get_recipient_list/')
+        console.log(res)
+        let pendingReq = res.data.list.filter((el)=> { return el.status === 'Pending'})
+        let nonPendingReq = res.data.list.filter((el)=> { return el.status !== 'Pending'})
+        setReqRows(pendingReq)
+        setNonPendingList(nonPendingReq)
+    }catch (error){
+        Swal.fire({
+            title : error.response.data.error || 'Something went wrong!',
+            icon : 'error'
+        })
+    }
+    setLoadingPage(false)
+}
+
+    //Refresh Page
+    useEffect(()=>{
+        if(loadingApi){
+            getTableData()
+        }
+    },[loadingApi,reload])
+
     //Reject Recipient Request
-    const rejectRequest = async (id, sl) => {
+    const rejectRequest = async (id) => {
         //Reject API
-        console.log(id)
         Swal.fire({
             title: "Are you sure?",
             icon: "warning",
@@ -144,7 +171,6 @@ const RequestList = () => {
     
     // Accept Recipient Request
     const acceptRequest = async (id) =>{
-        console.log(id)
         try {
             const res = await axios.get(`http://192.168.1.19:8000/api/v1/adminUser/confirm_recipient_donation/${id}`)
             console.log(res)
@@ -157,7 +183,6 @@ const RequestList = () => {
 
     // Update Request
     const updateRequest = async (id, status) => {
-        console.log(status)
         if(status !== 'Rejected'){
             toast.error('Not Applicable')
             return
@@ -185,37 +210,11 @@ const RequestList = () => {
         }
     }
     
-    //API Data Call
-    const getTableData = async () =>{
-        setLoadingPage(true)
-        try{
-            const res = await axios.get('http://192.168.1.19:8000/api/v1/adminUser/get_recipient_list/')
-            console.log(res)
-            let pendingReq = res.data.list.filter((el)=> { return el.status === 'Pending'})
-            let nonPendingReq = res.data.list.filter((el)=> { return el.status !== 'Pending'})
-            setReqRows(pendingReq)
-            setNonPendingList(nonPendingReq)
-        }catch (error){
-            Swal.fire({
-                title : error.response.data.error || 'Something went wrong!',
-                icon : 'error'
-            })
-        }
-        setLoadingPage(false)
-    }
-    
-    //Refresh Page
-    useEffect(()=>{
-        if(loadingApi){
-            getTableData()
-        }
-    },[loadingApi,reload])
     
     // Modal Handlers
     const viewPrevDonation = async (id) => {
         setOpen(true)
         setModalLoad(true)
-        console.log(id)
         try{
             const data = await axios.get(`http://192.168.1.19:8000/api/v1/adminUser/getFirstDon/${id}`)
             console.log(data.data.firstDonation)
@@ -253,7 +252,7 @@ const RequestList = () => {
 
     return (
         <>  
-
+            {/* Request List Dashboard */}
             <AdminNavbar />
             <div className="admin_outer_div">
                 <div className="admin_dashboard">
@@ -266,7 +265,7 @@ const RequestList = () => {
                                             width={100}
                                             radius={5}
                                             color="#EAEAEA"
-                                            ariaLabel="ball-triangle-loading"
+                                            ariaLabel="falling-lines-loading"
                                             wrapperClass=""
                                             visible={true}
                                         />
@@ -298,9 +297,7 @@ const RequestList = () => {
                                     rows={reqRows}
                                     viewPrevDonation={viewPrevDonation}
                                     acceptRequest={acceptRequest}
-                                    // setChanges={changeSelectionModel}
                                     rejectRequest={rejectRequest}
-                                    // donorData={apiDonorData}
                                 />
                                     
                                 <h1>All Requests</h1>
@@ -316,6 +313,9 @@ const RequestList = () => {
                 </div>
                 <ToastContainer />
             </div>
+
+            {/* Modal for View Receipt */}
+
             <div className="modal_div">
                 <Modal
                     aria-labelledby="transition-modal-title"
@@ -354,7 +354,7 @@ const RequestList = () => {
                                                 lastLineColor=""
                                             />
                                         </Box>
-                                     </>
+                                    </>
                                 ) : (
                                     <>
                                         
@@ -374,7 +374,15 @@ const RequestList = () => {
                                             <Typography variant='h4' sx={modalTypStyle} >
                                                 <b> Donor's Name : </b> {modalData.donorName !== '' ? modalData.donorName : '-'}
                                             </Typography>
-                                            <img src={modalData.donationReceipt} height='200px' width='auto' alt="Receipt" />
+                                            {
+                                                modalData.donationReceipt == 'No Image Found' ? (
+                                                    <Typography variant='h4' sx={modalTypStyle} >
+                                                        <b> {modalData.donationReceipt} </b> 
+                                                    </Typography>
+                                                ) : (
+                                                    <img src={modalData.donationReceipt} height='200px' width='auto' alt="Receipt" />
+                                                )
+                                            }
                                         </div>
                                     </>
                                 )
@@ -386,5 +394,3 @@ const RequestList = () => {
         </>
     )
 }
-
-export default RequestList

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { Button, ChakraProvider, Checkbox, FormControl, FormHelperText, FormLabel, Grid, GridItem, HStack, Heading, Icon, IconButton, Input, InputGroup, InputLeftAddon, Radio, RadioGroup, Select, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Textarea, VStack } from '@chakra-ui/react';
+import { Button, ChakraProvider, Checkbox, FormControl, FormHelperText, FormLabel, Grid, GridItem, HStack, Heading, Icon, Input, InputGroup, InputLeftAddon, Radio, RadioGroup, Select, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Textarea, VStack } from '@chakra-ui/react';
 import { Box } from '@mui/material'
-import { IdentificationBadge, Envelope, Phone ,Calendar, Password, Eye, EyeSlash, HouseLine, Drop, Gauge, CalendarCheck , Bed     } from '@phosphor-icons/react'
+import { IdentificationBadge, Phone ,Calendar, HouseLine, Drop, CalendarCheck , Bed } from '@phosphor-icons/react'
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
@@ -11,10 +11,6 @@ import getCookie from '../getToken';
 
 //Style for Modal
 const style = {
-    // position: 'relative',
-    // top: '50%',
-    // left: '50%',
-    // transform: 'translate(-50%, -50%)',
     width: {lg : '75rem' , xs : '40rem'},
     minHeight : '35rem',
     maxHeight : '68rem',
@@ -35,9 +31,11 @@ const style = {
     
 };
 
-const Registration = (props) => {
+export default function Registration(){
     axios.defaults.withCredentials=true;
 
+
+    
     // State variables
     // Check for Invalid Registration
     const [isDonorValid , setIsDonorValid] = useState({
@@ -85,6 +83,21 @@ const Registration = (props) => {
     // Page Reloader flag
     const [reload,setReload] = useState(true)
 
+
+   // API Calls
+   const getCount = async () => {
+        try{
+            const res = await axios.get('http://192.168.1.19:8000/api/v1/adminUser/get_total_cquantity/');
+            console.log(res)
+            setDailyCount(res.data.quantity)
+        }catch(e){
+            console.log(e)
+        }
+    }
+
+    useEffect(() =>{
+        getCount();
+    },[reload])
     // Handlers
     //Handle State Change of Recipient Details
     const setRecipientDetails = (e) =>{
@@ -136,7 +149,7 @@ const Registration = (props) => {
                 break
 
             case 'address':
-                if(value.trim().length < 10){
+                if(value.trim().length < 2){
                     setIsRecipientValid(pS => ({
                         ...pS,
                         [name] : true
@@ -224,7 +237,7 @@ const Registration = (props) => {
                 break
                 
             case 'address' : 
-                if(value.trim().length < 10){
+                if(value.trim().length < 2){
                     setIsDonorValid(prevState => ({
                         ...prevState,
                         [name] : true
@@ -246,10 +259,8 @@ const Registration = (props) => {
 
     // Add Recipient
     const addRecipient =async () => {
-        console.log('Adding Recipient')
 
         if(isRecipientValid.firstName || isRecipientValid.lastName || isRecipientValid.phoneNumber || isRecipientValid.address || recipientInfo.dob === '' || recipientInfo.bloodGroup === '' || recipientInfo.gender === ''){
-            console.log('Check')
             toast.error('Please Enter the Recipient Details Correctly')
             return
         }
@@ -265,7 +276,6 @@ const Registration = (props) => {
             const res = await axios.post('http://192.168.1.19:8000/api/v1/adminUser/admin_booking/', formData,{
                 headers : {'X-CSRFToken': token}
             })
-            console.log(res)
             Swal.fire({
                 text : res.data.success,
                 icon : 'success'
@@ -296,7 +306,6 @@ const Registration = (props) => {
 
     // Add Donors
     const addDonor = async () => {
-        console.log('Adding Donors')
         if(isDonorValid.firstName || isDonorValid.lastName || isDonorValid.phoneNumber || isDonorValid.address || donorInfo.bloodGroup === '' || donorInfo.dob === '' || donorInfo.gender === ''){
             toast.error('Please Fill the Donor Details Correctly')
             return
@@ -319,7 +328,6 @@ const Registration = (props) => {
             const res = await axios.post('http://192.168.1.19:8000/api/v1/adminUser/admin_donor_registration/', JSON.stringify(payload),{
                 headers : {'X-CSRFToken': token}
             })
-            console.log(res)
             Swal.fire({
                 text : res.data.success,
                 icon : 'success'
@@ -347,36 +355,21 @@ const Registration = (props) => {
     }
 
 
-    // API Calls
-    const getCount = async () => {
-        try{
-            const res = await axios.get('http://192.168.1.19:8000/api/v1/adminUser/get_total_cquantity/');
-            console.log(res)
-            setDailyCount(res.data.quantity)
-        }catch(e){
-            console.log(e)
-        }
-    }
-
-    useEffect(() =>{
-        getCount();
-    },[reload])
+    
 
 
 
     return (
         <>
-
                     <Box sx={style}>
                         <ChakraProvider>
-                            
                             <Tabs isFitted variant='solid-rounded' colorScheme='red' size='md'>
                                 <TabList mb='2em' >
                                     <Tab fontSize={{lg: '1.8rem', base: '1.2rem'}}>Recipient Registration</Tab>
                                     <Tab fontSize={{lg: '1.8rem', base: '1.2rem'}}>Donor Registration</Tab>
                                 </TabList>
                                 <TabPanels>
-                                {/* Recipient Panel */}
+                                    {/* Recipient Panel */}
                                     <TabPanel>
                                         <VStack>
                                             <Heading> Total Slots Left is : {dailyCount} </Heading>
@@ -633,7 +626,7 @@ const Registration = (props) => {
                                                         </InputLeftAddon>
                                                         <Textarea variant='outline' backgroundColor='red.50' errorBorderColor='red.400' focusBorderColor={isDonorValid.address ? 'red.400' : 'green.300'} isInvalid={isDonorValid.address} fontSize={14} resize='none' name="address" value={donorInfo.address} onChange={e => setDonorDetails(e)} />
                                                     </InputGroup>
-                                                    {isDonorValid.address ? <FormHelperText color="red" fontWeight={500}> Address is too Short, Minimum 10 Characters is required  </FormHelperText> : null}
+                                                    {isDonorValid.address ? <FormHelperText color="red" fontWeight={500}> Address is too Short, Minimum 2 Characters is required  </FormHelperText> : null}
                                                 </FormControl>
                                             </GridItem>
                                         </Grid>
@@ -654,13 +647,8 @@ const Registration = (props) => {
                                     </TabPanel>
                                 </TabPanels>
                             </Tabs>
-                            
-                            
                         </ChakraProvider>
                     </Box>
-               
         </>
     )
 }
-
-export default Registration

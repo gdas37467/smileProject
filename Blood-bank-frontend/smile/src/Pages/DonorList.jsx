@@ -6,7 +6,7 @@ import ComplexTable from '../Components/ComplexTable'
 import AdminNavbar from '../Components/AdminNavbar'
 import Swal from 'sweetalert2'
 import { ToastContainer, toast } from 'react-toastify'
-import {BallTriangle , FallingLines} from 'react-loader-spinner';
+import {FallingLines} from 'react-loader-spinner';
 import { Box, Button } from '@mui/material'
 import TableComp from '../Components/Table'
 
@@ -14,14 +14,12 @@ import TableComp from '../Components/Table'
 
 const tableColumn = ["Donor's Name","Total Donations"]
 
-const DonorList = () => {
+export default function DonorList(){
     axios.defaults.withCredentials = true
 
     const navigate = useNavigate()
 
-    // const [conDonationsRows, setconDonationsRows] = useState([]);
-    // const [reqRows, setReqRows] = useState([]);
-    // const [apiDonorData , setApiDonorData]  = useState({})
+    // State Variables
     const [donorList , setDonorList] = useState([]);
     const [topDonorList , setTopDonorList] = useState([]);
     const [loadingPage , setLoadingPage] = useState(true)
@@ -78,7 +76,6 @@ const DonorList = () => {
     //Send Donor For Donation
     const sentForDonation = async (id) =>{
         //API for matched donor
-        console.log(id)
         try {
             const res = await axios.get(`http://192.168.1.19:8000/api/v1/adminUser/confirm_donor/${id}`)
             console.log(res)
@@ -95,7 +92,6 @@ const DonorList = () => {
     //Add Loan to Donor
     const addLoan = async (id) =>{
         //API for matched donor
-        console.log(id)
         try {
             const res = await axios.get(`http://192.168.1.19:8000/api/v1/adminUser/confirm_loan/${id}` )
             toast.success('Donor Added For Loan Successfully')
@@ -125,8 +121,6 @@ const DonorList = () => {
     }
     //Send Loan Reminder to Donor
     const sendReminder = async (id) =>{
-        //API for matched donor
-        console.log(id)
         try {
             const res = await axios.get(`http://192.168.1.19:8000/api/v1/adminUser/loan_msg/${id}`)
             console.log(res)
@@ -165,7 +159,7 @@ const DonorList = () => {
         
     }
 
-
+    // API Call for Lists
     const getAvailableDonors = async () => {
         setLoadingPage(true)
         try {
@@ -186,6 +180,12 @@ const DonorList = () => {
         setLoadingPage(false)
     }
 
+    useEffect(()=>{
+        if(loadingApi){
+            getAvailableDonors()
+        }
+    },[loadingApi,reload])
+    
     const adminLogout = () => {
         try{
             axios.get('http://192.168.1.19:8000/api/v1/adminUser/admin_logout/').then((res)=>{
@@ -207,13 +207,6 @@ const DonorList = () => {
             })
         }
     }
-
-    useEffect(()=>{
-        if(loadingApi){
-            getAvailableDonors()
-        }
-    },[loadingApi,reload])
-
     return (
         <>     
             <AdminNavbar />
@@ -238,6 +231,7 @@ const DonorList = () => {
                             </>
                         ) : (
                             <>
+                                {/* Logout Button */}
                                 <div className="logout">
                                     <Button variant='contained' onClick={adminLogout}
                                         sx={{
@@ -255,6 +249,7 @@ const DonorList = () => {
                                         Logout
                                     </Button>
                                 </div>
+                                {/* Donor List */}
                                 <h1>Donor List</h1>
                                 <ComplexTable
                                     type='donorList'
@@ -265,7 +260,7 @@ const DonorList = () => {
                                     sendReminder={sendReminder}
                                     deleteDonor={deleteDonor}
                                 />
-
+                                {/* Top 10 Donors */}
                                 <h1>Top 10 Donors</h1>
                                 <TableComp
                                     type='donor'
@@ -281,5 +276,3 @@ const DonorList = () => {
         </>
     )
 }
-
-export default DonorList

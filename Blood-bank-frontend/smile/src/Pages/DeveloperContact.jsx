@@ -9,7 +9,7 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import EmailIcon from '@mui/icons-material/Email';
 import { Divider } from '@mui/material';
 
-const DeveloperContact = () => {
+export default function DeveloperContact () {
     return (
         <>
             <div className="developer_outer">
@@ -77,5 +77,3 @@ const DeveloperContact = () => {
         </>
     )
 }
-
-export default DeveloperContact

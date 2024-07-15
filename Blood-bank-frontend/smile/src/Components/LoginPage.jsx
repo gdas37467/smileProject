@@ -1,6 +1,6 @@
-import React, {  useEffect, useState } from 'react'
-import { ChakraProvider, IconButton, FormHelperText, Heading, Button, FormControl, FormLabel, Input, Icon, InputGroup, InputLeftAddon, PinInput, PinInputField, HStack, Stack, VStack, Text, Box, Divider, AbsoluteCenter} from '@chakra-ui/react'
-import { Envelope, Password } from '@phosphor-icons/react'
+import React, { useState } from 'react'
+import { ChakraProvider, IconButton, FormHelperText, Heading, Button, FormControl, FormLabel, Input, Icon, InputGroup, InputLeftAddon, PinInput, PinInputField, HStack, VStack,  Box} from '@chakra-ui/react'
+import { Envelope } from '@phosphor-icons/react'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import Swal from 'sweetalert2'
@@ -18,14 +18,7 @@ export default function LoginPage(props){
 
     const navigate = useNavigate()
 
-        //Show Timer
-        const [showTime, setShowTime] = useState(false)
-        //Change OTP Button text
-        const [changeText , setChangeText] = useState('Send OTP')
-        //Disable OTP Button
-        const [disability , setDisability] = useState(false)
-        //Timer Countdown
-        const [time , setTime] = useState('')
+    
         //Recepient Email
         const [email , setEmail] = useState('')
         //Error Msg for Phone Number
@@ -33,18 +26,13 @@ export default function LoginPage(props){
             isErr : false,
             msg : ''
         })    
-        //Multiplying Timer
-        const [n ,setN ] = useState(1)
+        
         // Getting OTP value from user input
         const [otpVal ,setOtpVal] = useState("")
         //Verifying OTP
         const [isLoading , setIsLoading] = useState(false)
         //Checking Email Validity
         const [isEmailValid , setIsEmailValid] = useState(false)
-        // Recipient Password
-        const [password , setPassword] = useState('')
-        // Check if User already Exists
-        const [userExists , setUserExists] = useState(false)
         // Email Check
         const [check , setCheck] = useState(false)
         
@@ -53,29 +41,19 @@ export default function LoginPage(props){
     
         // SEND OTP and Next Page
         const sendOtp = async(email) =>{
-            // return
 
             if(!emailRegex.test(email)){
-                console.log("Validation")
-                setErrorMsg(prev => ({
+                setErrorMsg({
                     isErr : true,
                     msg : "Invalid Email! Please Enter a valid Email."
-                }))
+                })
                 return
             }else{
-                // setShowTime(!showTime)
-                // timer()
                 setCheck(true)
-
                 setErrorMsg({
                     isErr : false,
                     msg : ""
                 })
-                
-                let data =  JSON.stringify({
-                    email : email
-                })
-                // console.log(data)
                 let url = ''
                 try {
                     switch(props.type){
@@ -94,14 +72,13 @@ export default function LoginPage(props){
                             })
                             break
                     }
-                    const res = await axios.post(`http://192.168.1.19:8000/api/v1/${url}`, data)
+                    const res = await axios.post(`http://192.168.1.19:8000/api/v1/${url}`, JSON.stringify({email: email}))
                     console.log(res)
                     // setCheck(true)
                     toast.success("OTP Sent Successfully !",{
                         position : toast.POSITION.TOP_RIGHT
                     })
                 } catch (err) {
-                    console.log(err)
                     setCheck(false)
                     toast.error(err.response.data.error || 'Something Went Wrong',{
                         position : toast.POSITION.TOP_RIGHT
@@ -109,13 +86,11 @@ export default function LoginPage(props){
                 }
 
                 
-                // console.log(res)
     
             }
         }
     
         // Verify OTP
-    
         const verifyOtp = async ( ) =>{
             
             if(otpVal.length !== 6){
@@ -130,7 +105,6 @@ export default function LoginPage(props){
                     const res = await axios.post('http://192.168.1.19:8000/api/v1/donor/verify_otp/',JSON.stringify({otp : otpVal}),{
                         headers : {'X-CSRFToken': token}
                     })
-                    console.log(res)
                     if( 'success' in res.data){
                         const now = new Date().getTime()
                         let check = {
@@ -168,7 +142,6 @@ export default function LoginPage(props){
                         })
                     }
                 } catch (error) {
-                    console.log(error)
                     Swal.fire({
                         title : error.response.data.error || 'Something went wrong!' , 
                         icon  : 'error'
@@ -180,7 +153,6 @@ export default function LoginPage(props){
         }
         //Real Time Number check
         const emailCheck =(email) =>{
-            // console.log(emailRegex.test(email))
             if(!emailRegex.test(email)){
                 setIsEmailValid(true)
                 setEmail(email)
@@ -189,10 +161,6 @@ export default function LoginPage(props){
                 setEmail(email)
             }
         }
-      
-
-
-
 
     return(
         <>
@@ -261,7 +229,6 @@ export default function LoginPage(props){
                                                                 fontSize='10px'
                                                                 fontWeight='200'
                                                                 onClick={() => setCheck(false)}
-                                                                // isDisabled={disability}
                                                         >
                                                             Wrong Email? Update Here!
                                                         </Button>
@@ -304,10 +271,8 @@ export default function LoginPage(props){
                             )
                         }
                         
-                    </VStack>        
-                         
+                </VStack>        
             </ChakraProvider>
-
         </>
     )
 

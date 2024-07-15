@@ -1,17 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { ChakraProvider, Heading, Button, FormControl, FormLabel, Input, Icon, InputGroup, InputLeftAddon, HStack, VStack, InputRightElement} from '@chakra-ui/react'
-import { User , Password, Eye, EyeSlash, SignIn} from '@phosphor-icons/react'
+import { User , Password} from '@phosphor-icons/react'
 import axios from 'axios'
-// import { toast } from 'react-toastify'
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom'
 import LoginIcon from '@mui/icons-material/Login';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import getCookie from '../getToken'
 
 
-const AdminLogin = () => {
+export default function AdminLogin(){
     axios.defaults.withCredentials = true
     const navigate = useNavigate()
 
@@ -21,13 +19,11 @@ const AdminLogin = () => {
         password : '',
     })
 
-    const [isAdminInvalid, setIsAdminInvalid] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
 
     //Admin Login API
     const submitDetails = async (data) => {
-        // code
         if(data.username === '' || data.password === ''){
             Swal.fire({
                 title : 'Please enter your username/password',
@@ -82,9 +78,7 @@ const AdminLogin = () => {
                                                 </InputLeftAddon>
                                                 <Input variant='outline'
                                                         backgroundColor='red.50'
-                                                        isInvalid={isAdminInvalid}
                                                         focusBorderColor='green.300'
-                                                        errorBorderColor='red.400'
                                                         height={30} 
                                                         fontSize={14}  
                                                         type="text" 
@@ -102,9 +96,7 @@ const AdminLogin = () => {
                                                 </InputLeftAddon>
                                                 <Input variant='outline'
                                                         backgroundColor='red.50'
-                                                        isInvalid={isAdminInvalid}
                                                         focusBorderColor='green.300'
-                                                        errorBorderColor='red.400'
                                                         height={30} 
                                                         fontSize={14}  
                                                         type={showPassword ? 'text' : 'password'} 
@@ -116,7 +108,6 @@ const AdminLogin = () => {
                                                     <Button
                                                         bgColor='#d71414'
                                                         _hover={{bg:'#d71414'}}
-                                                        // width='4.5rem'
                                                     >
 
                                                     {
@@ -139,12 +130,11 @@ const AdminLogin = () => {
                                                     fontSize='16px'
                                                     type='submit'
                                                     onClick={() => submitDetails(adminInfo)}
-                                                    // isDisabled={disability}
                                             >
                                                 LogIn
                                             </Button>
                                         </HStack>
-                                    </VStack>                            
+                                </VStack>                            
                             </ChakraProvider>
                         </div>
                     </div>
@@ -152,5 +142,3 @@ const AdminLogin = () => {
         </>
     )
 }
-
-export default AdminLogin
