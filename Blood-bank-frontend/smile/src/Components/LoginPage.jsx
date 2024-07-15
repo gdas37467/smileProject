@@ -1,6 +1,6 @@
-import React, {  useEffect, useState } from 'react'
-import { ChakraProvider, IconButton, FormHelperText, Heading, Button, FormControl, FormLabel, Input, Icon, InputGroup, InputLeftAddon, PinInput, PinInputField, HStack, Stack, VStack, Text, Box, Divider, AbsoluteCenter} from '@chakra-ui/react'
-import { Envelope, Password } from '@phosphor-icons/react'
+import React, { useState } from 'react'
+import { ChakraProvider, IconButton, FormHelperText, Heading, Button, FormControl, FormLabel, Input, Icon, InputGroup, InputLeftAddon, PinInput, PinInputField, HStack, VStack,  Box} from '@chakra-ui/react'
+import { Envelope } from '@phosphor-icons/react'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import Swal from 'sweetalert2'
@@ -26,18 +26,13 @@ export default function LoginPage(props){
             isErr : false,
             msg : ''
         })    
-        //Multiplying Timer
-        const [n ,setN ] = useState(1)
+        
         // Getting OTP value from user input
         const [otpVal ,setOtpVal] = useState("")
         //Verifying OTP
         const [isLoading , setIsLoading] = useState(false)
         //Checking Email Validity
         const [isEmailValid , setIsEmailValid] = useState(false)
-        // Recipient Password
-        const [password , setPassword] = useState('')
-        // Check if User already Exists
-        const [userExists , setUserExists] = useState(false)
         // Email Check
         const [check , setCheck] = useState(false)
         
@@ -48,21 +43,16 @@ export default function LoginPage(props){
         const sendOtp = async(email) =>{
 
             if(!emailRegex.test(email)){
-                setErrorMsg(prev => ({
+                setErrorMsg({
                     isErr : true,
                     msg : "Invalid Email! Please Enter a valid Email."
-                }))
+                })
                 return
             }else{
                 setCheck(true)
-
                 setErrorMsg({
                     isErr : false,
                     msg : ""
-                })
-                
-                let data =  JSON.stringify({
-                    email : email
                 })
                 let url = ''
                 try {
@@ -82,7 +72,7 @@ export default function LoginPage(props){
                             })
                             break
                     }
-                    const res = await axios.post(`/api/v1/${url}`, data)
+                    await axios.post(`/api/v1/${url}`, JSON.stringify({email : email}))
                     toast.success("OTP Sent Successfully !",{
                         position : toast.POSITION.TOP_RIGHT
                     })
@@ -99,7 +89,6 @@ export default function LoginPage(props){
         }
     
         // Verify OTP
-    
         const verifyOtp = async ( ) =>{
             
             if(otpVal.length !== 6){
@@ -170,10 +159,6 @@ export default function LoginPage(props){
                 setEmail(email)
             }
         }
-      
-
-
-
 
     return(
         <>
@@ -284,10 +269,8 @@ export default function LoginPage(props){
                             )
                         }
                         
-                    </VStack>        
-                         
+                </VStack>        
             </ChakraProvider>
-
         </>
     )
 

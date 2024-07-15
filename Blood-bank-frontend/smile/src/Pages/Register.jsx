@@ -8,12 +8,7 @@ import Swal from 'sweetalert2'
 import { Button } from '@mui/material'
 
 
-
-
-
-
-
-const Register = () => {
+export default function Register() {
     axios.defaults.withCredentials = true
     
     const navigate = useNavigate()
@@ -110,5 +105,3 @@ const Register = () => {
         </>
     )
 }
-
-export default Register

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { Button, ChakraProvider, Checkbox, FormControl, FormHelperText, FormLabel, Grid, GridItem, HStack, Heading, Icon, IconButton, Input, InputGroup, InputLeftAddon, Radio, RadioGroup, Select, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Textarea, VStack } from '@chakra-ui/react';
+import { Button, ChakraProvider, Checkbox, FormControl, FormHelperText, FormLabel, Grid, GridItem, HStack, Heading, Icon, Input, InputGroup, InputLeftAddon, Radio, RadioGroup, Select, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Textarea, VStack } from '@chakra-ui/react';
 import { Box } from '@mui/material'
-import { IdentificationBadge, Envelope, Phone ,Calendar, Password, Eye, EyeSlash, HouseLine, Drop, Gauge, CalendarCheck , Bed     } from '@phosphor-icons/react'
+import { IdentificationBadge, Phone ,Calendar, HouseLine, Drop, CalendarCheck , Bed } from '@phosphor-icons/react'
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
@@ -31,9 +31,11 @@ const style = {
     
 };
 
-const Registration = (props) => {
+export default function Registration(){
     axios.defaults.withCredentials=true;
 
+
+    
     // State variables
     // Check for Invalid Registration
     const [isDonorValid , setIsDonorValid] = useState({
@@ -80,6 +82,21 @@ const Registration = (props) => {
     const [dailyCount, setDailyCount] = useState()
     // Page Reloader flag
     const [reload,setReload] = useState(true)
+
+
+    // API Calls
+    const getCount = async () => {
+        try{
+            const res = await axios.get('/api/v1/adminUser/get_total_cquantity/');
+            setDailyCount(res.data.quantity)
+        }catch(e){
+            toast.error(e.response.data.error || 'Something went wrong')
+        }
+    }
+
+    useEffect(() =>{
+        getCount();
+    },[reload])
 
     // Handlers
     //Handle State Change of Recipient Details
@@ -132,7 +149,7 @@ const Registration = (props) => {
                 break
 
             case 'address':
-                if(value.trim().length < 10){
+                if(value.trim().length < 2){
                     setIsRecipientValid(pS => ({
                         ...pS,
                         [name] : true
@@ -220,7 +237,7 @@ const Registration = (props) => {
                 break
                 
             case 'address' : 
-                if(value.trim().length < 10){
+                if(value.trim().length < 2){
                     setIsDonorValid(prevState => ({
                         ...prevState,
                         [name] : true
@@ -338,35 +355,21 @@ const Registration = (props) => {
     }
 
 
-    // API Calls
-    const getCount = async () => {
-        try{
-            const res = await axios.get('/api/v1/adminUser/get_total_cquantity/');
-            setDailyCount(res.data.quantity)
-        }catch(e){
-            toast.error(e.response.data.error || 'Something went wrong')
-        }
-    }
-
-    useEffect(() =>{
-        getCount();
-    },[reload])
+    
 
 
 
     return (
         <>
-
                     <Box sx={style}>
                         <ChakraProvider>
-                            
                             <Tabs isFitted variant='solid-rounded' colorScheme='red' size='md'>
                                 <TabList mb='2em' >
                                     <Tab fontSize={{lg: '1.8rem', base: '1.2rem'}}>Recipient Registration</Tab>
                                     <Tab fontSize={{lg: '1.8rem', base: '1.2rem'}}>Donor Registration</Tab>
                                 </TabList>
                                 <TabPanels>
-                                {/* Recipient Panel */}
+                                    {/* Recipient Panel */}
                                     <TabPanel>
                                         <VStack>
                                             <Heading> Total Slots Left is : {dailyCount} </Heading>
@@ -623,7 +626,7 @@ const Registration = (props) => {
                                                         </InputLeftAddon>
                                                         <Textarea variant='outline' backgroundColor='red.50' errorBorderColor='red.400' focusBorderColor={isDonorValid.address ? 'red.400' : 'green.300'} isInvalid={isDonorValid.address} fontSize={14} resize='none' name="address" value={donorInfo.address} onChange={e => setDonorDetails(e)} />
                                                     </InputGroup>
-                                                    {isDonorValid.address ? <FormHelperText color="red" fontWeight={500}> Address is too Short, Minimum 10 Characters is required  </FormHelperText> : null}
+                                                    {isDonorValid.address ? <FormHelperText color="red" fontWeight={500}> Address is too Short, Minimum 2 Characters is required  </FormHelperText> : null}
                                                 </FormControl>
                                             </GridItem>
                                         </Grid>
@@ -644,13 +647,8 @@ const Registration = (props) => {
                                     </TabPanel>
                                 </TabPanels>
                             </Tabs>
-                            
-                            
                         </ChakraProvider>
                     </Box>
-               
         </>
     )
 }
-
-export default Registration
