@@ -97,6 +97,7 @@ Follow these steps to get a local copy up and running.
 
     ```bash
     python manage.py migrate
+    python manage.py makemigrations
     ```
 
 5. Run the server:
