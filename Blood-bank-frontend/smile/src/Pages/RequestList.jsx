@@ -113,7 +113,7 @@ export default function RequestList() {
    const getTableData = async () =>{
     setLoadingPage(true)
     try{
-        const res = await axios.get('http://192.168.1.19:8000/api/v1/adminUser/get_recipient_list/')
+        const res = await axios.get('http://<your_local_ip>//api/v1/adminUser/get_recipient_list/')
         console.log(res)
         let pendingReq = res.data.list.filter((el)=> { return el.status === 'Pending'})
         let nonPendingReq = res.data.list.filter((el)=> { return el.status !== 'Pending'})
@@ -149,7 +149,7 @@ export default function RequestList() {
 
             if(res.isConfirmed){
                 try {
-                    const res = await axios.get(`http://192.168.1.19:8000/api/v1/adminUser/reject_request/${id}`)
+                    const res = await axios.get(`http://<your_local_ip>//api/v1/adminUser/reject_request/${id}`)
                     console.log(res)
                     Swal.fire({
                         text : "The Request Has Been Rejected",
@@ -172,7 +172,7 @@ export default function RequestList() {
     // Accept Recipient Request
     const acceptRequest = async (id) =>{
         try {
-            const res = await axios.get(`http://192.168.1.19:8000/api/v1/adminUser/confirm_recipient_donation/${id}`)
+            const res = await axios.get(`http://<your_local_ip>//api/v1/adminUser/confirm_recipient_donation/${id}`)
             console.log(res)
             toast.success( res.data.status)
         } catch (error) {
@@ -198,7 +198,7 @@ export default function RequestList() {
             }).then(async (res) => {
                 if(res.isConfirmed){
                     try {
-                        const res = await axios.get(`http://192.168.1.19:8000/api/v1/adminUser/confirm_recipient_donation/${id}`)
+                        const res = await axios.get(`http://<your_local_ip>//api/v1/adminUser/confirm_recipient_donation/${id}`)
                         console.log(res)
                         toast.success("Request Accepted Successfully!")
                         setReload(!reload)
@@ -216,7 +216,7 @@ export default function RequestList() {
         setOpen(true)
         setModalLoad(true)
         try{
-            const data = await axios.get(`http://192.168.1.19:8000/api/v1/adminUser/getFirstDon/${id}`)
+            const data = await axios.get(`http://<your_local_ip>//api/v1/adminUser/getFirstDon/${id}`)
             console.log(data.data.firstDonation)
             setModalData(data.data.firstDonation)
             setModalLoad(false)
@@ -230,7 +230,7 @@ export default function RequestList() {
     //Admin Logout
     const adminLogout = () => {
         try{
-            axios.get('http://192.168.1.19:8000/api/v1/adminUser/admin_logout/').then((res)=>{
+            axios.get('http://<your_local_ip>//api/v1/adminUser/admin_logout/').then((res)=>{
                 setLoadingPage(true)
                 localStorage.removeItem('adminCheck')
                 Swal.fire({

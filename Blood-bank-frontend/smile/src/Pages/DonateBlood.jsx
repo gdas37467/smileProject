@@ -239,7 +239,7 @@ export default function DonateBlood() {
         }else{
             timer()
             try{
-                const res =  await axios.post('http://192.168.1.19:8000/api/v1/donor/send_otp/', JSON.stringify({email : donorInfo.email}))
+                const res =  await axios.post('http://<your_local_ip>//api/v1/donor/send_otp/', JSON.stringify({email : donorInfo.email}))
                 if('success' in res.data){
                     toast.success(res.data.success, {
                         position : toast.POSITION.TOP_RIGHT
@@ -275,7 +275,7 @@ export default function DonateBlood() {
         }
         try {
             var token = getCookie('csrftoken')
-            const res = await axios.post('http://192.168.1.19:8000/api/v1/donor/register/',JSON.stringify(donorDet),{
+            const res = await axios.post('http://<your_local_ip>//api/v1/donor/register/',JSON.stringify(donorDet),{
                 headers : {'X-CSRFToken': token}
             })
             if('success' in res.data){

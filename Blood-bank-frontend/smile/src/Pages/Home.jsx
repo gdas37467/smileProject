@@ -75,7 +75,7 @@ export default function Home(){
     const loadImgs = async() =>{
         setLoadPage(true)
         try{
-            const res = await axios.get('http://192.168.1.19:8000/api/v1/adminUser/getLeaderboardImages/')
+            const res = await axios.get('http://<your_local_ip>//api/v1/adminUser/getLeaderboardImages/')
             setImages(res.data.data)
         }catch(e){
             toast.error("Error getting leaderboard images!")

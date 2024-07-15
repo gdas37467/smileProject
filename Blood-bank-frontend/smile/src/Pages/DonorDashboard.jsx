@@ -106,7 +106,7 @@ export default function DonorDashboard(){
     const getDonorRecords = async () =>{
         setLoadingPage(true)
         try {
-            const res = await axios.get('http://192.168.1.19:8000/api/v1/donor/get_donor_records/')
+            const res = await axios.get('http://<your_local_ip>//api/v1/donor/get_donor_records/')
             console.log(res)
             setDonorList(res.data.donorList)
             setDonorDetails(res.data.donorDetails)
@@ -137,7 +137,7 @@ export default function DonorDashboard(){
     // Logout API call
     const logout = () => {
         try{
-            axios.get('http://192.168.1.19:8000/api/v1/donor/logout/').then((res)=>{
+            axios.get('http://<your_local_ip>//api/v1/donor/logout/').then((res)=>{
                 setLoadingPage(true)
                 localStorage.removeItem('check')
                 Swal.fire({

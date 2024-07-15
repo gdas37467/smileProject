@@ -32,7 +32,7 @@ export default function AdminLogin(){
         }else{
             try {
                 setIsLoading(true)
-                const res = await axios.post('http://192.168.1.19:8000/api/v1/adminUser/admin_login/', JSON.stringify(data))
+                const res = await axios.post('http://<your_local_ip>//api/v1/adminUser/admin_login/', JSON.stringify(data))
                 console.log(res)
                 if('success' in res.data){
                     const now = new Date().getTime()

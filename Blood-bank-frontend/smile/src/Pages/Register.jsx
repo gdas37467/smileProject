@@ -58,7 +58,7 @@ export default function Register() {
     //Admin Logout
     const adminLogout = () => {
         try{
-            axios.get('http://192.168.1.19:8000/api/v1/adminUser/admin_logout/').then((res)=>{
+            axios.get('http://<your_local_ip>//api/v1/adminUser/admin_logout/').then((res)=>{
                 localStorage.removeItem('adminCheck')
                 Swal.fire({
                     title : 'Logout Successful',
