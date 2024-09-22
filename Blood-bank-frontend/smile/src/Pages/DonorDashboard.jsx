@@ -36,7 +36,7 @@ function stringAvatar(name) {
             boxShadow : '0 0 2rem rgba(0,0,0,0.5)'
 
         },
-        children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
+        children: `${name.split(' ')[0][0]}${name.split(' ')[name.split(' ').length - 1][0]}`,
     };
 }
 
@@ -220,7 +220,7 @@ export default function DonorDashboard(){
                                                                     <b>Address : </b> {donorDetails.address} 
                                                                 </Typography>
                                                                 <Typography  variant="h5" m={0.5}>
-                                                                    <b> Sex :</b> Male
+                                                                    <b> Sex :</b> {donorDetails.gender}
                                                                 </Typography>
                                                                 <Typography  variant="h5" m={0.5}>
                                                                     <b> Blood Group :</b> {donorDetails.bloodGroup}

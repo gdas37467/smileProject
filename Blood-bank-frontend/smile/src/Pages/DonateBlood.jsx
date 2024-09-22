@@ -345,9 +345,9 @@ export default function DonateBlood() {
                                 <FormLabel htmlFor='gender'> Gender </FormLabel>
                                 <RadioGroup onChange={e => setDonorInfo(prev => ({ ...prev, gender: e }))} name="gender" value={donorInfo.gender}>
                                     <Stack direction='row' pt={4}>
-                                        <Radio size='lg' colorScheme='red' value='male'>Male</Radio>
-                                        <Radio size='lg' colorScheme='red' value='female'>Female</Radio>
-                                        <Radio size='lg' colorScheme='red' value='others'>Others</Radio>
+                                        <Radio size='lg' colorScheme='red' value='Male'>Male</Radio>
+                                        <Radio size='lg' colorScheme='red' value='Female'>Female</Radio>
+                                        <Radio size='lg' colorScheme='red' value='Others'>Others</Radio>
                                     </Stack>
                                 </RadioGroup>
                             </FormControl>
