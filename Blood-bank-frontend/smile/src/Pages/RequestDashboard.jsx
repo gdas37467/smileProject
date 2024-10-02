@@ -10,21 +10,8 @@ import VaccinesIcon from '@mui/icons-material/Vaccines';
 import PropTypes from 'prop-types';
 import DoneIcon from '@mui/icons-material/Done';
 import { ChakraProvider, FormHelperText, RadioGroup } from '@chakra-ui/react';
-import {
-    FormControl,
-    FormLabel,
-    Input,
-    Grid,
-    GridItem,
-    Icon,
-    InputGroup,
-    InputLeftAddon,
-    Checkbox,
-    Select,
-    Textarea,
-    Radio
-} from '@chakra-ui/react'
-import { IdentificationBadge, Envelope, Phone ,Calendar, HouseLine, Drop, CalendarCheck , Bed , FirstAid , Receipt, UserCircle, CloudArrowUp, UserCirclePlus} from '@phosphor-icons/react'
+import { FormControl, FormLabel, Input, Grid, GridItem, Icon, InputGroup, InputLeftAddon, Checkbox, Select, Textarea, Radio } from '@chakra-ui/react'
+import { IdentificationBadge, Phone ,Calendar, HouseLine, Drop, CalendarCheck , Bed , FirstAid , Receipt, UserCircle, CloudArrowUp,} from '@phosphor-icons/react'
 import TableComp from '../Components/Table';
 import axios from 'axios';
 import { ToastContainer , toast } from 'react-toastify';
@@ -36,17 +23,14 @@ import DynamicFormIcon from '@mui/icons-material/DynamicForm';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import {BallTriangle, FallingLines} from 'react-loader-spinner';
+import {FallingLines} from 'react-loader-spinner';
 import getCookie from '../getToken';
 
 
 
 
-// Email Regex
-const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 //Accepted File Types
 const fileTypes = ['jpg', 'png', 'jpeg']
-
 
 // Steps for Requesting Blood
 const steps = ["Patient Details", "Patient Contact Details", "Patient Requirement", "Requisition Form"]
@@ -274,9 +258,41 @@ export default function RequestDashboard() {
         }
     },[])
 
+    //Page Loading API
+    const loadAPI = async () =>{
+        setLoadingPage(true)
+        try {
+            const res = await axios.get('/api/v1/recipient/get_recipient_records/')
+            let pendingReq = res.data.pastRecord.filter(el => el.status === 'Pending')
+            let pastRecord = res.data.pastRecord.filter(el => el.status !== 'Pending')
+            setPendingRecords(pendingReq)
+            setPastRecords(pastRecord)
+            setRecDetails(res.data.recipientData)
 
+        } catch (error) {
+            Swal.fire({
+                title : error.response.data.error || 'Something Went Wrong!',
+                icon : 'warning',
+            })
+        }
+        setLoadingPage(false)
+    }
 
+    //Page Loading API 
+    useEffect(() => {
+        // Date and Time for Display
+        setInterval(()=>{
+            let date = new Date()
+            setDisT(date.toLocaleTimeString())
+            setTime(date.toLocaleTimeString('en-US',{hour12: true, hour : '2-digit', minute : '2-digit'}).split(/[\s:]/))
+            setDate(date.toLocaleDateString('en-US', {weekday : 'short', day : '2-digit', month : 'long'}).split(' '))
+        },1000)
 
+        if(loadingApi){
+            loadAPI()
+        }
+
+    }, [loadingApi,reload]);
 
     //Handlers
     //Handles Modal Open and Close
@@ -295,9 +311,9 @@ export default function RequestDashboard() {
                         text : `You have to wait ${recDetails.remainingDays} days before placing another Request.`,
                         icon : 'warning'
                     })
-                }
-       
+                }       
     }
+    
     const handleClose = () => setOpen(false);
 
     // Stepper Controller
@@ -489,7 +505,7 @@ export default function RequestDashboard() {
     
 
     //Function to select a receipt
-    const clickReceipt = (e) =>{ inpRef.current.click() }
+    const clickReceipt = () =>{ inpRef.current.click() }
 
     //Modal Content
     const formDetails = (activeStep) =>{
@@ -762,8 +778,6 @@ export default function RequestDashboard() {
     
     
     }
-
-
     //Function to submit Patient Request
     const placeRequest = async (patDet) =>{ 
 
@@ -847,25 +861,7 @@ export default function RequestDashboard() {
 
 
     }
-    //Page Loading API
-    const loadAPI = async () =>{
-        setLoadingPage(true)
-        try {
-            const res = await axios.get('/api/v1/recipient/get_recipient_records/')
-            let pendingReq = res.data.pastRecord.filter(el => el.status === 'Pending')
-            let pastRecord = res.data.pastRecord.filter(el => el.status !== 'Pending')
-            setPendingRecords(pendingReq)
-            setPastRecords(pastRecord)
-            setRecDetails(res.data.recipientData)
-
-        } catch (error) {
-            Swal.fire({
-                title : error.response.data.error || 'Something Went Wrong!',
-                icon : 'warning',
-            })
-        }
-        setLoadingPage(false)
-    }
+    
     //Logout API
     const logout = () => {
         try{
@@ -889,23 +885,6 @@ export default function RequestDashboard() {
         }
     }
 
-
-    //Page Loading API 
-    useEffect(() => {
-        // Date and Time for Display
-        setInterval(()=>{
-            let date = new Date()
-            setDisT(date.toLocaleTimeString())
-            setTime(date.toLocaleTimeString('en-US',{hour12: true, hour : '2-digit', minute : '2-digit'}).split(/[\s:]/))
-            setDate(date.toLocaleDateString('en-US', {weekday : 'short', day : '2-digit', month : 'long'}).split(' '))
-        },1000)
-
-        if(loadingApi){
-            loadAPI()
-        }
-
-    }, [loadingApi,reload]);
-
     const tableColumn = ["Patient's Name", "Requested Date", "Blood Group", "Status" ]
 
     //Main Return
@@ -915,6 +894,8 @@ export default function RequestDashboard() {
                     
                         <div className="req_dashboard_content">
                             <div className="actual_content">
+
+                            {/* Request Dashboard */}
                             {
                                 !loadingPage ? (
                                     <>
@@ -1049,7 +1030,7 @@ export default function RequestDashboard() {
                             }
 
 
-                                {/* Function to Open A Modal For Registering a Patient in need of Blood Units */}
+                                {/* Modal For Registering a Patient in need of Blood Units */}
                                 <div className="modal_div">
                                     <Modal
                                         aria-labelledby="transition-modal-title"

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Button,Typography, Avatar, Card, CardContent, Paper, Divider, Box} from '@mui/material';
+import { Button,Typography, Avatar, Divider, Box} from '@mui/material';
 import TableComp from '../Components/Table'
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
-import {BallTriangle, FallingLines} from 'react-loader-spinner';
+import {FallingLines} from 'react-loader-spinner';
 
 
 // Avatar Color
@@ -36,16 +36,17 @@ function stringAvatar(name) {
             boxShadow : '0 0 2rem rgba(0,0,0,0.5)'
 
         },
-        children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
+        children: `${name.split(' ')[0][0]}${name.split(' ')[name.split(' ').length - 1][0]}`,
     };
 }
 
 
 
-const DonorDashboard = () => {
+export default function DonorDashboard(){
     axios.defaults.withCredentials=true 
 
     const navigate = useNavigate()
+    // Loading Page State Variables
     const [loadingPage,setLoadingPage] = useState(true)
     const [loadApi, setLoadApi] = useState(false)
 
@@ -92,8 +93,7 @@ const DonorDashboard = () => {
         }
     },[])
 
-
-
+    // Donor Details State Variables
     const [donorList, setDonorList] = useState([])
     const [donorDetails, setDonorDetails] = useState()
     //Set Time
@@ -166,6 +166,7 @@ const DonorDashboard = () => {
                         {
                                 !loadingPage ? (
                                     <>
+                                        {/* Logout Button */}
                                         <div className="logout">
                                             <Button variant='contained' onClick={logout}
                                                 sx={{
@@ -183,6 +184,7 @@ const DonorDashboard = () => {
                                                 Logout
                                             </Button>
                                         </div>
+                                        {/* Time And Date */}
                                         <div className="grid_container">
                                             <div className="calendar">
                                                 <div className="date_time">
@@ -218,7 +220,7 @@ const DonorDashboard = () => {
                                                                     <b>Address : </b> {donorDetails.address} 
                                                                 </Typography>
                                                                 <Typography  variant="h5" m={0.5}>
-                                                                    <b> Sex :</b> Male
+                                                                    <b> Sex :</b> {donorDetails.gender}
                                                                 </Typography>
                                                                 <Typography  variant="h5" m={0.5}>
                                                                     <b> Blood Group :</b> {donorDetails.bloodGroup}
@@ -258,7 +260,6 @@ const DonorDashboard = () => {
                                     ) : (
                                         <>
                                             <Box height='100%' width='100%' display='flex' justifyContent='center' alignItems='center' >
-
                                                 <FallingLines
                                                     height={100}
                                                     width={100}
@@ -284,5 +285,3 @@ const DonorDashboard = () => {
         </>
     )
 }
-
-export default DonorDashboard

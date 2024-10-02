@@ -10,13 +10,11 @@ import {motion} from 'framer-motion'
 
 
 
-const RequestBlood = () => {
+export default function RequestBlood(){
     axios.defaults.withCredentials=true
     
     const navigate = useNavigate()
 
-       
-    
     useEffect(()=>{
         const now = new Date().getTime()
         if(localStorage.getItem('check') !== null){
@@ -49,5 +47,3 @@ const RequestBlood = () => {
         </>
     )
 }
-
-export default RequestBlood

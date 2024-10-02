@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import { Backdrop, Box, Button, Fade, IconButton, Modal, Typography } from '@mui/material'
 import { ToastContainer, toast } from 'react-toastify'
-import {BallTriangle,FallingLines, LineWave} from 'react-loader-spinner';
+import {FallingLines} from 'react-loader-spinner';
 import CloseIcon from '@mui/icons-material/Close';
 
 
@@ -25,6 +25,7 @@ const style = {
     borderBottom: '2px solid rgb(214,205,205)',
     boxShadow: 24,
     p: 4,
+    overflowY : 'scroll',
     '@media only screen and (max-width : 767px)' : {
         width: '36rem',
         height : '50rem',
@@ -44,7 +45,7 @@ const modalTypStyle = {
 
 
 
-const RequestList = () => {
+export default function RequestList() {
     axios.defaults.withCredentials = true
 
     const navigate = useNavigate()
@@ -59,6 +60,7 @@ const RequestList = () => {
     const [open,setOpen] = useState(false)
     // Modal Data
     const [modalData , setModalData] = useState();
+    // Loading Page and Reload States
     const [loadingPage , setLoadingPage] = useState(true)
     const [loadingApi , setLoadingApi] = useState(false)
     const [reload,setReload] = useState(false)
@@ -107,8 +109,32 @@ const RequestList = () => {
 
     },[])
 
+    //API Data Call
+    const getTableData = async () =>{
+        setLoadingPage(true)
+        try{
+            const res = await axios.get('/api/v1/adminUser/get_recipient_list/')
+            let pendingReq = res.data.list.filter((el)=> { return el.status === 'Pending'})
+            let nonPendingReq = res.data.list.filter((el)=> { return el.status !== 'Pending'})
+            setReqRows(pendingReq)
+            setNonPendingList(nonPendingReq)
+        }catch (error){
+            Swal.fire({
+                title : error.response.data.error || 'Something went wrong!',
+                icon : 'error'
+            })
+        }
+        setLoadingPage(false)
+    }
+
+    //Refresh Page
+    useEffect(()=>{
+        if(loadingApi){
+            getTableData()
+        }
+    },[loadingApi,reload])
     //Reject Recipient Request
-    const rejectRequest = async (id, sl) => {
+    const rejectRequest = async (id) => {
         //Reject API
         Swal.fire({
             title: "Are you sure?",
@@ -121,7 +147,7 @@ const RequestList = () => {
 
             if(res.isConfirmed){
                 try {
-                    const res = await axios.get(`/api/v1/adminUser/reject_request/${id}`)
+                    await axios.get(`/api/v1/adminUser/reject_request/${id}`)
                     Swal.fire({
                         text : "The Request Has Been Rejected",
                         icon : 'warning'
@@ -179,31 +205,6 @@ const RequestList = () => {
         }
     }
     
-    //API Data Call
-    const getTableData = async () =>{
-        setLoadingPage(true)
-        try{
-            const res = await axios.get('/api/v1/adminUser/get_recipient_list/')
-            let pendingReq = res.data.list.filter((el)=> { return el.status === 'Pending'})
-            let nonPendingReq = res.data.list.filter((el)=> { return el.status !== 'Pending'})
-            setReqRows(pendingReq)
-            setNonPendingList(nonPendingReq)
-        }catch (error){
-            Swal.fire({
-                title : error.response.data.error || 'Something went wrong!',
-                icon : 'error'
-            })
-        }
-        setLoadingPage(false)
-    }
-    
-    //Refresh Page
-    useEffect(()=>{
-        if(loadingApi){
-            getTableData()
-        }
-    },[loadingApi,reload])
-    
     // Modal Handlers
     const viewPrevDonation = async (id) => {
         setOpen(true)
@@ -244,7 +245,7 @@ const RequestList = () => {
 
     return (
         <>  
-
+            {/* Request List Dashboard */}
             <AdminNavbar />
             <div className="admin_outer_div">
                 <div className="admin_dashboard">
@@ -257,7 +258,7 @@ const RequestList = () => {
                                             width={100}
                                             radius={5}
                                             color="#EAEAEA"
-                                            ariaLabel="ball-triangle-loading"
+                                            ariaLabel="falling-lines-loading"
                                             wrapperClass=""
                                             visible={true}
                                         />
@@ -305,6 +306,9 @@ const RequestList = () => {
                 </div>
                 <ToastContainer />
             </div>
+
+            {/* Modal for View Receipt */}
+
             <div className="modal_div">
                 <Modal
                     aria-labelledby="transition-modal-title"
@@ -343,7 +347,7 @@ const RequestList = () => {
                                                 lastLineColor=""
                                             />
                                         </Box>
-                                     </>
+                                    </>
                                 ) : (
                                     <>
                                         
@@ -383,5 +387,3 @@ const RequestList = () => {
         </>
     )
 }
-
-export default RequestList

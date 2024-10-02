@@ -32,15 +32,14 @@ const style = {
 
 const drawerWidth = 240;
 
-function AdminNavbar (){
+export default function AdminNavbar (){
 
      // Modal State Variables
     const [open,setOpen] = useState(false)
     const handleClose = () => setOpen(false);
     const addTopDonor = () => setOpen(true);
     const [selectedImgs , setSelectedImgs] = useState([])
-    // Register Recipient/Donor state
-    const [register,setRegister] = useState(false)
+    
     const inpRef = useRef(null)
 
     const topDonorImages = (e) => {
@@ -73,7 +72,7 @@ function AdminNavbar (){
             const res = await axios.post('/api/v1/adminUser/addPhotos/',formData,{
                 headers : {'X-CSRFToken': token}
             })
-            toast.success('Images added successfully!')
+            toast.success(res.data.success || 'Images added successfully!')
             setOpen(false)
             setSelectedImgs([])
         } catch (error) {
@@ -224,18 +223,8 @@ function AdminNavbar (){
                     </Fade>
                 </Modal>
             </div>
-                {
-                    register && (
-                        <Registration 
-                            setRegister={e=> setRegister(false)}
-                            
-                        />
-                    )
-                }
-                <ToastContainer />
+            <ToastContainer />
 
         </>
     )
 }
-
-export default AdminNavbar

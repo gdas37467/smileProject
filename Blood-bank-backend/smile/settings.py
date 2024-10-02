@@ -46,7 +46,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['smileorganization.in' , 'www.smileorganization.in', '91.108.105.42','192.168.122.83']
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(',')
 
 
 # Application definition
@@ -80,8 +80,8 @@ MIDDLEWARE = [
 ]
 
 
-CSRF_TRUSTED_ORIGINS = ['https://smileorganization.in' , 'https://www.smileorganization.in', 'https://91.108.105.42' ,'http://192.168.122.83'
-]
+CSRF_TRUSTED_ORIGINS = os.environ.get('CORS_ALLOWED_AND_CSRF_TRUSTED_ORIGINS').split(',')
+
 #CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 SESSION_COOKIE_SAMESITE = 'Lax'
@@ -94,12 +94,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 CSRF_COOKIE_AGE = 86400 
 
 # custom added
-CORS_ALLOWED_ORIGINS = [
-    'https://91.108.105.42',
-    'https://smileorganization.in',
-    'https://www.smileorganization.in',
-    'http://192.168.122.83'
-]
+CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_AND_CSRF_TRUSTED_ORIGINS').split(',')
 
 
 
@@ -172,13 +167,12 @@ WSGI_APPLICATION = 'smile.wsgi.application'
 
 DATABASES = {
         'default': {
-            
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'defaultdb',
-        'USER': os.environ.get('NA'),
-        'PASSWORD': os.environ.get('PASSWORD'),
-        'HOST': os.environ.get('HOST'),
-        'PORT': '20379'
+            'ENGINE': os.environ.get('DB_ENGINE'),
+            'NAME': os.environ.get('DB_NAME'),
+            'USER': os.environ.get('DB_USER'),
+            'PASSWORD': os.environ.get('DB_PASSWORD'),
+            'HOST': os.environ.get('DB_HOST'),
+            'PORT': os.environ.get('DB_PORT')
         }
         
 }

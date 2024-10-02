@@ -11,12 +11,28 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
 import SwipeRightIcon from '@mui/icons-material/SwipeRight';
 
-const ComplexTable = (props) => {
+export default function ComplexTable(props){
     
     const rows = props.rows
     const [columns , setColumns] = useState([])
     
-    
+    // Filling Row Data
+    useEffect(()=>{
+        switch(props.type){
+            case 'reqList': 
+                setColumns(reqListCols)
+                break
+            
+            case 'donorList' : 
+                setColumns(donorListCols)
+                break
+            
+            case 'nonPendingList' : 
+                setColumns(nonPendingListCols)
+        }
+    },[props.type])
+
+    // Custom No Rows Found
     const CustomNoRows = () =>{
         return(
             <>
@@ -42,6 +58,7 @@ const ComplexTable = (props) => {
         )
     }
     
+    // Column Visibility
     const columnVisibility = { 
         id : false,
         registrationDate : false,
@@ -135,7 +152,7 @@ const ComplexTable = (props) => {
                 <GridActionsCellItem
                     icon={<Tooltip arrow title="Reject Request"><CancelRoundedIcon /></Tooltip>}
                     label="Reject Request"
-                    onClick={() => props.rejectRequest(params.id, params.row.sl)}
+                    onClick={() => props.rejectRequest(params.id)}
                     color="error"
                 />,
                 ];
@@ -425,24 +442,6 @@ const ComplexTable = (props) => {
         },
     ]
 
-    useEffect(()=>{
-        switch(props.type){
-            case 'reqList': 
-                setColumns(reqListCols)
-                break
-            
-            case 'donorList' : 
-                setColumns(donorListCols)
-                break
-            
-            case 'nonPendingList' : 
-                setColumns(nonPendingListCols)
-        }
-    },[props.type])
-    
-
-  
-
     return (
         <>
             <Box className={props.type} sx={{ height: 400,  backgroundColor: '#daccca', mt : 5,mb : 5 ,  borderRadius: '2.5rem' , borderLeft: '3px solid rgba(255, 255, 255, 0.7)', boxShadow: '0 0 4rem rgba(0, 0, 0, 0.6)', }}>
@@ -482,5 +481,3 @@ const ComplexTable = (props) => {
         </>
     )
 }
-
-export default ComplexTable
